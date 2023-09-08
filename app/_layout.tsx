@@ -93,6 +93,8 @@ const styles = StyleSheet.create({
     height: 50
   },
   menuOptions: {
+    display: 'flex',
+    flexDirection: 'row',
     paddingRight: '10%',
   },
   menuItem: {
