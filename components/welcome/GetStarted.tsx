@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { View, StyleSheet, TextInput, Pressable, Text } from 'react-native';
-import { rasoiBoxYellow } from '../constants/Colors';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 
 export default function GetStarted() {
     const [text, setText] = useState("");
 
     function onPress() {
-
     }
 
     return (
@@ -33,8 +32,8 @@ const styles = StyleSheet.create({
     input: {
         height: 50,
         width: '90%',
-        borderWidth: 1,
-        borderColor: 'white',
+        borderWidth: 2,
+        borderColor: rasoiBoxPink,
         borderRadius: 50,
         boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)',
         backgroundColor: 'rgb(250, 250, 250)',

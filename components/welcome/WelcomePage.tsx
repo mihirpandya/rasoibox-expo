@@ -1,12 +1,33 @@
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Text } from "../components/Themed";
-import Header from "./Header";
-import Footer from "./Footer";
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { Text } from "../Themed";
+import Header from "../Header";
+import Footer from "../Footer";
 import GetStarted from "./GetStarted";
 import InnerChef from "./InnerChef";
-import { titleColor } from '../constants/Colors';
+import HowItWorks from "./HowItWorks";
+import { titleColor } from '../../constants/Colors';
+
+function getSloganFontSize(): number {
+    const width = Dimensions.get('window').width;
+    if (width < 700) {
+        return 40;
+    } else {
+        return 100;
+    }
+}
+
+function getDescriptionFontSize(): number {
+    const width = Dimensions.get('window').width;
+    if (width < 700) {
+        return 19;
+    } else {
+        return 25;
+    }
+}
 
 export default function WelcomePage() {
+    console.log(Dimensions.get('window'));
+    console.log(Dimensions.get('screen'));
     return (
         <View style={{flex: 1}}>
             <ScrollView>
@@ -19,6 +40,7 @@ export default function WelcomePage() {
                     <GetStarted />
                 </View>
                 <InnerChef />
+                <HowItWorks />
                 <Footer />
             </ScrollView>
         </View>
@@ -34,13 +56,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     slogan: {
-        fontSize: 100,
+        fontSize: getSloganFontSize(),
         fontFamily: 'CormorantGaramondSemiBold',
         textAlign: 'center',
         color: titleColor
     },
     description: {
-        fontSize: 25,
+        fontSize: getDescriptionFontSize(),
         fontFamily: 'AvenirLight',
         width: '50%',
         color: '#555555',

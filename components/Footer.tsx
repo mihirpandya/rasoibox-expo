@@ -15,9 +15,10 @@ export default function Footer() {
     return (
         <View style={styles.footer}>
             <FooterIcon />
-            <Text style={{textAlign: 'center'}}>
+            <Text style={styles.text}>
                 hello@rasoibox.com{"\n\n"}
-                © Rasoi Box, Inc.
+                © Rasoi Box, Inc.{"\n\n\n"}
+                Terms and Conditions
             </Text>
         </View>
     )
@@ -30,8 +31,15 @@ const styles = StyleSheet.create({
     },
     footer: {
         backgroundColor: 'white',
-        height: 100,
+        paddingTop: 50,
+        paddingBottom: 50,
         alignItems: 'center',
         justifyContent: 'center'     
     },
+    text: {
+        textAlign: 'center',
+        fontFamily: 'AvenirLight',
+        fontSize: 14,
+        color: '#555555'
+    }
 });

@@ -2,6 +2,7 @@ import { View, Image, StyleSheet } from 'react-native';
 import { Link, Stack } from 'expo-router';
 import React from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { rasoiBoxPink } from '../constants/Colors';
 
 function LogoTitle() {
@@ -22,7 +23,7 @@ export default function Header() {
                 headerShown: false,
                 title: "Rasoi Box"
             }} />
-            <FontAwesome5 style={styles.profile} name="user-circle" size={24} color="black" />
+            <Ionicons style={styles.profile} name="person-circle-outline" size={25} />
             <LogoTitle />
         </View>
     );

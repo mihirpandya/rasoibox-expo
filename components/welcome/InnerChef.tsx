@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { rasoiBoxPink } from '../constants/Colors';
+import { rasoiBoxPink } from '../../constants/Colors';
 
 export default function InnerChef() {
     return (

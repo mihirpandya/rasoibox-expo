@@ -4,7 +4,7 @@ import { Redirect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text } from '../components/Themed';
 import { isAuthenticated } from './api/rasoibox-backend';
-import WelcomePage from '../components/WelcomePage';
+import WelcomePage from '../components/welcome/WelcomePage';
 
 interface AuthenticationDetails {
   authenticated: boolean
