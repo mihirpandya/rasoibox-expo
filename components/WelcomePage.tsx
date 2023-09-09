@@ -1,5 +1,5 @@
 import { View, Image, StyleSheet, ScrollView, Pressable, Linking } from 'react-native';
-import { Link, Stack } from 'expo-router';
+import { Link } from 'expo-router';
 import { Text } from "../components/Themed";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -19,7 +19,7 @@ export default function WelcomePage() {
                     </Pressable>
                 </Link>
             </View>
-            
+
             <Footer />
         </View>
       )
