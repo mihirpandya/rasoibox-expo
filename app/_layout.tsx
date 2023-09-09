@@ -2,10 +2,11 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, Link } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useColorScheme, Image, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '../components/Themed';
+import { isAuthenticated } from './api/rasoibox-backend';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -43,74 +44,18 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
-}
-
-function LogoTitle() {
-  return (
-    <View style={{paddingLeft: '20%'}}>
-      <Link href="/">
-        <Image
-          style={styles.logo}
-          source={{ uri: '../assets/images/header_logo.svg' }}
-        />
-      </Link>
-    </View>
-  );
-}
-
-function MenuOptions() {
-  return (
-    <View style={styles.menuOptions}>
-      <Text style={styles.menuItem}>
-        <Link href="/menu">
-          Menu
-        </Link>
-      </Text>
-      <Text style={styles.menuItem}>
-        <Link href="/(tabs)">
-          Tab One
-        </Link>
-      </Text>
-      <Text style={styles.menuItem}>
-        <Link href="/(tabs)/two">
-          Tab Two
-        </Link>
-      </Text>
-      <Text style={styles.menuItem}>About Us</Text>
-    </View>
-  )
-}
-
-function RootLayoutNav() {
-
-  return (
-    <Stack
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: 'white',
-        },
-        headerTitle: _props => <LogoTitle />,
-        headerRight: _props => <MenuOptions />
-      }}>
-        <Text>Hello World</Text>
-    </Stack>
-  );
+  return <Stack />
 }
 
 const styles = StyleSheet.create({
   logo: {
-    width: 225,
+    width: 200,
     height: 50
   },
-  menuOptions: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingRight: '10%',
-  },
-  menuItem: {
-    padding: 20,
-    fontFamily: 'AvenirLight',
-    fontSize: 15,
+  header: {
+    backgroundColor: 'white',
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center' 
   }
 });
