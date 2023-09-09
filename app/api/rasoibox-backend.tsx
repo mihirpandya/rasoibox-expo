@@ -12,8 +12,6 @@ export function getAvailableItems(): Promise<any> {
 }
 
 export function isAuthenticated(token: string | undefined | null): Promise<any> {
-    console.log("token:")
-    console.log(token);
     return fetch(BACKEND + 'users/check', {
         method: 'POST',
         headers: {

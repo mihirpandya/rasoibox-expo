@@ -1,56 +1,55 @@
+import { useEffect, useState } from 'react';
 import { View, Image, StyleSheet, ScrollView, Pressable, Linking } from 'react-native';
-import { Link, Stack } from 'expo-router';
-import { Text } from "../components/Themed";
+import { Redirect } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Text } from '../components/Themed';
+import { isAuthenticated } from './api/rasoibox-backend';
+import WelcomePage from '../components/WelcomePage';
 
-function LogoTitle() {
-    return (
-        <Link href="/">
-          <Image
-            style={styles.logo}
-            source={require('../assets/images/header_logo.svg')}
-          />
-        </Link>
-    );
+interface AuthenticationDetails {
+  authenticated: boolean
 }
 
-function FooterIcon() {
+export default function Index() {
+
+    const [authDetails, setAuthDetails] = useState<AuthenticationDetails>()
+
+    const getToken = async () => {
+      try {
+        const value = await AsyncStorage.getItem("access_token");
+        return value;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const fetchIsAuthenticated = () => {
+        let authDetails: AuthenticationDetails;
+        getToken().then(async token => {
+          if (token == null || token == undefined) {
+            authDetails = {
+              authenticated: false
+            }
+          } else {
+            authDetails = await isAuthenticated(token)
+          }
+        }).catch(error => {
+          console.error(error);
+          authDetails = {
+            authenticated: false
+          }
+        }).finally(() => {
+          setAuthDetails(authDetails);
+        })
+      }
+    
+      useEffect(() => {
+          fetchIsAuthenticated()
+        }, [])
+
     return (
-        <Image 
-            style={styles.icon}
-            source={require('../assets/images/icon.png')}
-        />
+      !authDetails?.authenticated ? <WelcomePage /> : <Redirect href="/menu" />
     )
-}
-
-export default function WelcomePage() {
-    return (
-        <View>
-            <View style={styles.header}>
-                <Stack.Screen options={{
-                    headerShown: false,
-                    title: "Rasoi Box"
-                }} />
-                <LogoTitle />
-            </View>
-            <View style={styles.body}>
-                <Text style={styles.slogan}>COOK WITH CONFIDENCE</Text>
-                <Link href="/menu">
-                    <Pressable style={styles.button}>
-                        <Text>
-                            View Menu
-                        </Text>
-                    </Pressable>
-                </Link>
-            </View>
-            <View style={styles.footer}>
-                <FooterIcon />
-                <Text style={{textAlign: 'center'}}>
-                    hello@rasoibox.com{"\n\n"}
-                    © Rasoi Box, Inc.
-                </Text>
-            </View>
-        </View>
-      )
 }
 
 const styles = StyleSheet.create({

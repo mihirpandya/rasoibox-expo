@@ -1,10 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { isAuthenticated } from './api/rasoibox-backend';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -26,45 +24,6 @@ export default function RootLayout() {
     AvenirLight: require('../assets/fonts/Avenir-Light.ttf'),
     ...FontAwesome.font,
   });
-
-  const [authDetails, setAuthDetails] = useState([])
-
-  const getToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem("access_token");
-      return value;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  const fetchIsAuthenticated = () => {
-    let authDetails: any;
-    getToken().then(token => {
-      if (token == null || token == undefined) {
-        console.log("never logged in");
-        authDetails = {
-          "authenticated": false
-        }
-      } else {
-        isAuthenticated(token).then(response => {
-          console.log(response);
-          authDetails = response
-        })
-      }
-    }).catch(error => {
-      console.error(error);
-      authDetails = {
-        "authenticated": false
-      }
-    }).finally(() => {
-      setAuthDetails(authDetails);
-    })
-  }
-
-  useEffect(() => {
-      fetchIsAuthenticated()
-    }, [])
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
