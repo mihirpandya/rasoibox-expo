@@ -7,7 +7,7 @@ function LogoTitle() {
         <Link href="/">
           <Image
             style={styles.logo}
-            source={{ uri: '../assets/images/header_logo.svg' }}
+            source={require('../assets/images/header_logo.svg')}
           />
         </Link>
     );
@@ -17,7 +17,7 @@ function FooterIcon() {
     return (
         <Image 
             style={styles.icon}
-            source={{uri: '../assets/images/icon.png' }}
+            source={require('../assets/images/icon.png')}
         />
     )
 }
@@ -44,9 +44,10 @@ export default function WelcomePage() {
             </View>
             <View style={styles.footer}>
                 <FooterIcon />
-                <Text>hello@rasoibox.com</Text>
-                <br />
-                <Text>Rasoi Box, Inc.</Text>
+                <Text style={{textAlign: 'center'}}>
+                    hello@rasoibox.com{"\n\n"}
+                    © Rasoi Box, Inc.
+                </Text>
             </View>
         </View>
       )
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     },
     body: {
         backgroundColor: 'white',
-        paddingTop: 150,
+        paddingTop: 50,
         paddingBottom: 100,
         paddingLeft: '20%',
         paddingRight: '20%',
@@ -77,8 +78,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     slogan: {
-        fontSize: 50,
+        fontSize: 40,
         fontFamily: 'CormorantGaramondSemiBold',
+        textAlign: 'center',
     },
     header: {
         backgroundColor: 'white',

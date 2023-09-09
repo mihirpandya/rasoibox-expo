@@ -1,11 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, Link } from 'expo-router';
+import { SplashScreen, Stack, router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { useColorScheme, Image, View, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text } from '../components/Themed';
+import { StyleSheet } from 'react-native';
 import { isAuthenticated } from './api/rasoibox-backend';
 
 export {
@@ -28,6 +26,45 @@ export default function RootLayout() {
     AvenirLight: require('../assets/fonts/Avenir-Light.ttf'),
     ...FontAwesome.font,
   });
+
+  const [authDetails, setAuthDetails] = useState([])
+
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem("access_token");
+      return value;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const fetchIsAuthenticated = () => {
+    let authDetails: any;
+    getToken().then(token => {
+      if (token == null || token == undefined) {
+        console.log("never logged in");
+        authDetails = {
+          "authenticated": false
+        }
+      } else {
+        isAuthenticated(token).then(response => {
+          console.log(response);
+          authDetails = response
+        })
+      }
+    }).catch(error => {
+      console.error(error);
+      authDetails = {
+        "authenticated": false
+      }
+    }).finally(() => {
+      setAuthDetails(authDetails);
+    })
+  }
+
+  useEffect(() => {
+      fetchIsAuthenticated()
+    }, [])
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
