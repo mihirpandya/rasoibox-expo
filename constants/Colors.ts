@@ -1,6 +1,10 @@
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 
+export const titleColor = '#253132'
+export const rasoiBoxPink = '#f17a7e';
+export const rasoiBoxYellow = '#f9a66c';
+
 export default {
   light: {
     text: '#000',
