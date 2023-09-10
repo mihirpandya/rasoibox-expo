@@ -1,12 +1,11 @@
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Text } from 'react-native';
 import React from 'react';
-import { Text } from "../components/Themed";
 
 function FooterIcon() {
     return (
         <Image 
             style={styles.icon}
-            source={require('../assets/images/icon.png')}
+            source={require('../../assets/images/icon.png')}
         />
     )
 }

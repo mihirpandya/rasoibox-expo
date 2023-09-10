@@ -1,7 +1,7 @@
 import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { Text } from "../Themed";
-import Header from "../Header";
-import Footer from "../Footer";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 import GetStarted from "./GetStarted";
 import InnerChef from "./InnerChef";
 import HowItWorks from "./HowItWorks";

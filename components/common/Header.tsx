@@ -3,14 +3,14 @@ import { Link, Stack } from 'expo-router';
 import React from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { rasoiBoxPink } from '../constants/Colors';
+import { rasoiBoxPink } from '../../constants/Colors';
 
 function LogoTitle() {
     return (
         <Link href="/">
           <Image
             style={styles.logo}
-            source={require('../assets/images/header_logo.svg')}
+            source={require('../../assets/images/header_logo.svg')}
           />
         </Link>
     );
