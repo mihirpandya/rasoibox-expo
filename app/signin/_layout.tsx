@@ -55,7 +55,7 @@ export default function SignIn() {
 
 const styles = StyleSheet.create({
     card: {
-        height: 474,
+        height: 500,
         width: 485,
         borderRadius: 10,
         boxShadow: '2px 2px 20px 2px rgba(0, 0, 0, 0.2)',
