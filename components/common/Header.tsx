@@ -1,8 +1,7 @@
-import { View, Image, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack } from 'expo-router';
 import React from 'react';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import { Image, StyleSheet, View } from 'react-native';
 import { rasoiBoxPink } from '../../constants/Colors';
 
 function LogoTitle() {

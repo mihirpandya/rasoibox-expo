@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import Header from '../../components/common/Header';
-import Footer from '../../components/common/Footer';
 import { Text } from '../../components/Themed';
+import Footer from '../../components/common/Footer';
+import Header from '../../components/common/Header';
 import { getAvailableItems } from '../api/rasoibox-backend';
 
 export default function Menu() {

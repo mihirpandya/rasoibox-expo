@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
+import React from 'react';
 import { View } from 'react-native';
+import AuthShim from "../../components/common/AuthShim";
 import Header from "../../components/common/Header";
 import SignInForm from "../../components/signin/SignInForm";
 
@@ -12,7 +13,7 @@ export default function SignIn() {
                 title: "Rasoi Box"
             }} />
             <Header />
-            <SignInForm />
+            <AuthShim authChild={<Redirect href="/menu" />} unauthChild={<SignInForm />}/>
         </View>
     )
 }

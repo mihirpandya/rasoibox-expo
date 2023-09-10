@@ -1,5 +1,5 @@
-import { View, Image, StyleSheet, Text } from 'react-native';
 import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 function FooterIcon() {
     return (

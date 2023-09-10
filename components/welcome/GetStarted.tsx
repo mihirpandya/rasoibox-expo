@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
-import { View, StyleSheet, TextInput, Pressable, Text } from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 
 export default function GetStarted() {

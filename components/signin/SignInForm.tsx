@@ -1,9 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Link, Redirect } from 'expo-router';
 import React, { useState } from 'react';
-import { Link } from 'expo-router';
-import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native';
-import ErrorText from "../common/ErrorText";
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { login } from "../../app/api/rasoibox-backend";
 import { rasoiBoxYellow } from '../../constants/Colors';
+import * as Storage from "../../constants/Storage";
 import { validateEmail } from "../../validators/Validators";
+import ErrorText from "../common/ErrorText";
 
 export const errorIds = ['no_error', 'email', 'password', 'invalid_login'] as const;
 type ErrorID = typeof errorIds[number];
@@ -16,11 +19,18 @@ const ERRORS: Record<ErrorID, string> = {
 }
 
 export default function SignInForm() {
+    const [loggedIn, setLoggedIn] = useState<boolean>(false)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<ErrorID>('no_error')
 
-    function onPress() {
+    function submitIfEnter(event: any) {
+        if (event.key === "Enter") {
+            submit();
+        }
+    }
+
+    async function submit() {
         if (!validateEmail(email)) {
             setError('email');
             return;
@@ -30,42 +40,57 @@ export default function SignInForm() {
             setError('password');
             return;
         }
+
+        const loginResponse = await login(email, password)
+        console.log(loginResponse);
+
+        if (loginResponse["status"] == 0) {
+            AsyncStorage.setItem(Storage.ACCESS_TOKEN, loginResponse[Storage.ACCESS_TOKEN])
+            setError('no_error')
+            setLoggedIn(true)
+        } else {
+            setError('invalid_login')
+        }
     }
 
-    return (
-        <View style={styles.center}>
-            <View style={styles.card}>
-                <View style={styles.form}>
-                    <Text style={styles.title}>
-                        Welcome Back!
-                    </Text>
-                    <Text style={styles.fieldTitle}>
-                        Email
-                    </Text>
-                    <TextInput style={styles.fieldValue} onChangeText={setEmail}/>
-                    <View style={styles.password}>
-                        <Text style={styles.fieldTitle}>
-                            Password
+    if (loggedIn) {
+        return <Redirect href="/menu" />
+    } else {
+        return (
+            <View style={styles.center}>
+                <View style={styles.card}>
+                    <View style={styles.form}>
+                        <Text style={styles.title}>
+                            Welcome Back!
                         </Text>
-                        <Link href="/forgotpassword">
-                            <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                        </Link>
-                    </View>
-                    <TextInput style={styles.fieldValue} secureTextEntry={true} onChangeText={setPassword}/>
-                    {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
-                    <Pressable style={styles.button} onPress={onPress}>
-                        <Text style={styles.buttonText}>Sign In</Text>
-                    </Pressable>
-                    <View style={styles.signup}>
-                        <Text style={styles.signupText}>New to Rasoi Box?</Text>
-                        <Link href="/signup">
-                            <Text style={styles.forgotPassword}>Sign Up</Text>
-                        </Link>
+                        <Text style={styles.fieldTitle}>
+                            Email
+                        </Text>
+                        <TextInput style={styles.fieldValue} onChangeText={setEmail} onKeyPress={submitIfEnter}/>
+                        <View style={styles.password}>
+                            <Text style={styles.fieldTitle}>
+                                Password
+                            </Text>
+                            <Link href="/forgotpassword">
+                                <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                            </Link>
+                        </View>
+                        <TextInput style={styles.fieldValue} secureTextEntry={true} onChangeText={setPassword} onKeyPress={submitIfEnter}/>
+                        {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
+                        <Pressable style={styles.button} onPress={submit}>
+                            <Text style={styles.buttonText}>Sign In</Text>
+                        </Pressable>
+                        <View style={styles.signup}>
+                            <Text style={styles.signupText}>New to Rasoi Box?</Text>
+                            <Link href="/signup">
+                                <Text style={styles.forgotPassword}>Sign Up</Text>
+                            </Link>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
-    )
+        )
+    }
 }
 
 const styles = StyleSheet.create({

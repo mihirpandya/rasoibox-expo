@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, ScrollView, Pressable, Linking } from 'react-native';
-import { Redirect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text } from '../components/Themed';
-import { isAuthenticated } from './api/rasoibox-backend';
+import { Redirect } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import AuthShim from "../components/common/AuthShim";
 import WelcomePage from '../components/welcome/WelcomePage';
+import * as Storage from "../constants/Storage";
+import { isAuthenticated } from './api/rasoibox-backend';
 
 interface AuthenticationDetails {
   authenticated: boolean
@@ -16,7 +17,7 @@ export default function Index() {
 
     const getToken = async () => {
       try {
-        const value = await AsyncStorage.getItem("access_token");
+        const value = await AsyncStorage.getItem(Storage.ACCESS_TOKEN);
         return value;
       } catch (e) {
         return null;
@@ -47,9 +48,9 @@ export default function Index() {
           fetchIsAuthenticated()
         }, [])
 
-    return (
-      !authDetails?.authenticated ? <WelcomePage /> : <Redirect href="/menu" />
-    )
+        return (
+        <AuthShim authChild={<Redirect href="/menu" />} unauthChild={<WelcomePage />}/>
+        );
 }
 
 const styles = StyleSheet.create({

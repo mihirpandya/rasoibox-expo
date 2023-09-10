@@ -1,11 +1,11 @@
-import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
-import { Text } from "../Themed";
-import Header from "../common/Header";
-import Footer from "../common/Footer";
-import GetStarted from "./GetStarted";
-import InnerChef from "./InnerChef";
-import HowItWorks from "./HowItWorks";
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { titleColor } from '../../constants/Colors';
+import { Text } from "../Themed";
+import Footer from "../common/Footer";
+import Header from "../common/Header";
+import GetStarted from "./GetStarted";
+import HowItWorks from "./HowItWorks";
+import InnerChef from "./InnerChef";
 
 function getSloganFontSize(): number {
     const width = Dimensions.get('window').width;

@@ -1,12 +1,12 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, router } from 'expo-router';
+import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+  ErrorBoundary
 } from 'expo-router';
 
 export const unstable_settings = {
