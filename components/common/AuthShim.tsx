@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { isAuthenticated } from "../../app/api/rasoibox-backend";
-import * as Storage from "../../constants/Storage";
+import * as Storage from "./Storage";
 
 interface IAuthShimProps {
     authChild: React.ReactNode;
@@ -28,8 +28,9 @@ export default function AuthShim(props: IAuthShimProps) {
             authDetails = {
                 authenticated: false
             }
-        }).finally(() => {
+        }).finally(async () => {
             setAuthDetails(authDetails)
+            await Storage.storeAuthDetails(authDetails);
         })
     }
 

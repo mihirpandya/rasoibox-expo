@@ -26,8 +26,6 @@ function getDescriptionFontSize(): number {
 }
 
 export default function WelcomePage() {
-    console.log(Dimensions.get('window'));
-    console.log(Dimensions.get('screen'));
     return (
         <View style={{flex: 1}}>
             <ScrollView>

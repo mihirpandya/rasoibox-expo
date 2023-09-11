@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack } from 'expo-router';
-import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { rasoiBoxPink } from '../../constants/Colors';
+import { AuthDetails } from './AuthShim';
+import * as Storage from "./Storage";
 
 function LogoTitle() {
     return (
@@ -16,13 +18,35 @@ function LogoTitle() {
 }
 
 export default function Header() {
+    const [authDetails, setAuthDetails] = useState<AuthDetails>();
+    const [pressed, setPressed] = useState<boolean>(false);
+
+    const togglePressed = () => {
+        const newPressed = !pressed;
+        setPressed(newPressed);
+    }
+
+    useEffect(() => {
+        Storage.getAuthDetails().then(stored => {
+            if (stored == undefined) {
+                stored = {
+                    authenticated: false
+                }
+            }
+
+            setAuthDetails(stored);
+        })
+    }, [])
+
     return (
         <View style={styles.header}>
             <Stack.Screen options={{
                 headerShown: false,
                 title: "Rasoi Box"
             }} />
-            <Ionicons style={styles.profile} name="person-circle-outline" size={25} />
+            <Pressable onPress={togglePressed}>
+                <Ionicons style={styles.profile} name="person-circle-outline" size={25} />
+            </Pressable>
             <LogoTitle />
         </View>
     );

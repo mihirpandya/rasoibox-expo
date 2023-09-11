@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { login } from "../../app/api/rasoibox-backend";
 import { rasoiBoxYellow } from '../../constants/Colors';
-import * as Storage from "../../constants/Storage";
 import { validateEmail } from "../../validators/Validators";
 import ErrorText from "../common/ErrorText";
+import * as Storage from "../common/Storage";
+import { AuthDetails } from '../common/AuthShim';
 
 export const errorIds = ['no_error', 'email', 'password', 'invalid_login'] as const;
 type ErrorID = typeof errorIds[number];
@@ -48,6 +49,13 @@ export default function SignInForm() {
             AsyncStorage.setItem(Storage.ACCESS_TOKEN, loginResponse[Storage.ACCESS_TOKEN])
             setError('no_error')
             setLoggedIn(true)
+            const authDetails: AuthDetails = {
+                authenticated: true,
+                first_name: loginResponse["first_name"],
+                last_name: loginResponse["last_name"],
+                email: loginResponse["email"]
+            }
+            await Storage.storeAuthDetails(authDetails)
         } else {
             setError('invalid_login')
         }

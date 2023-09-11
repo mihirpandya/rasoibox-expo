@@ -22,7 +22,13 @@ export function isAuthenticated(token: string | undefined | null): Promise<any> 
             "Authorization": "Bearer " + token
         }
     }).then(response => {
-        return response.json()
+        if (response.status == 200) {
+            return response.json()
+        } else {
+            return {
+                "authenticated": false
+            }
+        }
     }).catch(error => {
         console.error(error)
         throw error;

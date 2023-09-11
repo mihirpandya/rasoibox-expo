@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import AuthShim from "../components/common/AuthShim";
 import WelcomePage from '../components/welcome/WelcomePage';
-import * as Storage from "../constants/Storage";
+import * as Storage from "../components/common/Storage";
 import { isAuthenticated } from './api/rasoibox-backend';
 
 interface AuthenticationDetails {
