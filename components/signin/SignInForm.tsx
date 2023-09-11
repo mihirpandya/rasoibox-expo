@@ -5,9 +5,9 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { login } from "../../app/api/rasoibox-backend";
 import { rasoiBoxYellow } from '../../constants/Colors';
 import { validateEmail } from "../../validators/Validators";
+import { AuthDetails } from '../common/AuthShim';
 import ErrorText from "../common/ErrorText";
 import * as Storage from "../common/Storage";
-import { AuthDetails } from '../common/AuthShim';
 
 export const errorIds = ['no_error', 'email', 'password', 'invalid_login'] as const;
 type ErrorID = typeof errorIds[number];

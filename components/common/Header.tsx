@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 import { Link, Stack } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
@@ -33,7 +33,6 @@ export default function Header() {
                     authenticated: false
                 }
             }
-
             setAuthDetails(stored);
         })
     }, [])
@@ -48,6 +47,7 @@ export default function Header() {
                 <Ionicons style={styles.profile} name="person-circle-outline" size={25} />
             </Pressable>
             <LogoTitle />
+            {authDetails?.authenticated && <AntDesign style={styles.cart} name="shoppingcart" size={25} />}
         </View>
     );
 }
@@ -68,5 +68,10 @@ const styles = StyleSheet.create({
         position: 'fixed',
         left: '10%',
         color: rasoiBoxPink,
+    },
+    cart: {
+        position: 'fixed',
+        right: '10%',
+        color: rasoiBoxPink
     }
 });
