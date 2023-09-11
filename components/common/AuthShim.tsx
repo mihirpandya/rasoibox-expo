@@ -8,8 +8,11 @@ interface IAuthShimProps {
     unauthChild: React.ReactNode;
 }
 
-interface AuthDetails {
-    authenticated: boolean
+export interface AuthDetails {
+    authenticated: boolean,
+    first_name?: string,
+    last_name?: string,
+    email?: string
 }
 
 export default function AuthShim(props: IAuthShimProps) {

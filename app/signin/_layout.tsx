@@ -2,6 +2,7 @@ import { Redirect, Stack } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
 import AuthShim from "../../components/common/AuthShim";
+import Footer from "../../components/common/Footer";
 import Header from "../../components/common/Header";
 import SignInForm from "../../components/signin/SignInForm";
 
@@ -14,6 +15,7 @@ export default function SignIn() {
             }} />
             <Header />
             <AuthShim authChild={<Redirect href="/menu" />} unauthChild={<SignInForm />}/>
+            <Footer />
         </View>
     )
 }
