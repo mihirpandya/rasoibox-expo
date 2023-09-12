@@ -99,5 +99,6 @@ const styles = StyleSheet.create({
         alignItem: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
+        paddingTop: '3%'
     }
 })

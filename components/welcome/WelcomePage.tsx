@@ -51,7 +51,8 @@ const styles = StyleSheet.create({
         paddingRight: Dimensions.get('screen').width < 700 ? '10%' : '20%',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        paddingTop: '3%'
     },
     slogan: {
         fontSize: getSloganFontSize(),
