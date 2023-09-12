@@ -40,7 +40,7 @@ export default function MealKitCard(props: MealKitCardProps) {
                         {description}
                     </Text>
                     <View style={styles.tags}>
-                        {tags.map(tag => <Text style={styles.tag}>{tag}</Text>)}
+                        {tags.map(tag => <Text key={tag} style={styles.tag}>{tag}</Text>)}
                     </View>
                 </Card.Content>
             </Card>

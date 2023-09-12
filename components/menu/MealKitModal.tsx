@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         backgroundColor: 'white',
         width: Dimensions.get('window').width < 700 ? '100%' : '50%',
+        borderRadius: 10
     },
     close: {
         color: rasoiBoxGrey,

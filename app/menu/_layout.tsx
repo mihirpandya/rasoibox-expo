@@ -20,7 +20,7 @@ interface MealKit {
 
 export default function Menu() {
     const [availableItems, setAvailableItems] = useState<MealKit[]>([])
-    const [selectedItemId, setSelectedItemId] = useState<number | undefined>(undefined);
+    const [selectedItem, setSelectedItem] = useState<MealKit | undefined>(undefined);
 
     const fetchAvailableItems = () => {
         getAvailableItems().then(response => {
@@ -48,11 +48,9 @@ export default function Menu() {
         fetchAvailableItems()
       }, []);
 
-    const selectItemId = (id: number) => {
-        setSelectedItemId(id)
+    const selectItem = (mealKit: MealKit) => {
+        setSelectedItem(mealKit)
     }
-
-    const selectedItem: MealKit | undefined = (selectedItemId == undefined) ? undefined : availableItems.filter(mealKit => mealKit.id === selectedItemId)[0]
     
     return (
         <View style={{flex: 1}}>
@@ -70,11 +68,11 @@ export default function Menu() {
                             cookTime={item.cookTime}
                             prepTime={item.prepTime}
                             tags={item.tags}
-                            onPress={() => selectItemId(item.id)}
+                            onPress={() => selectItem(item)}
                         />)}
                         {selectedItem != undefined && <MealKitModal 
-                            isVisible={selectedItemId != undefined}
-                            closeModal={() => setSelectedItemId(undefined)}
+                            isVisible={selectedItem != undefined}
+                            closeModal={() => setSelectedItem(undefined)}
                             id={selectedItem.id}
                             name={selectedItem.name}
                             description={selectedItem.description}
