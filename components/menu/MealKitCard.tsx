@@ -12,7 +12,8 @@ type MealKitCardProps = {
     prices: number[],
     cookTime: number,
     prepTime: number,
-    tags: string[]
+    tags: string[],
+    onPress: () => void;
 }
 
 export default function MealKitCard(props: MealKitCardProps) {
@@ -25,11 +26,12 @@ export default function MealKitCard(props: MealKitCardProps) {
         prices,
         cookTime,
         prepTime,
-        tags
+        tags,
+        onPress
     } = props;
 
     return (
-        <Pressable>
+        <Pressable onPress={onPress}>
             <Card style={styles.card}>
                 <Card.Cover style={styles.cover} source={{uri: imageUrl}} />
                 <Card.Title titleStyle={styles.title} title={name}/>

@@ -3,6 +3,7 @@ import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import MealKitCard from "../../components/menu/MealKitCard";
+import MealKitModal from "../../components/menu/MealKitModal";
 import { getAvailableItems } from '../api/rasoibox-backend';
 
 interface MealKit {
@@ -19,6 +20,7 @@ interface MealKit {
 
 export default function Menu() {
     const [availableItems, setAvailableItems] = useState<MealKit[]>([])
+    const [selectedItemId, setSelectedItemId] = useState<number | undefined>(undefined);
 
     const fetchAvailableItems = () => {
         getAvailableItems().then(response => {
@@ -45,13 +47,20 @@ export default function Menu() {
     useEffect(() => {
         fetchAvailableItems()
       }, []);
+
+    const selectItemId = (id: number) => {
+        setSelectedItemId(id)
+    }
+
+    const selectedItem: MealKit | undefined = (selectedItemId == undefined) ? undefined : availableItems.filter(mealKit => mealKit.id === selectedItemId)[0]
     
     return (
         <View style={{flex: 1}}>
             <ScrollView>
                 <Header />
                     <View style={styles.card}>
-                        {availableItems.map(item => <MealKitCard 
+                        {availableItems.map(item => <MealKitCard
+                            key={item.id}
                             id={item.id}
                             name={item.name}
                             description={item.description}
@@ -61,7 +70,21 @@ export default function Menu() {
                             cookTime={item.cookTime}
                             prepTime={item.prepTime}
                             tags={item.tags}
+                            onPress={() => selectItemId(item.id)}
                         />)}
+                        {selectedItem != undefined && <MealKitModal 
+                            isVisible={selectedItemId != undefined}
+                            closeModal={() => setSelectedItemId(undefined)}
+                            id={selectedItem.id}
+                            name={selectedItem.name}
+                            description={selectedItem.description}
+                            imageUrl={selectedItem.imageUrl}
+                            servingSizes={selectedItem.servingSizes}
+                            prices={selectedItem.prices}
+                            cookTime={selectedItem.cookTime}
+                            prepTime={selectedItem.prepTime}
+                            tags={selectedItem.tags}
+                        />}
                     </View>
                 <Footer />
             </ScrollView>
