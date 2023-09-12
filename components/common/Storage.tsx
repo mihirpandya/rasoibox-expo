@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthDetails } from "./AuthShim";
 
 export const ACCESS_TOKEN = "access_token"
-export const USER_DETAILS = "user_details"
 const AUTH_DETAILS = "auth_details"
 
 export async function storeAuthDetails(authDetails: AuthDetails) {
@@ -20,5 +19,17 @@ export async function getAuthDetails(): Promise<AuthDetails | null> {
     }).catch(e => {
         console.error(e);
         return null;
+    });
+}
+
+export async function removeAuthDetails(): Promise<void> {
+    await AsyncStorage.removeItem(AUTH_DETAILS).then(async () => {
+        return await AsyncStorage.removeItem(ACCESS_TOKEN).then(() => { return; }).catch(e => {
+            console.error(e);
+            return;
+        })
+    }).catch(e => {
+        console.error(e);
+        return;
     });
 }

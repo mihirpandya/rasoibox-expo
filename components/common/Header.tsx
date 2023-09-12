@@ -1,4 +1,4 @@
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
