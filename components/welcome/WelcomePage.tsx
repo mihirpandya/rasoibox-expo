@@ -1,5 +1,5 @@
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
-import { titleColor } from '../../constants/Colors';
+import { rasoiBoxGrey, rasoiBoxYellow, titleColor } from '../../constants/Colors';
 import { Text } from "../Themed";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
@@ -47,8 +47,8 @@ export default function WelcomePage() {
 
 const styles = StyleSheet.create({
     card: {
-        paddingLeft: '20%',
-        paddingRight: '20%',
+        paddingLeft: Dimensions.get('screen').width < 700 ? '10%' : '20%',
+        paddingRight: Dimensions.get('screen').width < 700 ? '10%' : '20%',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white'
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     description: {
         fontSize: getDescriptionFontSize(),
         fontFamily: 'AvenirLight',
-        width: '50%',
-        color: '#555555',
+        width: Dimensions.get('screen').width < 700 ? '100%' : '50%',
+        color: rasoiBoxGrey,
         paddingTop: 20,
     },
     button: {
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#f9a66c',
+        backgroundColor: rasoiBoxYellow,
         fontSize: 20,
         fontFamily: 'AvenirLight',
     },

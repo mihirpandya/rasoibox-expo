@@ -2,6 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import Modal from "react-native-modal";
+import { rasoiBoxGrey } from '../../constants/Colors';
 
 interface LightboxProps {
     isVisible: boolean;
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height + 10,
     },
     close: {
-        color: '#555555',
+        color: rasoiBoxGrey,
         padding: 20,
         borderBottomWidth: 1,
     },

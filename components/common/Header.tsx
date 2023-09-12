@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { rasoiBoxPink } from '../../constants/Colors';
+import { rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
 import LeftMenu from "../LeftMenu";
 import { AuthDetails } from './AuthShim';
 import Lightbox from "./Lightbox";
@@ -47,7 +47,7 @@ export default function Header() {
                 title: "Rasoi Box"
             }} />
             <Pressable onPress={togglePressed} style={styles.menu}>
-                <Ionicons name="menu-sharp" size={25} color={'#555555'}/>
+                <Ionicons name="menu-sharp" size={25} color={rasoiBoxGrey}/>
             </Pressable>
             <Lightbox isVisible={pressed} closeLightbox={togglePressed}>
                 <LeftMenu authDetails={authDetails} onNav={togglePressed}/>

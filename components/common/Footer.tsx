@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { rasoiBoxGrey } from '../../constants/Colors';
 
 function FooterIcon() {
     return (
@@ -39,6 +40,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'AvenirLight',
         fontSize: 14,
-        color: '#555555'
+        color: rasoiBoxGrey
     }
 });
