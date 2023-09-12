@@ -46,14 +46,18 @@ export default function Header() {
                 headerShown: false,
                 title: "Rasoi Box"
             }} />
-            <Pressable onPress={togglePressed}>
-                <Ionicons style={styles.menu} name="menu" size={25} />
+            <Pressable onPress={togglePressed} style={styles.menu}>
+                <Ionicons name="menu-sharp" size={25} color={'#555555'}/>
             </Pressable>
             <Lightbox isVisible={pressed} closeLightbox={togglePressed}>
                 <LeftMenu authDetails={authDetails} onNav={togglePressed}/>
             </Lightbox>
             <LogoTitle />
-            {authDetails?.authenticated && <AntDesign style={styles.cart} name="shoppingcart" size={25} />}
+            {authDetails?.authenticated && 
+                <Pressable style={styles.cart}>
+                    <Ionicons name="cart-outline" size={25} color={rasoiBoxPink}/>
+                </Pressable>
+            }
         </View>
     );
 }
@@ -73,12 +77,10 @@ const styles = StyleSheet.create({
     // icons
     menu: {
         position: 'fixed',
-        left: '10%',
-        color: '#555555',
+        left: 50,
     },
     cart: {
         position: 'fixed',
-        right: '10%',
-        color: rasoiBoxPink
+        right: 50,
     }
 });

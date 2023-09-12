@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Link, Redirect } from 'expo-router';
+import { Link, Redirect, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { login } from "../../app/api/rasoibox-backend";
@@ -56,6 +56,7 @@ export default function SignInForm() {
                 email: loginResponse["email"]
             }
             await Storage.storeAuthDetails(authDetails)
+            router.replace("/menu")
         } else {
             setError('invalid_login')
         }
