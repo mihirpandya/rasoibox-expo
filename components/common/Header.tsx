@@ -77,10 +77,10 @@ const styles = StyleSheet.create({
     // icons
     menu: {
         position: 'fixed',
-        left: 50,
+        left: '5%',
     },
     cart: {
         position: 'fixed',
-        right: 50,
+        right: '5%',
     }
 });

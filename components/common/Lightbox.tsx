@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         backgroundColor: 'white',
         position: 'absolute',
-        marginLeft: -80,
-        width: 400,
+        marginLeft: '-6%',
+        width: 300,
         height: Dimensions.get('window').height + 10,
     },
     close: {
