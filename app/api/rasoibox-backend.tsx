@@ -64,7 +64,7 @@ export function updateCart(verification_code: string, recipe_name: string, servi
         "serving_size": serving_size
     }
 
-    return fetch(BACKEND + "/api/order/update_cart?verification_code=" + verification_code, {
+    return fetch(BACKEND + "order/update_cart?verification_code=" + verification_code, {
         "method": "post",
         "headers": {
             "accept": "application/json",
@@ -91,7 +91,7 @@ export function updateCart(verification_code: string, recipe_name: string, servi
 }
 
 export function getCart(verification_code: string) {
-    return fetch(BACKEND + "/api/order/get_cart?verification_code=" + verification_code, {
+    return fetch(BACKEND + "order/get_cart?verification_code=" + verification_code, {
         "method": "get",
         "headers": {
             "accept": "application/json",

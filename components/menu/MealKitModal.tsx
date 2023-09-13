@@ -1,9 +1,9 @@
 import { AntDesign } from '@expo/vector-icons';
-import React, { useState } from "react";
-import { Dimensions, Pressable, StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import Modal from "react-native-modal";
 import { router } from "expo-router";
-import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from "../../constants/Colors";
+import React, { useState } from "react";
+import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Modal from "react-native-modal";
+import { rasoiBoxGrey, rasoiBoxYellow } from "../../constants/Colors";
 
 interface MealKitModalProps {
     isVisible: boolean,

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { getAvailableItems } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import MealKitCard from "../../components/menu/MealKitCard";
 import MealKitModal from "../../components/menu/MealKitModal";
-import { getAvailableItems } from '../../app/api/rasoibox-backend';
 import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
 

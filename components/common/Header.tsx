@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
 import LeftMenu from "../LeftMenu";
+import RightCart from "../cart/RightCart";
 import { AuthDetails } from './AuthShim';
 import Lightbox, { LightboxSide } from "./Lightbox";
 import * as Storage from "./Storage";
@@ -55,7 +56,7 @@ export default function Header() {
             <Pressable onPress={toggleMenuPressed} style={styles.menu}>
                 <Ionicons name="menu-sharp" size={25} color={rasoiBoxGrey}/>
             </Pressable>
-            <Lightbox isVisible={menuPressed} side={LightboxSide.left} closeLightbox={toggleMenuPressed}>
+            <Lightbox isVisible={menuPressed} width={300} side={LightboxSide.left} closeLightbox={toggleMenuPressed}>
                 <LeftMenu authDetails={authDetails} onNav={toggleMenuPressed}/>
             </Lightbox>
             <LogoTitle />
@@ -64,8 +65,8 @@ export default function Header() {
                     <Ionicons name="cart-outline" size={25} color={rasoiBoxPink}/>
                 </Pressable>
             }
-            <Lightbox isVisible={cartPressed} side={LightboxSide.right} closeLightbox={toggleCartPressed}>
-                <LeftMenu authDetails={authDetails} onNav={toggleCartPressed}/>
+            <Lightbox isVisible={cartPressed} width={350} side={LightboxSide.right} closeLightbox={toggleCartPressed}>
+                <RightCart />
             </Lightbox>
         </View>
     );

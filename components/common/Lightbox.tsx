@@ -9,6 +9,7 @@ export enum LightboxSide { left, right }
 interface LightboxProps {
     isVisible: boolean;
     side: LightboxSide;
+    width: number;
     closeLightbox: () => void;
     children: React.ReactNode;
 }
@@ -21,7 +22,7 @@ interface PositionDetails {
     closePressableStyle: StyleProp<ViewStyle>
 }
 
-function getPositionDetails(side: LightboxSide): PositionDetails {
+function getPositionDetails(width: number, side: LightboxSide): PositionDetails {
     if (side === LightboxSide.left) {
         return {
             animationIn: 'slideInLeft',
@@ -32,7 +33,7 @@ function getPositionDetails(side: LightboxSide): PositionDetails {
                 backgroundColor: 'white',
                 position: 'absolute',
                 marginLeft: '-6%',
-                width: 300,
+                width: width,
                 height: Dimensions.get('window').height + 10,
                 marginTop: '-6%'
             },
@@ -55,7 +56,7 @@ function getPositionDetails(side: LightboxSide): PositionDetails {
                 backgroundColor: 'white',
                 position: 'absolute',
                 marginRight: '-6%',
-                width: 300,
+                width: width,
                 height: Dimensions.get('window').height + 10,
                 marginTop: '-6%',
             },
@@ -72,9 +73,9 @@ function getPositionDetails(side: LightboxSide): PositionDetails {
 }
 
 export default function Lightbox(props: LightboxProps) {
-    const { isVisible, side, closeLightbox, children } = props;
+    const { isVisible, width, side, closeLightbox, children } = props;
 
-    const { animationIn, animationOut, modalViewStyle, modalStyle, closePressableStyle } = getPositionDetails(side);
+    const { animationIn, animationOut, modalViewStyle, modalStyle, closePressableStyle } = getPositionDetails(width, side);
 
     return (
         <Modal 
