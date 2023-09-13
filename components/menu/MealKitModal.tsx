@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     a2cText: {
         fontFamily: 'AvenirLight',
         fontSize: 20,
-        color: 'black',
+        color: 'white',
         fontWeight: 'bold'
     },
     servingSizeSelected: {
