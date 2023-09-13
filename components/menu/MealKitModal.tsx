@@ -2,6 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import React, { useState } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import Modal from "react-native-modal";
+import { router } from "expo-router";
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from "../../constants/Colors";
 
 interface MealKitModalProps {
@@ -16,6 +17,7 @@ interface MealKitModalProps {
     cookTime: number,
     prepTime: number,
     tags: string[],
+    isAuth: boolean
 }
 
 function twoDecimals(num: number): string {
@@ -46,7 +48,8 @@ export default function MealKitModal(props: MealKitModalProps) {
         prices,
         cookTime,
         prepTime,
-        tags
+        tags,
+        isAuth
     } = props;
 
     servingSizes.sort()
@@ -56,6 +59,15 @@ export default function MealKitModal(props: MealKitModalProps) {
 
     const servingSize = servingSizes[selectedServingSize];
     const price = prices[selectedServingSize];
+
+    function addToCart() {
+        if (isAuth) {
+            console.log("add to cart");
+        } else {
+            closeModal()
+            router.replace("/signin")
+        }
+    }
 
     return (
         <Modal isVisible={isVisible} style={styles.modal} animationIn={'fadeIn'} animationOut={'fadeOut'} onBackdropPress={closeModal}>
@@ -93,10 +105,10 @@ export default function MealKitModal(props: MealKitModalProps) {
                             </View>
                         </View>
                     </ScrollView>
-                    <Pressable>
+                    <Pressable onPress={addToCart}>
                         <View style={styles.a2cButton}>
                             <Text style={styles.a2cText}>
-                                Add to cart
+                                {isAuth ? "Add to cart" : "Sign in to place order"}
                             </Text>
                         </View>
                     </Pressable>

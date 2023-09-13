@@ -12,7 +12,8 @@ export interface AuthDetails {
     authenticated: boolean,
     first_name?: string,
     last_name?: string,
-    email?: string
+    email?: string,
+    verification_code?: string
 }
 
 export default function AuthShim(props: IAuthShimProps) {
@@ -29,6 +30,7 @@ export default function AuthShim(props: IAuthShimProps) {
                 authenticated: false
             }
         }).finally(async () => {
+            console.log(authDetails);
             setAuthDetails(authDetails)
             await Storage.storeAuthDetails(authDetails);
         })

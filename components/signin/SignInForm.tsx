@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, Redirect, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { login } from "../../app/api/rasoibox-backend";
 import { rasoiBoxYellow } from '../../constants/Colors';
 import { validateEmail } from "../../validators/Validators";
@@ -53,10 +53,10 @@ export default function SignInForm() {
                 authenticated: true,
                 first_name: loginResponse["first_name"],
                 last_name: loginResponse["last_name"],
-                email: loginResponse["email"]
+                email: loginResponse["email"],
+                verification_code: loginResponse["verification_code"]
             }
             await Storage.storeAuthDetails(authDetails)
-            router.replace("/menu")
         } else {
             setError('invalid_login')
         }
@@ -104,15 +104,15 @@ export default function SignInForm() {
 
 const styles = StyleSheet.create({
     card: {
-        height: 500,
-        width: 485,
+        height: Dimensions.get('window').width < 700 ? '100%' : 500,
+        width: Dimensions.get('window').width < 700 ? '100%' : 485,
         borderRadius: 10,
-        boxShadow: '2px 2px 20px 2px rgba(0, 0, 0, 0.2)',
+        boxShadow: Dimensions.get('window').width > 700 && '2px 2px 20px 2px rgba(0, 0, 0, 0.2)',
     },
     center: {
         alignItems: 'center',
         height: '100%',
-        paddingTop: 50,
+        paddingTop: Dimensions.get('window').width < 700 ? 10 : 50,
         backgroundColor: 'white'
     },
     title: {

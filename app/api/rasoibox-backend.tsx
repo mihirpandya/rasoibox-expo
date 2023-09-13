@@ -57,3 +57,54 @@ export function login(email: string, password: string): Promise<any> {
         throw error;
     })
 }
+
+export function updateCart(verification_code: string, recipe_name: string, serving_size: number) {
+    const request_body = {
+        "recipe_name": recipe_name,
+        "serving_size": serving_size
+    }
+
+    return fetch(BACKEND + "/api/order/update_cart?verification_code=" + verification_code, {
+        "method": "post",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        "body": JSON.stringify(request_body)
+    }).then((response) => {
+        if (response.status == 200) {
+            return {
+                "status": 0
+            }
+        } else if (response.status == 404) {
+            return {
+                "status": -1
+            }
+        } else {
+            console.error(response);
+            throw Error(response.statusText)
+        }
+    }).catch((error) => {
+        console.error(error);
+        throw error;
+    })
+}
+
+export function getCart(verification_code: string) {
+    return fetch(BACKEND + "/api/order/get_cart?verification_code=" + verification_code, {
+        "method": "get",
+        "headers": {
+            "accept": "application/json",
+        }
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else {
+            console.error(response);
+            return {}
+        }
+    }).catch((error => {
+        console.error(error);
+        throw error;
+    }))
+}

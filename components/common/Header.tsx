@@ -5,7 +5,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
 import LeftMenu from "../LeftMenu";
 import { AuthDetails } from './AuthShim';
-import Lightbox from "./Lightbox";
+import Lightbox, { LightboxSide } from "./Lightbox";
 import * as Storage from "./Storage";
 
 function LogoTitle() {
@@ -22,11 +22,17 @@ function LogoTitle() {
 
 export default function Header() {
     const [authDetails, setAuthDetails] = useState<AuthDetails>();
-    const [pressed, setPressed] = useState<boolean>(false);
+    const [menuPressed, setMenuPressed] = useState<boolean>(false);
+    const [cartPressed, setCartPressed] = useState<boolean>(false);
 
-    const togglePressed = () => {
-        const newPressed = !pressed;
-        setPressed(newPressed);
+    const toggleMenuPressed = () => {
+        const newPressed = !menuPressed;
+        setMenuPressed(newPressed);
+    }
+
+    const toggleCartPressed = () => {
+        const newPressed = !cartPressed;
+        setCartPressed(newPressed);
     }
 
     useEffect(() => {
@@ -46,18 +52,21 @@ export default function Header() {
                 headerShown: false,
                 title: "Rasoi Box"
             }} />
-            <Pressable onPress={togglePressed} style={styles.menu}>
+            <Pressable onPress={toggleMenuPressed} style={styles.menu}>
                 <Ionicons name="menu-sharp" size={25} color={rasoiBoxGrey}/>
             </Pressable>
-            <Lightbox isVisible={pressed} closeLightbox={togglePressed}>
-                <LeftMenu authDetails={authDetails} onNav={togglePressed}/>
+            <Lightbox isVisible={menuPressed} side={LightboxSide.left} closeLightbox={toggleMenuPressed}>
+                <LeftMenu authDetails={authDetails} onNav={toggleMenuPressed}/>
             </Lightbox>
             <LogoTitle />
             {authDetails?.authenticated && 
-                <Pressable style={styles.cart}>
+                <Pressable style={styles.cart} onPress={toggleCartPressed}>
                     <Ionicons name="cart-outline" size={25} color={rasoiBoxPink}/>
                 </Pressable>
             }
+            <Lightbox isVisible={cartPressed} side={LightboxSide.right} closeLightbox={toggleCartPressed}>
+                <LeftMenu authDetails={authDetails} onNav={toggleCartPressed}/>
+            </Lightbox>
         </View>
     );
 }
