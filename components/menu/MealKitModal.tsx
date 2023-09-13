@@ -65,7 +65,7 @@ export default function MealKitModal(props: MealKitModalProps) {
                 </Pressable>
                 <View style={styles.content}>
                     <ScrollView>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={styles.header}>
                             <Text style={styles.title}>{name}</Text>
                             <View style={styles.tags}>
                             {tags.map(tag => <Text key={tag} style={styles.tag}>{tag}</Text>)}
@@ -127,14 +127,21 @@ const styles = StyleSheet.create({
     image: {
         justifyContent: 'center',
         width: '100%',
-        height: 300,  
+        height: Dimensions.get('window').width < 700 ? 200 : 300,
+        marginTop: 10,
+    },
+    header: {
+        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
+        justifyContent: 'space-between'
     },
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
         fontSize: 30
     },
     content: {
-        padding: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        flex: 1
     },
     description: {
         fontFamily: 'AvenirLight',
@@ -172,7 +179,8 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 50
+        marginTop: 10,
+        marginBottom: 10,
     },
     a2cText: {
         fontFamily: 'AvenirLight',
