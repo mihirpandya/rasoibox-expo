@@ -1,6 +1,10 @@
+import { Redirect } from 'expo-router';
 import React from 'react';
-import { Text, View } from 'react-native';
+import Checkout from '../../components/checkout/Checkout';
+import AuthShim from '../../components/common/AuthShim';
 
 export default function Menu() {
-    return <View><Text>Checkout</Text></View>
+    return (
+            <Checkout />
+    )
 }

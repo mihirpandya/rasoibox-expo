@@ -5,9 +5,9 @@ import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import MealKitCard from "../../components/menu/MealKitCard";
 import MealKitModal from "../../components/menu/MealKitModal";
+import { rasoiBoxPink } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
-import { rasoiBoxPink } from '../../constants/Colors';
 
 interface MealKit {
     id: number,

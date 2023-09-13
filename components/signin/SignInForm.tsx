@@ -8,6 +8,8 @@ import { validateEmail } from "../../validators/Validators";
 import { AuthDetails } from '../common/AuthShim';
 import ErrorText from "../common/ErrorText";
 import * as Storage from "../common/Storage";
+import FormKey from "../common/FormKey";
+import FormValue from "../common/FormValue";
 
 export const errorIds = ['no_error', 'email', 'password', 'invalid_login'] as const;
 type ErrorID = typeof errorIds[number];
@@ -76,19 +78,15 @@ export default function SignInForm() {
                             <Text style={styles.title}>
                                 Welcome Back!
                             </Text>
-                            <Text style={styles.fieldTitle}>
-                                Email
-                            </Text>
-                            <TextInput style={styles.fieldValue} onChangeText={setEmail} onKeyPress={submitIfEnter}/>
+                            <FormKey>Email</FormKey>
+                            <FormValue secureTextEntry={false} onChangeText={setEmail} onKeyPress={submitIfEnter} />
                             <View style={styles.password}>
-                                <Text style={styles.fieldTitle}>
-                                    Password
-                                </Text>
+                                <FormKey>Password</FormKey>
                                 <Link href="/forgotpassword">
                                     <Text style={styles.forgotPassword}>Forgot Password?</Text>
                                 </Link>
                             </View>
-                            <TextInput style={styles.fieldValue} secureTextEntry={true} onChangeText={setPassword} onKeyPress={submitIfEnter}/>
+                            <FormValue secureTextEntry={true} onChangeText={setPassword} onKeyPress={submitIfEnter} />
                             {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
                             <Pressable style={styles.button} onPress={submit}>
                                 <Text style={styles.buttonText}>Sign In</Text>
