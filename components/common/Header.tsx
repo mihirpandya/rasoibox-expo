@@ -66,7 +66,7 @@ export default function Header() {
                 </Pressable>
             }
             <Lightbox isVisible={cartPressed} width={350} side={LightboxSide.right} closeLightbox={toggleCartPressed}>
-                <RightCart />
+                <RightCart closeLightbox={toggleCartPressed}/>
             </Lightbox>
         </View>
     );

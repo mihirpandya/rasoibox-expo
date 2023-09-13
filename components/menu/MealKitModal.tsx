@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Modal from "react-native-modal";
 import { rasoiBoxGrey, rasoiBoxYellow } from "../../constants/Colors";
+import { updateCart } from '../../app/api/rasoibox-backend';
 
 interface MealKitModalProps {
     isVisible: boolean,
@@ -17,7 +18,7 @@ interface MealKitModalProps {
     cookTime: number,
     prepTime: number,
     tags: string[],
-    isAuth: boolean
+    verificationCode: string | undefined
 }
 
 function twoDecimals(num: number): string {
@@ -49,7 +50,7 @@ export default function MealKitModal(props: MealKitModalProps) {
         cookTime,
         prepTime,
         tags,
-        isAuth
+        verificationCode
     } = props;
 
     servingSizes.sort()
@@ -60,9 +61,10 @@ export default function MealKitModal(props: MealKitModalProps) {
     const servingSize = servingSizes[selectedServingSize];
     const price = prices[selectedServingSize];
 
-    function addToCart() {
-        if (isAuth) {
-            console.log("add to cart");
+    function addToCart(recipeName: string, servingSize: number) {
+        if (verificationCode != undefined) {
+            console.log("adding " + recipeName + " " + servingSize);
+            updateCart(verificationCode, recipeName, servingSize).then(_response => closeModal())
         } else {
             closeModal()
             router.replace("/signin")
@@ -105,10 +107,10 @@ export default function MealKitModal(props: MealKitModalProps) {
                             </View>
                         </View>
                     </ScrollView>
-                    <Pressable onPress={addToCart}>
+                    <Pressable onPress={() => addToCart(name, servingSizes[selectedServingSize])}>
                         <View style={styles.a2cButton}>
                             <Text style={styles.a2cText}>
-                                {isAuth ? "Add to cart" : "Sign in to place order"}
+                                {verificationCode != undefined ? "Add to cart" : "Sign in to place order"}
                             </Text>
                         </View>
                     </Pressable>

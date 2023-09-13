@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { getCart } from '../../app/api/rasoibox-backend';
-import { rasoiBoxGrey, rasoiBoxYellow } from '../../constants/Colors';
+import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { getCart, updateCart } from '../../app/api/rasoibox-backend';
+import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
+import { router } from 'expo-router';
 
 interface CartItemResponse {
     recipeName: string,
@@ -17,8 +18,12 @@ function ellipsify(name: string): string {
     return name.substring(0, 15) + "..."
 }
 
-function CartItem(props: { cartItem: CartItemResponse }) {
-    const { cartItem } = props;
+function checkoutButtonStyle(cartEmpty: boolean)  {
+    return cartEmpty ? styles.inactiveCheckoutButton : styles.checkoutButton
+}
+
+function CartItem(props: { cartItem: CartItemResponse, deleteItem: () => void }) {
+    const { cartItem, deleteItem } = props;
     return (
         <View style={styles.cartItem}>
             <Image style={styles.itemImage} source={{ uri: cartItem.imageUrl }}/>
@@ -28,7 +33,7 @@ function CartItem(props: { cartItem: CartItemResponse }) {
                 <Text style={styles.price}>{cartItem.price}</Text>
             </View>
             <View style={styles.deleteItem}>
-                <Pressable>
+                <Pressable onPress={deleteItem}>
                     <Ionicons name="trash-outline" size={20} color={rasoiBoxGrey} />
                 </Pressable>
             </View>
@@ -36,12 +41,14 @@ function CartItem(props: { cartItem: CartItemResponse }) {
     )
 }
 
-export default function RightCart() {
+export default function RightCart(props: {closeLightbox: () => void}) {
     const [authDetails, setAuthDetails] = useState<AuthDetails>();
     const [cart, setCart] = useState<CartItemResponse[]>([])
+    const [loading, setLoading] = useState<boolean>(true);
 
     function fetchCart() {
         if (authDetails?.verification_code != undefined) {
+            setLoading(true);
             getCart(authDetails.verification_code).then(response => {
                 const cartItems: CartItemResponse[] = Object.values(response).map(item => {
                     return {
@@ -53,6 +60,7 @@ export default function RightCart() {
                 });
 
                 setCart(cartItems);
+                setLoading(false);
             })
         }
     }
@@ -72,22 +80,40 @@ export default function RightCart() {
         fetchCart()
     }, [authDetails])
 
-    return (
-        <View style={{flex: 1}}>
-            <ScrollView>
-                {cart.length == 0 ? <Text>Empty cart</Text> : <FlatList 
-                    data={cart}
-                    renderItem={
-                        ({item}) => <CartItem cartItem={item}/>
-                    }/>}
-            </ScrollView>
-            <View style={styles.checkoutButton}>
-                <Pressable>
-                    <Text style={styles.checkout}>Checkout</Text>
-                </Pressable>
-            </View>
-        </View>
-    )
+    function deleteItem(recipeName: string) {
+        if (authDetails?.verification_code != undefined) {
+            updateCart(authDetails.verification_code, recipeName, 0).then(_response => fetchCart())
+        }
+    }
+
+    function checkout() {
+        router.replace("/checkout");
+        props.closeLightbox();
+    }
+
+    if (loading) {
+        return (<ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/>);
+    } else {
+        return (
+                <View style={{flex: 1}}>
+                    <ScrollView>
+                        <Text style={styles.title}>Your Cart</Text>
+                        <FlatList 
+                            data={cart}
+                            renderItem={
+                                ({item}) => <CartItem cartItem={item} deleteItem={() => deleteItem(item.recipeName)}/>
+                            }/>
+                        <Text style={styles.subtitle}>All orders placed after Thursday will arrive on the following Sunday.</Text>
+                    </ScrollView>
+                    <View style={checkoutButtonStyle(cart.length == 0)}>
+                        <Pressable disabled={cart.length == 0} onPress={checkout}>
+                            <Text style={styles.checkout}>Checkout</Text>
+                        </Pressable>
+                    </View>
+                    <Text style={styles.subtitle}>All promo codes will be applied at checkout.</Text>
+                </View>
+            );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -132,10 +158,30 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 20
     },
+    inactiveCheckoutButton: {
+        backgroundColor: 'grey',
+        paddingTop: 5,
+        paddingBottom: 5,
+        alignContent: 'center',
+        justifyContent: 'center',
+        margin: 10,
+        borderRadius: 20
+    },
     checkout: {
         color: 'white',
         textAlign: 'center',
         fontFamily: 'AvenirLight',
         fontSize: 20
+    },
+    title: {
+        padding: 20,
+        fontFamily: 'CormorantGaramondSemiBold',
+        fontSize: 25
+    },
+    subtitle: {
+        textAlign: 'center',
+        padding: 5,
+        fontFamily: 'AvenirLight',
+        color: '#808080'
     }
 });

@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, Redirect, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Dimensions, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { login } from "../../app/api/rasoibox-backend";
-import { rasoiBoxYellow } from '../../constants/Colors';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { validateEmail } from "../../validators/Validators";
 import { AuthDetails } from '../common/AuthShim';
 import ErrorText from "../common/ErrorText";
@@ -24,6 +24,7 @@ export default function SignInForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<ErrorID>('no_error')
+    const [loading, setLoading] = useState<boolean>(false);
 
     function submitIfEnter(event: any) {
         if (event.key === "Enter") {
@@ -42,7 +43,9 @@ export default function SignInForm() {
             return;
         }
 
+        setLoading(true);
         const loginResponse = await login(email, password)
+        setLoading(false);
         console.log(loginResponse);
 
         if (loginResponse["status"] == 0) {
@@ -68,34 +71,36 @@ export default function SignInForm() {
         return (
             <View style={styles.center}>
                 <View style={styles.card}>
-                    <View style={styles.form}>
-                        <Text style={styles.title}>
-                            Welcome Back!
-                        </Text>
-                        <Text style={styles.fieldTitle}>
-                            Email
-                        </Text>
-                        <TextInput style={styles.fieldValue} onChangeText={setEmail} onKeyPress={submitIfEnter}/>
-                        <View style={styles.password}>
-                            <Text style={styles.fieldTitle}>
-                                Password
+                    {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> : 
+                        <View style={styles.form}>
+                            <Text style={styles.title}>
+                                Welcome Back!
                             </Text>
-                            <Link href="/forgotpassword">
-                                <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                            </Link>
+                            <Text style={styles.fieldTitle}>
+                                Email
+                            </Text>
+                            <TextInput style={styles.fieldValue} onChangeText={setEmail} onKeyPress={submitIfEnter}/>
+                            <View style={styles.password}>
+                                <Text style={styles.fieldTitle}>
+                                    Password
+                                </Text>
+                                <Link href="/forgotpassword">
+                                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                                </Link>
+                            </View>
+                            <TextInput style={styles.fieldValue} secureTextEntry={true} onChangeText={setPassword} onKeyPress={submitIfEnter}/>
+                            {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
+                            <Pressable style={styles.button} onPress={submit}>
+                                <Text style={styles.buttonText}>Sign In</Text>
+                            </Pressable>
+                            <View style={styles.signup}>
+                                <Text style={styles.signupText}>New to Rasoi Box?</Text>
+                                <Link href="/signup">
+                                    <Text style={styles.forgotPassword}>Sign Up</Text>
+                                </Link>
+                            </View>
                         </View>
-                        <TextInput style={styles.fieldValue} secureTextEntry={true} onChangeText={setPassword} onKeyPress={submitIfEnter}/>
-                        {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
-                        <Pressable style={styles.button} onPress={submit}>
-                            <Text style={styles.buttonText}>Sign In</Text>
-                        </Pressable>
-                        <View style={styles.signup}>
-                            <Text style={styles.signupText}>New to Rasoi Box?</Text>
-                            <Link href="/signup">
-                                <Text style={styles.forgotPassword}>Sign Up</Text>
-                            </Link>
-                        </View>
-                    </View>
+                    }
                 </View>
             </View>
         )
@@ -171,5 +176,5 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontSize: 15,
         paddingRight: 5,
-    }
+    },
 });

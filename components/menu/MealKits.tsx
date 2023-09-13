@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { getAvailableItems } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
@@ -7,6 +7,7 @@ import MealKitCard from "../../components/menu/MealKitCard";
 import MealKitModal from "../../components/menu/MealKitModal";
 import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
+import { rasoiBoxPink } from '../../constants/Colors';
 
 interface MealKit {
     id: number,
@@ -24,8 +25,10 @@ export default function MealKits() {
     const [availableItems, setAvailableItems] = useState<MealKit[]>([])
     const [selectedItem, setSelectedItem] = useState<MealKit | undefined>(undefined);
     const [authDetails, setAuthDetails] = useState<AuthDetails | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const fetchAvailableItems = () => {
+        setLoading(true);
         getAvailableItems().then(response => {
             const keys = Object.keys(response);
             const values = Object.values(response);
@@ -44,6 +47,7 @@ export default function MealKits() {
                 })
             }
             setAvailableItems(items)
+            setLoading(false);
         })
     }
 
@@ -70,9 +74,11 @@ export default function MealKits() {
     }
     
     return (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, backgroundColor: 'white'}}>
             <ScrollView>
                 <Header />
+                {
+                    loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> :
                     <View style={styles.card}>
                         {availableItems.map(item => <MealKitCard
                             key={item.id}
@@ -99,9 +105,10 @@ export default function MealKits() {
                             cookTime={selectedItem.cookTime}
                             prepTime={selectedItem.prepTime}
                             tags={selectedItem.tags}
-                            isAuth={authDetails?.authenticated === true}
+                            verificationCode={authDetails?.verification_code}
                         />}
                     </View>
+                }
                 <Footer />
             </ScrollView>
         </View>
