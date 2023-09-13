@@ -34,6 +34,24 @@ const ERRORS: Record<ErrorID, string> = {
     phone_number: "Please enter a 10-digit phone number."
 }
 
+export const promoCodeErrIds = [
+    'no_error',
+    'invalid',
+    'expired',
+    'already_used',
+    'more_than_one'
+]
+
+type PromoCodeErrorId = typeof promoCodeErrIds[number];
+
+const PROMO_CODE_ERRORS: Record<PromoCodeErrorId, string> = {
+    no_error: "There is no error. No message to show.",
+    invalid: "Invalid promo code.",
+    expired: "This promo code has expired.",
+    already_used: "This promo code has already been used.",
+    more_than_one: "Only one promo code can be applied per order."
+}
+
 function getApplyStyle(active: boolean) {
     return active ? styles.applyActive : styles.applyInactive;
 }
@@ -48,6 +66,7 @@ export default function Checkout() {
     const [cart, setCart] = useState<CartItemResponse[]>([])
     const [loading, setLoading] = useState<boolean>(true);
     const [promoCode, setPromoCode] = useState<string>("")
+    const [promoCodeError, setPromoCodeError] = useState<PromoCodeErrorId>('no_error');
     const [appliedPromoCode, setAppliedPromoCode] = useState<string | undefined>(undefined)
 
     const fetchAuthDetails = () => {
@@ -140,7 +159,7 @@ export default function Checkout() {
                 <View style={styles.card}>
                     <View style={styles.collectInfo}>
                         <Text style={styles.title}>Shipping Information</Text>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 20}}>
                             <View style={{width: '45%'}}>
                                 <FormKey>First Name</FormKey>
                                 <FormValue onChangeText={setFirstName} onKeyPress={submitIfEnter} defaultValue={authDetails?.first_name}></FormValue>
@@ -158,12 +177,11 @@ export default function Checkout() {
                             <FormKey>Phone Number</FormKey>
                             <FormValue onChangeText={setPhoneNumber} onKeyPress={submitIfEnter}></FormValue>
                         </View>
-                        <View style={{marginTop: 30}}>
-                            {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
-                            <CheckoutButton active={true} onPress={submit}/>
-                        </View>
                     </View>
                     <View style={styles.summary}>
+                        <View style={{marginLeft: 20}}>
+                            <Text style={styles.title}>Order Summary</Text>
+                        </View>
                         <FlatList 
                             data={cart}
                             renderItem={
@@ -181,6 +199,7 @@ export default function Checkout() {
                                 </Pressable>
                             </View>
                         </View>
+                        {promoCodeError != 'no_error' && <ErrorText message={PROMO_CODE_ERRORS[promoCodeError]}/>}
                         <View style={styles.subtotal}>
                             <View style={styles.section}>
                                 <Text style={styles.key}>Subtotal</Text>
@@ -208,6 +227,10 @@ export default function Checkout() {
                                 <Text style={styles.value}>$20.00</Text>
                             </View>
                         </View>
+                        <View>
+                            {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
+                            <CheckoutButton active={true} onPress={submit}/>
+                        </View>
                     </View>
                 </View>
                 <Footer />
@@ -223,7 +246,7 @@ const styles = StyleSheet.create({
     },
     collectInfo: {
         paddingTop: 30,
-        paddingBottom: 30,
+        width: Dimensions.get('window').width < 700 ? '95%' : 500,
         marginLeft: Dimensions.get('window').width < 700 ? 0 : '5%',
         paddingLeft: 20,
         paddingRight: 20
@@ -231,11 +254,15 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
         fontSize: 35,
-        paddingBottom: 30
+        paddingBottom: 30,
+        // textAlign: 'center',
+        paddingTop: 10
     },
     summary: {
+        paddingTop: 30,
         width: Dimensions.get('window').width < 700 ? '95%' : 380,
-        marginLeft: Dimensions.get('window').width < 700 ? '95%' : 0,
+        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : 0,
+        marginTop: Dimensions.get('window').width < 700 ? 20 : 0,
         borderRadius: 10,
         borderWidth: 1
     },
@@ -247,7 +274,6 @@ const styles = StyleSheet.create({
     },
     promocode: {
         borderTopWidth: 1,
-        borderBottomWidth: 1,
         borderColor: '#808080',
         backgroundColor: 'white',
         alignItems: 'center',
@@ -295,12 +321,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     subtotal: {
-        borderBottomWidth: 1,
+        borderTopWidth: 1,
         borderColor: '#808080',
         marginLeft: 20,
         marginRight: 20,
     },
     total: {
+        borderTopWidth: 1,
+        borderColor: '#808080',
         marginLeft: 20,
         marginRight: 20,
         paddingBottom: 30
