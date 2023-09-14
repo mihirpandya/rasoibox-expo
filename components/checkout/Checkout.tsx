@@ -260,7 +260,7 @@ export default function Checkout() {
                             renderItem={
                                 ({item}) => <CartItem cartItem={item} deleteItem={() => deleteItem(item.recipeName)}/>
                             }/>
-                        <Text style={styles.subtitle}>Estimated Delivery August 20, 2023</Text>
+                        <Text style={styles.subtitle}>Estimated Delivery September 20, 2023</Text>
                         <View style={styles.promocode}>
                             <Ionicons style={{marginRight: -30}} name="pricetags" size={20} color={rasoiBoxPink} />
                             <TextInput style={styles.promocodeText} placeholder='Promo code' onChangeText={setPromoCode} onKeyPress={submitPromoCodeIfEnter}/>

@@ -56,6 +56,11 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
                 label: 'Profile',
                 icon: 'person-circle',
                 href: '/profile'
+            },
+            {
+                label: 'Order History',
+                icon: "receipt-outline",
+                href: "/order-history"
             }
         ]
 
