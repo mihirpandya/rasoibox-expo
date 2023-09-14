@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, Pressable, Text, View, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { rasoiBoxGrey } from '../../constants/Colors';
 
 export interface CartItemResponse {
@@ -14,8 +14,12 @@ function ellipsify(name: string): string {
     return name.substring(0, 15) + "..."
 }
 
-export default function CartItem(props: { cartItem: CartItemResponse, deleteItem: () => void }) {
-    const { cartItem, deleteItem } = props;
+export default function CartItem(props: { 
+    cartItem: CartItemResponse, 
+    deleteItem: () => void, 
+    hideDelete?: boolean 
+}) {
+    const { cartItem, deleteItem, hideDelete } = props;
     return (
         <View style={styles.cartItem}>
             <Image style={styles.itemImage} source={{ uri: cartItem.imageUrl }}/>
@@ -24,11 +28,11 @@ export default function CartItem(props: { cartItem: CartItemResponse, deleteItem
                 <Text style={styles.servingSize}>{cartItem.servingSize} servings</Text>
                 <Text style={styles.price}>{cartItem.price}</Text>
             </View>
-            <View style={styles.deleteItem}>
+            {!hideDelete && <View style={styles.deleteItem}>
                 <Pressable onPress={deleteItem}>
                     <Ionicons name="trash-outline" size={20} color={rasoiBoxGrey} />
                 </Pressable>
-            </View>
+            </View>}
         </View>
     )
 }

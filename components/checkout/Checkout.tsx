@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getCart, updateCart } from '../../app/api/rasoibox-backend';
+import { getCart, isValidPromoCode, updateCart } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
@@ -52,8 +53,34 @@ const PROMO_CODE_ERRORS: Record<PromoCodeErrorId, string> = {
     more_than_one: "Only one promo code can be applied per order."
 }
 
+interface PromoCode {
+    promoCodeName: string,
+    amountOff: number,
+    percentOff: number
+}
+
 function getApplyStyle(active: boolean) {
     return active ? styles.applyActive : styles.applyInactive;
+}
+
+function twoDecimals(num: number): string {
+    return num.toFixed(2)
+}
+
+function getPromoAmount(promoCode: PromoCode): string {
+    if (promoCode.amountOff > 0) {
+        return "-$" + promoCode.amountOff
+    }
+
+    return "-" + promoCode.percentOff + "%"
+}
+
+function totalAfterPromo(total: number, promoCode: PromoCode): number {
+    if (promoCode.amountOff > 0) {
+        return total - promoCode.amountOff;
+    }
+
+    return total - (promoCode.percentOff / 100) * total;
 }
 
 export default function Checkout() {
@@ -67,7 +94,9 @@ export default function Checkout() {
     const [loading, setLoading] = useState<boolean>(true);
     const [promoCode, setPromoCode] = useState<string>("")
     const [promoCodeError, setPromoCodeError] = useState<PromoCodeErrorId>('no_error');
-    const [appliedPromoCode, setAppliedPromoCode] = useState<string | undefined>(undefined)
+    const [appliedPromoCode, setAppliedPromoCode] = useState<PromoCode | undefined>(undefined)
+    const [subtotal, setSubtotal] = useState<number>(0)
+    const [total, setTotal] = useState<number>(0)
 
     const fetchAuthDetails = () => {
         Storage.getAuthDetails().then(details => {
@@ -99,6 +128,17 @@ export default function Checkout() {
     }
 
     useEffect(() => {
+        let total = 0;
+        cart.forEach(cartItem => total += cartItem.price);
+        setSubtotal(total);
+        if (appliedPromoCode != undefined) {
+            total = totalAfterPromo(total, appliedPromoCode)
+        }
+        setTotal(total);
+    }, [cart, appliedPromoCode])
+
+
+    useEffect(() => {
         fetchAuthDetails()
     }, [])
 
@@ -124,8 +164,41 @@ export default function Checkout() {
         }
     }
 
+    function deleteAppliedPromoCode() {
+        setAppliedPromoCode(undefined);
+    }
+
     function submitPromoCode() {
-        console.log("submit promo code")
+        setPromoCodeError('no_error')
+        if (appliedPromoCode != undefined) {
+            setPromoCodeError('more_than_one')
+            return;
+        }
+        AsyncStorage.getItem(Storage.ACCESS_TOKEN).then(token => {
+            if (token != null) {
+                isValidPromoCode(token, promoCode).then(response => {
+                    const status = response["status"]
+                    if (status == 0) {
+                        setAppliedPromoCode({
+                            promoCodeName: response["promo_code_name"],
+                            amountOff: response["amount_off"],
+                            percentOff: response["percent_off"]
+                        })
+                    } else if (status == 1) {
+                        setPromoCodeError('already_used')
+                    } else if (status == -1) {
+                        setPromoCodeError('expired')
+                    } else {
+                        setPromoCodeError('invalid')
+                    }
+                }).catch(error => {
+                    console.error(error);
+                    setPromoCodeError('invalid')
+                })
+            } else {
+                setPromoCodeError('invalid')
+            }
+        })
     }
 
     function submit() {
@@ -203,7 +276,7 @@ export default function Checkout() {
                         <View style={styles.subtotal}>
                             <View style={styles.section}>
                                 <Text style={styles.key}>Subtotal</Text>
-                                <Text style={styles.value}>$20.00</Text>
+                                <Text style={styles.value}>${twoDecimals(subtotal)}</Text>
                             </View>
                             <View style={styles.section}>
                                 <Text style={styles.key}>Shipping</Text>
@@ -212,8 +285,13 @@ export default function Checkout() {
                             {
                                 appliedPromoCode != undefined &&
                                 <View style={styles.section}>
-                                    <Text style={styles.key}>Promo code</Text>
-                                    <Text style={styles.value}>{appliedPromoCode}</Text>
+                                    <Text style={styles.key}>{appliedPromoCode.promoCodeName}</Text>
+                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                        <Text style={styles.value}>{getPromoAmount(appliedPromoCode)}</Text>
+                                        <Pressable style={{paddingLeft: 5}} onPress={deleteAppliedPromoCode}>
+                                            <Ionicons name="trash-outline" size={15} color={rasoiBoxGrey} />
+                                        </Pressable>
+                                    </View>
                                 </View>
                             }
                             <View style={styles.section}>
@@ -224,7 +302,7 @@ export default function Checkout() {
                         <View style={styles.total}>
                             <View style={styles.section}>
                                 <Text style={styles.key}>Total</Text>
-                                <Text style={styles.value}>$20.00</Text>
+                                <Text style={styles.value}>${twoDecimals(total)}</Text>
                             </View>
                         </View>
                         <View>

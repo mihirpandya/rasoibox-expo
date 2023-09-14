@@ -43,7 +43,7 @@ export default function RootLayout() {
 
   return (
     <PaperProvider>
-      <Stack />
+        <Stack />
     </PaperProvider>
   );
 }

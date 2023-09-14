@@ -108,3 +108,26 @@ export function getCart(verification_code: string) {
         throw error;
     }))
 }
+
+export function isValidPromoCode(token: string, promo_code: string) {
+    return fetch(BACKEND + "order/is_valid_promo_code?promo_code=" + promo_code, {
+        "method": "get",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else if (response.status == 400) {
+            return {
+                "status": -1
+            }
+        } else {
+            return {
+                "status": -2
+            }
+        }
+    })
+}
