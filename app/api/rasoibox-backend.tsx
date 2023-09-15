@@ -131,3 +131,26 @@ export function isValidPromoCode(token: string, promo_code: string) {
         }
     })
 }
+
+export function initiateIntent(token: string) {
+    return fetch(BACKEND + "order/initiate_intent", {
+        "method": "post",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else if (response.status == 400) {
+            return {
+                "status": -1
+            }
+        } else {
+            return {
+                "status": -2
+            }
+        }
+    })
+}

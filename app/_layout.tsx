@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 
+
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary
@@ -43,7 +44,7 @@ export default function RootLayout() {
 
   return (
     <PaperProvider>
-        <Stack />
+      <Stack />
     </PaperProvider>
   );
 }

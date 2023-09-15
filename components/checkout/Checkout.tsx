@@ -9,11 +9,9 @@ import Header from '../../components/common/Header';
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from '../common/CartItem';
-import CheckoutButton from '../common/CheckoutButton';
 import ErrorText from '../common/ErrorText';
-import FormKey from '../common/FormKey';
-import FormValue from '../common/FormValue';
 import * as Storage from "../common/Storage";
+import StripeCheckout from "./StripeCheckout";
 
 export const errorIds = [
     'no_error',
@@ -230,27 +228,19 @@ export default function Checkout() {
             <ScrollView>
                 <Header />
                 <View style={styles.card}>
-                    <View style={styles.collectInfo}>
-                        <Text style={styles.title}>Shipping Information</Text>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 20}}>
-                            <View style={{width: '45%'}}>
-                                <FormKey>First Name</FormKey>
-                                <FormValue onChangeText={setFirstName} onKeyPress={submitIfEnter} defaultValue={authDetails?.first_name}></FormValue>
-                            </View>
-                            <View style={{width: '45%'}}>
-                                <FormKey>Last Name</FormKey>
-                                <FormValue onChangeText={setLastName} onKeyPress={submitIfEnter} defaultValue={authDetails?.last_name}></FormValue>
-                            </View>
-                        </View>
-                        <View style={{paddingTop: 20}}>
-                            <FormKey>Shipping Address</FormKey>
-                            <FormValue onChangeText={setAddress} onKeyPress={submitIfEnter}></FormValue>
-                        </View>
-                        <View style={{paddingTop: 20}}>
-                            <FormKey>Phone Number</FormKey>
-                            <FormValue onChangeText={setPhoneNumber} onKeyPress={submitIfEnter}></FormValue>
-                        </View>
-                    </View>
+                    {/* <CollectInfo 
+                        setFirstName={setFirstName}
+                        setLastName={setLastName}
+                        setAddress={setAddress}
+                        setPhoneNumber={setPhoneNumber}
+                        submitIfEnter={submitIfEnter}
+                        submit={submit}
+                        defaultFirstName={authDetails?.first_name}
+                        defaultLastName={authDetails?.last_name}
+                        errorMessage={error != 'no_error' ? ERRORS[error] : undefined}
+
+                    /> */}
+                    <StripeCheckout />
                     <View style={styles.summary}>
                         <View style={{marginLeft: 20}}>
                             <Text style={styles.title}>Order Summary</Text>
@@ -305,10 +295,6 @@ export default function Checkout() {
                                 <Text style={styles.value}>${twoDecimals(total)}</Text>
                             </View>
                         </View>
-                        <View>
-                            {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
-                            <CheckoutButton active={true} onPress={submit}/>
-                        </View>
                     </View>
                 </View>
                 <Footer />
@@ -319,15 +305,8 @@ export default function Checkout() {
 
 const styles = StyleSheet.create({
     card: {
-        flexDirection: Dimensions.get('window').width < 700 ? 'column': 'row',
+        flexDirection: Dimensions.get('window').width < 700 ? 'column-reverse': 'row',
         justifyContent: 'space-evenly'
-    },
-    collectInfo: {
-        paddingTop: 30,
-        width: Dimensions.get('window').width < 700 ? '95%' : 500,
-        marginLeft: Dimensions.get('window').width < 700 ? 0 : '5%',
-        paddingLeft: 20,
-        paddingRight: 20
     },
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
@@ -409,7 +388,7 @@ const styles = StyleSheet.create({
         borderColor: '#808080',
         marginLeft: 20,
         marginRight: 20,
-        paddingBottom: 30
+        paddingBottom: 20
     },
     section: {
         flexDirection: 'row',
