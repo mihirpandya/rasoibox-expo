@@ -228,19 +228,7 @@ export default function Checkout() {
             <ScrollView>
                 <Header />
                 <View style={styles.card}>
-                    {/* <CollectInfo 
-                        setFirstName={setFirstName}
-                        setLastName={setLastName}
-                        setAddress={setAddress}
-                        setPhoneNumber={setPhoneNumber}
-                        submitIfEnter={submitIfEnter}
-                        submit={submit}
-                        defaultFirstName={authDetails?.first_name}
-                        defaultLastName={authDetails?.last_name}
-                        errorMessage={error != 'no_error' ? ERRORS[error] : undefined}
-
-                    /> */}
-                    <StripeCheckout />
+                    <StripeCheckout firstName={authDetails?.first_name} lastName={authDetails?.last_name} promoCode={appliedPromoCode?.promoCodeName}/>
                     <View style={styles.summary}>
                         <View style={{marginLeft: 20}}>
                             <Text style={styles.title}>Order Summary</Text>

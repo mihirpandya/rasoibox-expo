@@ -9,17 +9,18 @@ import { rasoiBoxPink } from '../../constants/Colors';
 
 process.env.STRIPE_PUB_KEY
 
-const stripePromise = loadStripe("pk_test_51NKT9IDgBx8MbUKDtYV3RNaDYHlZS2DXYqvT7aoY10uxS7Nulza6XaVfw65P2Sqok2pyhlnyqCsEx5x6T1pKy7PQ00UdkwfT7J");
+const stripePromise = loadStripe("pk_live_51NKT9IDgBx8MbUKDEnyWUhYmtAwmdTxnAHNs5eAOsC9J0GTmHVdpQoeTF42EU3pG6rKGbYOZXUPVntxmB4UmWveM00daTVB6BO");
 const appearance = {
     variables: {
         colorPrimary: rasoiBoxPink,
-        fontFamily: 'Avenir'
+        fontFamily: 'Avenir',
     }
 }
 
-export default function StripeCheckout() {
+export default function StripeCheckout(props: {firstName?: string, lastName?: string, promoCode?: string}) {
+    const { firstName, lastName, promoCode } = props;
     const [orderId, setOrderId] = useState<string | undefined>();
-    const [clientSecret, setClientSecret] = useState<string | undefined>("pi_3NqiD3DgBx8MbUKD0i84uaOa_secret_tXv7hWUnRs5hGEmebzw8oLjga")
+    const [clientSecret, setClientSecret] = useState<string | undefined>()
     const options = {
         clientSecret: clientSecret,
         appearance: appearance
@@ -52,8 +53,9 @@ export default function StripeCheckout() {
     }, [authtoken])
 
     return (
+        clientSecret &&
         <Elements stripe={stripePromise} options={options}>
-            <StripeCheckoutForm />
+            <StripeCheckoutForm authToken={authtoken} firstName={firstName} lastName={lastName} promoCode={promoCode}/>
         </Elements>
     )
 }

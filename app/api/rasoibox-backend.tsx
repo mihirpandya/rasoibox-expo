@@ -1,5 +1,22 @@
 const BACKEND: string = "https://rasoibox.onrender.com/api/"
 
+export interface OrderBackendApi {
+    order_date: Date,
+    recipient_first_name: string,
+    recipient_last_name: string,
+    delivery_address: {
+        user_input: string,
+        street_name: string,
+        street_number: number,
+        apartment_number?: string,
+        city: string,
+        state: string,
+        zipcode: string
+    },
+    phone_number: string,
+    promo_codes: string[]
+}
+
 export function getAvailableItems(): Promise<any> {
     return fetch(BACKEND + 'order/get_available_items', {
         method: 'GET',
@@ -133,7 +150,7 @@ export function isValidPromoCode(token: string, promo_code: string) {
 }
 
 export function initiateIntent(token: string) {
-    return fetch(BACKEND + "order/initiate_intent", {
+    return fetch(BACKEND + "orderV2/initiate_intent", {
         "method": "post",
         "headers": {
             "accept": "application/json",
@@ -152,5 +169,38 @@ export function initiateIntent(token: string) {
                 "status": -2
             }
         }
+    })
+}
+
+export function initiatePlaceOrder(token: string, order: OrderBackendApi) {
+    return fetch(BACKEND + "orderV2/initiate_place_order", {
+        "method": "post",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        "body": JSON.stringify(order)
+    }).then((response) => {
+        if (response.status == 200) {
+            return {
+                "status": 0
+            }
+        } else if (response.status == 400) {
+            console.error(response);
+            return {
+                "status": -2,
+            }
+        } else if (response.status == 404) {
+            return {
+                "status": -1
+            }
+        } else {
+            console.error(response);
+            throw Error(response.statusText)
+        }
+    }).catch((error) => {
+        console.error(error);
+        throw error;
     })
 }
