@@ -2,18 +2,32 @@ import React from "react";
 import { Pressable, Text, View, StyleSheet, ActivityIndicator } from 'react-native';
 import { rasoiBoxYellow } from '../../constants/Colors';
 
+export enum CheckoutStatus { checkout, loading, success }
+
 function checkoutButtonStyle(active: boolean) {
     return active ? styles.checkoutButton : styles.inactiveCheckoutButton;
 }
 
-export default function CheckoutButton(props: { active: boolean, loading: boolean, onPress: () => void }) {
-    const { active, loading, onPress } = props;
+export default function CheckoutButton(props: { active: boolean, checkoutStatus: CheckoutStatus, onPress: () => void }) {
+    const { active, checkoutStatus: buttonStatus, onPress } = props;
+
+    function buttonLabelFromStatus() {
+        if (buttonStatus == CheckoutStatus.checkout) {
+            return (
+                <Pressable disabled={!active} onPress={onPress}>
+                    <Text style={styles.checkout}>Checkout</Text>
+                </Pressable>
+            );
+        } else if (buttonStatus == CheckoutStatus.loading) {
+            return (<ActivityIndicator size={"small"} color='white'/>);
+        } else {
+            // success
+            return (<Text style={styles.checkout}>Success!</Text>);
+        }
+    }
     return (
         <View style={checkoutButtonStyle(active)}>
-            {loading ? <ActivityIndicator size={"small"} color='white'/> :
-            <Pressable disabled={!active} onPress={onPress}>
-                <Text style={styles.checkout}>Checkout</Text>
-            </Pressable>}
+            {buttonLabelFromStatus()}
         </View>
     )
 }

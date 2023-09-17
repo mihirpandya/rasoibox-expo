@@ -1,7 +1,7 @@
 import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Dimensions, StyleSheet, Text, View } from 'react-native';
-import CheckoutButton from '../common/CheckoutButton';
+import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
 import ErrorText from '../common/ErrorText';
 import { StripeAddressElementOptions } from '@stripe/stripe-js';
 import { OrderBackendApi, initiatePlaceOrder } from '../../app/api/rasoibox-backend';
@@ -47,7 +47,7 @@ export default function StripeCheckoutForm(props: {
     const stripe = useStripe();
     const elements = useElements();
     
-    const [loading, setLoading] = useState<boolean>(false);
+    const [checkoutStatus, setCheckoutStatus] = useState<CheckoutStatus>(CheckoutStatus.checkout);
     const [inputUserInfo, setInputUserInfo] = useState<StripeAddressEvent | undefined>();
     const [error, setError] = useState<string>();
 
@@ -135,7 +135,7 @@ export default function StripeCheckoutForm(props: {
         // initiate order in rasoibox-backend
         // confirm payment on stripe
         // set error if stripe returns error
-        setLoading(true);
+        setCheckoutStatus(CheckoutStatus.loading);
         initiatePlaceOrder(authToken, orderDetails).then(response => {
             if (response["status"] == 0) {
                 stripe.confirmPayment({
@@ -153,18 +153,22 @@ export default function StripeCheckoutForm(props: {
                         } else {
                             setError("Payment did not succeed. Please try again.")
                         }
+                        setCheckoutStatus(CheckoutStatus.checkout)
+                    } else {
+                        setCheckoutStatus(CheckoutStatus.success)
                     }
                 }).catch(error => {
                     console.log(error);
                     setError(error.message)
+                    setCheckoutStatus(CheckoutStatus.checkout)
                 })
             } else {
                 setError("Failed to place order.")
+                setCheckoutStatus(CheckoutStatus.checkout)
             }
-        }).catch(error => {
+        }).catch(_error => {
             setError("Failed to place order.")
-        }).finally(() => {
-            setLoading(false);
+            setCheckoutStatus(CheckoutStatus.checkout)
         })
     }
 
@@ -183,7 +187,7 @@ export default function StripeCheckoutForm(props: {
             
             <View style={{paddingTop: 30}}>
                 {error && <ErrorText message={error}/>}
-                <CheckoutButton loading={loading} active={true} onPress={submit}/>
+                <CheckoutButton checkoutStatus={checkoutStatus} active={true} onPress={submit}/>
             </View>
         </View>
     )

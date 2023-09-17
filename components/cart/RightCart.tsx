@@ -5,7 +5,7 @@ import { getCart, updateCart } from '../../app/api/rasoibox-backend';
 import { rasoiBoxPink } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from "../common/CartItem";
-import CheckoutButton from "../common/CheckoutButton";
+import CheckoutButton, { CheckoutStatus } from "../common/CheckoutButton";
 import * as Storage from "../common/Storage";
 
 export default function RightCart(props: {closeLightbox: () => void}) {
@@ -72,7 +72,7 @@ export default function RightCart(props: {closeLightbox: () => void}) {
                             }/>
                         <Text style={styles.subtitle}>All orders placed after Thursday will arrive on the following Sunday.</Text>
                     </ScrollView>
-                    <CheckoutButton loading={false} active={cart.length > 0} onPress={checkout}/>
+                    <CheckoutButton checkoutStatus={CheckoutStatus.checkout} active={cart.length > 0} onPress={checkout}/>
                     <Text style={styles.subtitle}>All promo codes will be applied at checkout.</Text>
                 </View>
             );
