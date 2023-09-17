@@ -72,7 +72,7 @@ export default function RightCart(props: {closeLightbox: () => void}) {
                             }/>
                         <Text style={styles.subtitle}>All orders placed after Thursday will arrive on the following Sunday.</Text>
                     </ScrollView>
-                    <CheckoutButton active={cart.length > 0} onPress={checkout}/>
+                    <CheckoutButton loading={false} active={cart.length > 0} onPress={checkout}/>
                     <Text style={styles.subtitle}>All promo codes will be applied at checkout.</Text>
                 </View>
             );

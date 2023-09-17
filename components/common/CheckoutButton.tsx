@@ -1,18 +1,19 @@
 import React from "react";
-import { Pressable, Text, View, StyleSheet } from 'react-native';
+import { Pressable, Text, View, StyleSheet, ActivityIndicator } from 'react-native';
 import { rasoiBoxYellow } from '../../constants/Colors';
 
 function checkoutButtonStyle(active: boolean) {
     return active ? styles.checkoutButton : styles.inactiveCheckoutButton;
 }
 
-export default function CheckoutButton(props: { active: boolean, onPress: () => void }) {
-    const { active, onPress } = props;
+export default function CheckoutButton(props: { active: boolean, loading: boolean, onPress: () => void }) {
+    const { active, loading, onPress } = props;
     return (
         <View style={checkoutButtonStyle(active)}>
+            {loading ? <ActivityIndicator size={"small"} color='white'/> :
             <Pressable disabled={!active} onPress={onPress}>
                 <Text style={styles.checkout}>Checkout</Text>
-            </Pressable>
+            </Pressable>}
         </View>
     )
 }
@@ -25,7 +26,8 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         margin: 10,
-        borderRadius: 20
+        borderRadius: 20,
+        height: 40
     },
     inactiveCheckoutButton: {
         backgroundColor: '#aaaaaa',
@@ -34,7 +36,8 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         margin: 10,
-        borderRadius: 20
+        borderRadius: 20,
+        height: 40
     },
     checkout: {
         color: 'white',

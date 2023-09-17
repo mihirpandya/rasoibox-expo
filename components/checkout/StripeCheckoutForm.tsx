@@ -47,6 +47,7 @@ export default function StripeCheckoutForm(props: {
     const stripe = useStripe();
     const elements = useElements();
     
+    const [loading, setLoading] = useState<boolean>(false);
     const [inputUserInfo, setInputUserInfo] = useState<StripeAddressEvent | undefined>();
     const [error, setError] = useState<string>();
 
@@ -134,6 +135,7 @@ export default function StripeCheckoutForm(props: {
         // initiate order in rasoibox-backend
         // confirm payment on stripe
         // set error if stripe returns error
+        setLoading(true);
         initiatePlaceOrder(authToken, orderDetails).then(response => {
             if (response["status"] == 0) {
                 stripe.confirmPayment({
@@ -161,6 +163,8 @@ export default function StripeCheckoutForm(props: {
             }
         }).catch(error => {
             setError("Failed to place order.")
+        }).finally(() => {
+            setLoading(false);
         })
     }
 
@@ -179,7 +183,7 @@ export default function StripeCheckoutForm(props: {
             
             <View style={{paddingTop: 30}}>
                 {error && <ErrorText message={error}/>}
-                <CheckoutButton active={true} onPress={submit}/>
+                <CheckoutButton loading={loading} active={true} onPress={submit}/>
             </View>
         </View>
     )
