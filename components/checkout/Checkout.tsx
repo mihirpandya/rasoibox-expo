@@ -228,7 +228,7 @@ export default function Checkout() {
             <ScrollView>
                 <Header />
                 <View style={styles.card}>
-                    <StripeCheckout firstName={authDetails?.first_name} lastName={authDetails?.last_name} promoCode={appliedPromoCode?.promoCodeName}/>
+                    <StripeCheckout cartEmpty={cart.length == 0} firstName={authDetails?.first_name} lastName={authDetails?.last_name} promoCode={appliedPromoCode?.promoCodeName}/>
                     <View style={styles.summary}>
                         <View style={{marginLeft: 20}}>
                             <Text style={styles.title}>Order Summary</Text>

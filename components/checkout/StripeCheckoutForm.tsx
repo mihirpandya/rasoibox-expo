@@ -38,12 +38,13 @@ function getFirstAndLastName(fullName: string) {
 }
 
 export default function StripeCheckoutForm(props: {
+    cartEmpty: boolean, 
     authToken?: string,
     firstName?: string,
     lastName?: string,
     promoCode?: string
 }) {
-    const { authToken, firstName, lastName, promoCode } = props;
+    const { cartEmpty, authToken, firstName, lastName, promoCode } = props;
     const stripe = useStripe();
     const elements = useElements();
     
@@ -187,7 +188,7 @@ export default function StripeCheckoutForm(props: {
             
             <View style={{paddingTop: 30}}>
                 {error && <ErrorText message={error}/>}
-                <CheckoutButton checkoutStatus={checkoutStatus} active={true} onPress={submit}/>
+                <CheckoutButton checkoutStatus={checkoutStatus} active={!cartEmpty} onPress={submit}/>
             </View>
         </View>
     )
