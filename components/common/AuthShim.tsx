@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { isAuthenticated } from "../../app/api/rasoibox-backend";
 import * as Storage from "./Storage";
+import { ActivityIndicator } from 'react-native';
+import { rasoiBoxPink } from '../../constants/Colors';
 
 interface IAuthShimProps {
     authChild: React.ReactNode;
@@ -40,7 +42,11 @@ export default function AuthShim(props: IAuthShimProps) {
         fetchIsAuthenticated()
       }, [])
 
-    if (authDetails?.authenticated) {
+    if (authDetails == undefined) {
+        return (
+            <ActivityIndicator color={rasoiBoxPink} size="large" />
+        )
+    } else if (authDetails?.authenticated) {
         return authChild;
     } else {
         return unauthChild;
