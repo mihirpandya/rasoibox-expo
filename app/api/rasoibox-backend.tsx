@@ -17,48 +17,6 @@ export interface OrderBackendApi {
     promo_codes: string[]
 }
 
-// {
-//     "order_number": "80695030",
-//     "order_breakdown": {
-//       "items": {
-//         "20": 19.99
-//       },
-//       "promo_codes": [
-//         {
-//           "name": "WELCOME10",
-//           "amount_off": null,
-//           "percent_off": 10
-//         }
-//       ]
-//     },
-//     "order_date": "2023-08-15T17:39:37",
-//     "order_recipient_name": "Mihir Pandya",
-//     "order_delivery_address": {
-//       "city": "San Jose",
-//       "state": "CA",
-//       "zipcode": "95125",
-//       "user_input": "945 Desmet Dr, San Jose, CA 95125, USA",
-//       "street_name": "Desmet Drive",
-//       "street_number": 945,
-//       "apartment_number": ""
-//     },
-//     "order_total_dollars": 17.99,
-//     "order_delivered": false,
-//     "recipes": {
-//       "Chana Masala": {
-//         "id": 38,
-//         "image_url": "https://static.wixstatic.com/media/bbf858_7cf3c205476a4ec8bc78b6efb13b6de4~mv2.png",
-//         "serving_size": 2,
-//         "price": 19.99
-//       }
-//     },
-//     "customer_email": "mihir.m.pandya@gmail.com"
-//   }
-
-export interface OrderInformationResponse {
-
-}
-
 export function getAvailableItems(): Promise<any> {
     return fetch(BACKEND + 'order/get_available_items', {
         method: 'GET',
