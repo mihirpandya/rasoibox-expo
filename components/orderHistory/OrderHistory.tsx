@@ -10,6 +10,7 @@ import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { cleanDate, getTotal, orderJsonToOrderInformationResponse, twoDecimals } from '../../constants/utils';
 import * as Storage from "../common/Storage";
 import { OrderInformationResponse } from '../order/OrderInformation';
+import { ScrollView } from 'react-native-gesture-handler';
 
 function goToOrder(orderNumber: string) {
     router.replace("/order/" + orderNumber);
@@ -98,16 +99,18 @@ export default function OrderHistory() {
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
             <Header />
-                <View style={styles.card}>
-                    <Text style={styles.title}>Order History</Text>
-                {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> : 
-                    <FlatList
-                        data={orderInfos}
-                        renderItem={
-                            ({item}) => <OrderSummary orderInfo={item} />
-                        }/>
-                    }
-                </View>
+                <ScrollView>
+                    <View style={styles.card}>
+                        <Text style={styles.title}>Order History</Text>
+                        {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> : 
+                        <FlatList
+                            data={orderInfos}
+                            renderItem={
+                                ({item}) => <OrderSummary orderInfo={item} />
+                            }/>
+                        }
+                    </View>
+                </ScrollView>
             <Footer />
         </View>
     )
