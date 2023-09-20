@@ -94,7 +94,7 @@ export default function OrderHistory() {
                 orderInfo: orderHistory[index],
                 isEven: (index % 2) == 0
             }
-        })
+        }).sort((o1, o2) => o1.orderInfo.orderDate > o2.orderInfo.orderDate ? -1 : 1)
     
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
