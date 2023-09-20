@@ -98,8 +98,8 @@ export default function OrderHistory() {
     
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
-            <Header />
-                <ScrollView>
+            <ScrollView>
+                <Header />
                     <View style={styles.card}>
                         <Text style={styles.title}>Order History</Text>
                         {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> : 
@@ -110,8 +110,8 @@ export default function OrderHistory() {
                             }/>
                         }
                     </View>
-                </ScrollView>
-            <Footer />
+                <Footer />
+            </ScrollView>
         </View>
     )
 }
