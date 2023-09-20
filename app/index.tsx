@@ -48,9 +48,9 @@ export default function Index() {
           fetchIsAuthenticated()
         }, [])
 
-        return (
+      return (
         <AuthShim authChild={<Redirect href="/menu" />} unauthChild={<WelcomePage />}/>
-        );
+      );
 }
 
 const styles = StyleSheet.create({
