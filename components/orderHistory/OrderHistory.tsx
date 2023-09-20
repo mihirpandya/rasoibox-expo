@@ -33,7 +33,7 @@ function OrderSummary(props: {orderInfo: IndexedOrderInformation}) {
             <View style={{width: '50%'}}>
                 <Text style={styles.info}>Order #{orderInfo.orderNumber}</Text>
                 <Text style={styles.info}>Ordered on: {cleanDate(orderInfo.orderDate)}</Text>
-                <Text style={styles.info}>Total: {twoDecimals(getTotal(orderInfo))}</Text>
+                <Text style={styles.info}>Total: ${twoDecimals(getTotal(orderInfo))}</Text>
             </View>
             <View style={{width: '30%'}}>
                 <Text style={styles.info}>{orderInfo.delivered ? "Delivered" : "Delivery Pending"}</Text>
