@@ -10,9 +10,9 @@ import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colo
 import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from '../common/CartItem';
 import ErrorText from '../common/ErrorText';
+import PriceInformation from '../common/PriceInformation';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
-import PriceInformation from '../common/PriceInformation';
 
 export const errorIds = [
     'no_error',

@@ -225,3 +225,24 @@ export function getOrder(token: string, orderNumber: string) {
         throw error;
     })
 }
+
+export function getOrderHistory(token: string) {
+    return fetch(BACKEND + "order/get_order_history", {
+        "method": "get",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else {
+            console.error(response);
+            throw Error();
+        }
+    }).catch((error) => {
+        console.error(error);
+        throw error;
+    })
+}

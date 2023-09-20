@@ -3,18 +3,13 @@ import { View } from 'react-native';
 import { Text } from '../../components/Themed';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
+import AuthShim from '../../components/common/AuthShim';
+import { Redirect } from 'expo-router';
+import OrderHistory from '../../components/orderHistory/OrderHistory';
 
-export default function OrderHistory() {
+export default function ViewOrderHistory() {
     
     return (
-        <View>
-            <Header />
-
-            <Text>
-                This is your order history.
-            </Text>
-
-            <Footer />
-        </View>
+        <AuthShim authChild={<OrderHistory />} unauthChild={<Redirect href="/" />} />
     );
 }

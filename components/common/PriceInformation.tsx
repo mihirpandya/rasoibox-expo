@@ -2,8 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { rasoiBoxGrey } from '../../constants/Colors';
+import { getPromoAmount, twoDecimals } from "../../constants/utils";
 import { PromoCode } from "../checkout/Checkout";
-import { twoDecimals, getPromoAmount } from "../../constants/utils";
 
 interface PriceInformationProps {
     appliedPromoCode: PromoCode | undefined,

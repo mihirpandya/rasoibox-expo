@@ -1,31 +1,31 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { getOrder } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import * as Storage from "../common/Storage";
-import { getOrder } from '../../app/api/rasoibox-backend';
 import { rasoiBoxPink } from '../../constants/Colors';
+import { cleanAddress, cleanDate, getSubtotal, getTotal, orderJsonToOrderInformationResponse, totalAfterPromo } from '../../constants/utils';
+import { PromoCode } from '../checkout/Checkout';
 import CartItem, { CartItemResponse } from '../common/CartItem';
 import PriceInformation from '../common/PriceInformation';
-import { ScrollView } from 'react-native-gesture-handler';
-import { PromoCode } from '../checkout/Checkout';
-import { totalAfterPromo } from '../../constants/utils';
+import * as Storage from "../common/Storage";
 
 
-interface OrderBreakdown {
+export interface OrderBreakdown {
     items: Record<string, number>,
     promoCodes: PromoCode[]
 }
 
-interface RecipeInfo {
+export interface RecipeInfo {
     id: number,
     imageUrl: string,
     servingSize: number,
     price: number
 }
 
-interface DeliveryAddress {
+export interface DeliveryAddress {
     city: string,
     state: string,
     zipcode: string,
@@ -35,7 +35,7 @@ interface DeliveryAddress {
     apartmentNumber: string
 }
 
-interface OrderInformationResponse {
+export interface OrderInformationResponse {
     orderNumber: string,
     orderBreakdown: OrderBreakdown,
     orderDate: Date,
@@ -45,39 +45,6 @@ interface OrderInformationResponse {
     delivered: boolean,
     recipes: { [recipeName: string] : RecipeInfo }
     customerEmail: string
-}
-
-function cleanDate(date: Date): string {
-	let tzDate = new Date()
-	tzDate.setUTCDate(date.getDate())
-	tzDate.setUTCMonth(date.getMonth())
-	tzDate.setUTCFullYear(date.getFullYear())
-	tzDate.setUTCHours(date.getHours())
-	tzDate.setUTCMinutes(date.getMinutes())
-	tzDate.setUTCSeconds(date.getSeconds())
-	tzDate.setUTCMilliseconds(date.getMilliseconds())
-	return (tzDate).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
-}
-
-function cleanAddress(address: DeliveryAddress): string {
-    let addressStr: string = ""
-    if (address.streetNumber > 0) {
-        addressStr += address.streetNumber
-    }
-    addressStr += " "
-    addressStr += address.streetName
-    addressStr += ", "
-    if (address.apartmentNumber != undefined && address.apartmentNumber.length > 0) {
-        addressStr += address.apartmentNumber
-        addressStr += ", "
-    }
-    addressStr += address.city
-    addressStr += ", "
-    addressStr += address.state
-    addressStr += " "
-    addressStr += address.zipcode
-
-    return addressStr
 }
 
 function getCartFromOrderInfo(orderInfo: OrderInformationResponse | undefined): CartItemResponse[] {
@@ -94,31 +61,6 @@ function getCartFromOrderInfo(orderInfo: OrderInformationResponse | undefined): 
         }
     })
 }
-
-function getSubtotal(orderInfo: OrderInformationResponse | undefined): number | undefined {
-    if (orderInfo == undefined) {
-        return undefined
-    }
-
-    let total = 0
-    Object.values(orderInfo.recipes).forEach(recipe => total += recipe.price)
-    return total
-}
-
-function getTotal(orderInfo: OrderInformationResponse | undefined): number | undefined {
-    if (orderInfo == undefined) {
-        return undefined
-    }
-
-    let total = getSubtotal(orderInfo)
-    const promoCodes: PromoCode[] = orderInfo.orderBreakdown.promoCodes
-    if (total != undefined && promoCodes != undefined && promoCodes.length > 0) {
-        return totalAfterPromo(total, promoCodes[0])
-    } else {
-        return total
-    }
-}
-
 
 export default function OrderInformation(props: {orderNumber: any}) {
     const { orderNumber } = props;
@@ -144,49 +86,10 @@ export default function OrderInformation(props: {orderNumber: any}) {
         }
 
         getOrder(authtoken, orderNumber).then(response => {
-            const items: {[itemId: string] : number} = response['order_breakdown']['items'];
-            const promoCodes: PromoCode[] = Object.values(response['order_breakdown']['promo_codes']).map(code => {
-                return {
-                    name: code['name'],
-                    amountOff: code['amount_off'],
-                    percentOff: code['percent_off'],
-                }
-            })
-            const orderBreakdown: OrderBreakdown = {
-                items: items,
-                promoCodes: promoCodes
+            const orderResponse = orderJsonToOrderInformationResponse(response)
+            if (orderResponse != undefined) {
+                setOrderInfo(orderResponse)
             }
-            const deliveryAddress = {
-                city: response['order_delivery_address']['city'],
-                state: response['order_delivery_address']['state'],
-                zipcode: response['order_delivery_address']['zipcode'],
-                userInput: response['order_delivery_address']['user_input'],
-                streetName: response['order_delivery_address']['street_name'],
-                streetNumber: response['order_delivery_address']['street_number'],
-                apartmentNumber: response['order_delivery_address']['apartment_number']
-            }
-            const recipes: { [recipeName: string] : RecipeInfo } = Object.fromEntries(
-                Object.entries(response['recipes']).map(entry => [entry[0], {
-                    id: entry[1]['id'],
-                    imageUrl: entry[1]['image_url'],
-                    servingSize: entry[1]['serving_size'],
-                    price: entry[1]['price']
-                }])
-            );
-
-            const orderResponse: OrderInformationResponse = {
-                orderNumber: response['order_number'],
-                orderBreakdown: orderBreakdown,
-                orderDate: new Date(response['order_date']),
-                recipientName: response['order_recipient_name'],
-                deliveryAddress: deliveryAddress,
-                totalDollars: response['order_total_dollars'],
-                delivered: response['order_delivered'],
-                customerEmail: response['customer_email'],
-                recipes: recipes
-            }
-
-            setOrderInfo(orderResponse)
         }).catch(error => {
             setError('order-not-found')
         }).finally(() => {
@@ -254,7 +157,7 @@ const styles = StyleSheet.create({
         paddingRight: Dimensions.get('window').width < 700 ? '5%' : '15%',
     },
     card: {
-        flexDirection: Dimensions.get('window').width < 700 ? 'column-reverse': 'row',
+        flexDirection: Dimensions.get('window').width < 700 ? 'column': 'row',
         justifyContent: 'space-evenly'
     },
     orderNumber: {
@@ -262,7 +165,8 @@ const styles = StyleSheet.create({
         fontSize: Dimensions.get('window').width < 700 ? 20 : 30,
     },
     orderSummary: {
-        paddingTop: 30
+        paddingTop: 30,
+        marginLeft: 20,
     },
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
@@ -274,14 +178,16 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontWeight: 'bold',
         fontSize: Dimensions.get('window').width < 700 ? 15 :20,
-        paddingTop: 20
+        paddingTop: 20,
+        marginLeft: 20,
     },
     content: {
         fontFamily: 'AvenirLight',
-        fontSize: Dimensions.get('window').width < 700 ? 12 : 15,
+        fontSize: 15,
+        marginLeft: 20,
     },
     orderDetails: {
-
+        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : 0,
     },
     summary: {
         paddingTop: 30,
