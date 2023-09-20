@@ -6,7 +6,7 @@ import { getOrder } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxPink } from '../../constants/Colors';
-import { cleanAddress, cleanDate, getSubtotal, getTotal, orderJsonToOrderInformationResponse, totalAfterPromo } from '../../constants/utils';
+import { cleanAddress, cleanDate, getSubtotal, getTotal, orderJsonToOrderInformationResponse } from '../../constants/utils';
 import { PromoCode } from '../checkout/Checkout';
 import CartItem, { CartItemResponse } from '../common/CartItem';
 import PriceInformation from '../common/PriceInformation';
@@ -67,7 +67,6 @@ export default function OrderInformation(props: {orderNumber: any}) {
 
     const [authtoken, setAuthToken] = useState<string | undefined>()
     const [orderInfo, setOrderInfo] = useState<OrderInformationResponse>()
-    const [error, setError] = useState<string | undefined>(undefined)
     const [loading, setLoading] = useState<boolean>(true);
 
     function fetchToken() {

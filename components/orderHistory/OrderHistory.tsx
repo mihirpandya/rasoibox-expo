@@ -6,7 +6,7 @@ import { ActivityIndicator, Dimensions, FlatList, Pressable, StyleSheet, Text, V
 import { getOrderHistory } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { cleanDate, getTotal, orderJsonToOrderInformationResponse, twoDecimals } from '../../constants/utils';
 import * as Storage from "../common/Storage";
 import { OrderInformationResponse } from '../order/OrderInformation';
