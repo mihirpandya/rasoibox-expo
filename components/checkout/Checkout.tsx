@@ -12,6 +12,7 @@ import CartItem, { CartItemResponse } from '../common/CartItem';
 import ErrorText from '../common/ErrorText';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
+import PriceInformation from '../common/PriceInformation';
 
 export const errorIds = [
     'no_error',
@@ -51,8 +52,8 @@ const PROMO_CODE_ERRORS: Record<PromoCodeErrorId, string> = {
     more_than_one: "Only one promo code can be applied per order."
 }
 
-interface PromoCode {
-    promoCodeName: string,
+export interface PromoCode {
+    name: string,
     amountOff: number,
     percentOff: number
 }
@@ -178,7 +179,7 @@ export default function Checkout() {
                     const status = response["status"]
                     if (status == 0) {
                         setAppliedPromoCode({
-                            promoCodeName: response["promo_code_name"],
+                            name: response["promo_code_name"],
                             amountOff: response["amount_off"],
                             percentOff: response["percent_off"]
                         })
@@ -228,7 +229,7 @@ export default function Checkout() {
             <ScrollView>
                 <Header />
                 <View style={styles.card}>
-                    <StripeCheckout cartEmpty={cart.length == 0} firstName={authDetails?.first_name} lastName={authDetails?.last_name} promoCode={appliedPromoCode?.promoCodeName}/>
+                    <StripeCheckout cartEmpty={cart.length == 0} firstName={authDetails?.first_name} lastName={authDetails?.last_name} promoCode={appliedPromoCode?.name}/>
                     <View style={styles.summary}>
                         <View style={{marginLeft: 20}}>
                             <Text style={styles.title}>Order Summary</Text>
@@ -251,38 +252,13 @@ export default function Checkout() {
                             </View>
                         </View>
                         {promoCodeError != 'no_error' && <ErrorText message={PROMO_CODE_ERRORS[promoCodeError]}/>}
-                        <View style={styles.subtotal}>
-                            <View style={styles.section}>
-                                <Text style={styles.key}>Subtotal</Text>
-                                <Text style={styles.value}>${twoDecimals(subtotal)}</Text>
-                            </View>
-                            <View style={styles.section}>
-                                <Text style={styles.key}>Shipping</Text>
-                                <Text style={styles.value}>Free</Text>
-                            </View>
-                            {
-                                appliedPromoCode != undefined &&
-                                <View style={styles.section}>
-                                    <Text style={styles.key}>{appliedPromoCode.promoCodeName}</Text>
-                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                                        <Text style={styles.value}>{getPromoAmount(appliedPromoCode)}</Text>
-                                        <Pressable style={{paddingLeft: 5}} onPress={deleteAppliedPromoCode}>
-                                            <Ionicons name="trash-outline" size={15} color={rasoiBoxGrey} />
-                                        </Pressable>
-                                    </View>
-                                </View>
-                            }
-                            <View style={styles.section}>
-                                <Text style={styles.key}>Taxes</Text>
-                                <Text style={styles.value}>Calculated at next step</Text>
-                            </View>
-                        </View>
-                        <View style={styles.total}>
-                            <View style={styles.section}>
-                                <Text style={styles.key}>Total</Text>
-                                <Text style={styles.value}>${twoDecimals(total)}</Text>
-                            </View>
-                        </View>
+                        <PriceInformation
+                            appliedPromoCode={appliedPromoCode}
+                            subtotal={subtotal}
+                            total={total}
+                            showDelete={true}
+                            showTaxes={true}
+                        />
                     </View>
                 </View>
                 <Footer />

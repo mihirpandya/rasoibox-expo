@@ -6,13 +6,12 @@ import Header from '../../components/common/Header';
 import * as Storage from "../common/Storage";
 import { getOrder } from '../../app/api/rasoibox-backend';
 import { rasoiBoxPink } from '../../constants/Colors';
-import CartItem from '../common/CartItem';
+import CartItem, { CartItemResponse } from '../common/CartItem';
+import PriceInformation from '../common/PriceInformation';
+import { ScrollView } from 'react-native-gesture-handler';
+import { PromoCode } from '../checkout/Checkout';
+import { totalAfterPromo } from '../../constants/utils';
 
-interface PromoCode {
-    name: string,
-    amountOff: number | null,
-    percentOff: number | null
-}
 
 interface OrderBreakdown {
     items: Record<string, number>,
@@ -80,6 +79,46 @@ function cleanAddress(address: DeliveryAddress): string {
 
     return addressStr
 }
+
+function getCartFromOrderInfo(orderInfo: OrderInformationResponse | undefined): CartItemResponse[] {
+    if (orderInfo == undefined) {
+        return []
+    }
+
+    return Object.entries(orderInfo.recipes).map(recipe => {
+        return {
+            recipeName: recipe[0],
+            imageUrl: recipe[1].imageUrl,
+            servingSize: recipe[1].servingSize,
+            price: recipe[1].price
+        }
+    })
+}
+
+function getSubtotal(orderInfo: OrderInformationResponse | undefined): number | undefined {
+    if (orderInfo == undefined) {
+        return undefined
+    }
+
+    let total = 0
+    Object.values(orderInfo.recipes).forEach(recipe => total += recipe.price)
+    return total
+}
+
+function getTotal(orderInfo: OrderInformationResponse | undefined): number | undefined {
+    if (orderInfo == undefined) {
+        return undefined
+    }
+
+    let total = getSubtotal(orderInfo)
+    const promoCodes: PromoCode[] = orderInfo.orderBreakdown.promoCodes
+    if (total != undefined && promoCodes != undefined && promoCodes.length > 0) {
+        return totalAfterPromo(total, promoCodes[0])
+    } else {
+        return total
+    }
+}
+
 
 export default function OrderInformation(props: {orderNumber: any}) {
     const { orderNumber } = props;
@@ -164,44 +203,74 @@ export default function OrderInformation(props: {orderNumber: any}) {
     }, [authtoken])
 
     return (
-        <View>
-            <Header />
-            {loading && (orderInfo == undefined) ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50, backgroundColor: 'white'}}/> :
-                <View style={styles.card}>
-                    <Text style={styles.orderNumber}>Order #{orderInfo?.orderNumber}</Text>
-                    <View style={styles.orderDetails}>
-                        <Text style={styles.title}>Order Date</Text>
-                        <Text style={styles.content}>{cleanDate(orderInfo?.orderDate)}</Text>
-                        <Text style={styles.title}>Contact Information</Text>
-                        <Text style={styles.content}>{orderInfo?.recipientName}</Text>
-                        <Text style={styles.content}>{orderInfo?.customerEmail}</Text>
-                        <Text style={styles.title}>Shipping Address</Text>
-                        <Text style={styles.content}>{cleanAddress(orderInfo?.deliveryAddress)}</Text>
+        <View style={{backgroundColor: 'white', flex: 1}}>
+            <ScrollView>
+                <Header />
+                {loading && (orderInfo == undefined) ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50, backgroundColor: 'white'}}/> :
+                    <View style={styles.card}>
+                        <View style={styles.orderDetails}>
+                            <View style={styles.orderSummary}>
+                                <Text style={styles.title}>Order #{orderInfo?.orderNumber}</Text>
+                            </View>
+                            <Text style={styles.subtitle}>Order Date</Text>
+                            <Text style={styles.content}>{cleanDate(orderInfo?.orderDate)}</Text>
+                            <Text style={styles.subtitle}>Contact Information</Text>
+                            <Text style={styles.content}>{orderInfo?.recipientName}</Text>
+                            <Text style={styles.content}>{orderInfo?.customerEmail}</Text>
+                            <Text style={styles.subtitle}>Shipping Address</Text>
+                            <Text style={styles.content}>{cleanAddress(orderInfo?.deliveryAddress)}</Text>
+                            <Text style={styles.subtitle}>Delivery Status</Text>
+                            <Text style={styles.content}>{orderInfo?.delivered ? "Delivered" : "Delivery Pending"}</Text>
+                        </View>
+                        <View style={styles.summary}>
+                            <View style={{marginLeft: 20}}>
+                                <Text style={styles.title}>Order Summary</Text>
+                            </View>
+                            <FlatList
+                                data={getCartFromOrderInfo(orderInfo)}
+                                renderItem={
+                                    ({item}) => <CartItem cartItem={item} hideDelete={true} deleteItem={() => {}}/>
+                                }/>
+                            <PriceInformation 
+                                appliedPromoCode={orderInfo?.orderBreakdown.promoCodes[0]}
+                                subtotal={getSubtotal(orderInfo)}
+                                total={getTotal(orderInfo)}
+                                showDelete={false}
+                            />
+                        </View>
                     </View>
-                    {/* <FlatList
-                        data={cart}
-                        renderItem={
-                            ({item}) => <CartItem cartItem={item} deleteItem={() => deleteItem(item.recipeName)}/>
-                        }/> */}
-                </View>
-            }
-            <Footer />
+                }
+                <Footer />
+            </ScrollView>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    card: {
+    body: {
         backgroundColor: 'white',
         paddingTop: 50,
         paddingLeft: Dimensions.get('window').width < 700 ? '5%' : '15%',
         paddingRight: Dimensions.get('window').width < 700 ? '5%' : '15%',
     },
+    card: {
+        flexDirection: Dimensions.get('window').width < 700 ? 'column-reverse': 'row',
+        justifyContent: 'space-evenly'
+    },
     orderNumber: {
         fontFamily: 'CormorantGaramondSemiBold',
         fontSize: Dimensions.get('window').width < 700 ? 20 : 30,
     },
+    orderSummary: {
+        paddingTop: 30
+    },
     title: {
+        fontFamily: 'CormorantGaramondSemiBold',
+        fontSize: 35,
+        paddingBottom: 20,
+        paddingTop: 10,
+    },
+    subtitle: {
         fontFamily: 'AvenirLight',
         fontWeight: 'bold',
         fontSize: Dimensions.get('window').width < 700 ? 15 :20,
@@ -213,5 +282,13 @@ const styles = StyleSheet.create({
     },
     orderDetails: {
 
-    }
+    },
+    summary: {
+        paddingTop: 30,
+        width: Dimensions.get('window').width < 700 ? '95%' : 380,
+        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : 0,
+        marginTop: Dimensions.get('window').width < 700 ? 20 : 0,
+        borderRadius: 10,
+        borderWidth: 1
+    },
 });
