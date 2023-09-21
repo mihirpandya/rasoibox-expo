@@ -84,14 +84,15 @@ const styles = StyleSheet.create({
         lineHeight: 35,
     },
     image: {
-        width: 400,
+        width: Dimensions.get('window').width < 700 ? Dimensions.get('window').width - 10 : 400,
         height: 500,
         borderRadius: 20,
     },
     mission: {
         width: Dimensions.get('window').width < 700 ? '100%' : '70%',
         justifyContent: 'center',
-        paddingLeft: Dimensions.get('window').width < 700 ? 10 : 50
+        paddingLeft: Dimensions.get('window').width < 700 ? 10 : 50,
+        paddingTop: Dimensions.get('window').width < 700 ? 30 : 0
     },
     missionText: {
         width: '100%',
