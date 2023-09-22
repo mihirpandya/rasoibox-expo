@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, StyleSheet, Text, View, Image } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import RecipeConclusion from './RecipeConclusion';
 import { RecipeStep } from "./RecipeInfo";
 
@@ -10,6 +10,7 @@ function stepTitle(title: string): string {
 
 function ViewStep(props: { step: RecipeStep }) {
     const { step } = props;
+
     return (
         <View>
             <Text style={styles.stepName}>
@@ -24,11 +25,18 @@ function ViewStep(props: { step: RecipeStep }) {
             })}
             {
                 (step.gifUrl != undefined && step.gifUrl.length > 0) && 
-                step.gifUrl.map(gif => {
-                    return (
-                        <Image style={styles.stepImage} key={gif} source={{uri: gif}}/>
-                    )
-                })
+                <View style={styles.imageContainer}>
+                    <ScrollView 
+                        horizontal
+                        pagingEnabled={true}
+                        showsHorizontalScrollIndicator={true}
+                    >
+                        {step.gifUrl.map(url => (
+                                <Image style={styles.stepImage} key={url} source={{uri: url}} />
+                            )
+                        )}
+                    </ScrollView>
+                </View>
             }
         </View>
     )
@@ -49,23 +57,28 @@ const styles = StyleSheet.create({
     card: {
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
-        padding: 30
-    },
-    stepCard: {
-
+        padding: 30,
+        paddingTop: 100
     },
     instructions: {
         fontFamily: 'AvenirLight',
-        fontSize: 15,
+        fontSize: 17,
         paddingBottom: 20,
+        paddingLeft: 20,
+        paddingRight: 20
     },
     stepName: {
-        fontSize: 17,
+        fontSize: 20,
         fontFamily: 'AvenirLight',
         paddingBottom: 20,
     },
     stepImage: {
-        width: 300,
-        height: 250
+        width: 636,
+        height: 487,
+        borderRadius: 10
+    },
+    imageContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })

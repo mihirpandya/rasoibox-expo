@@ -63,7 +63,6 @@ export default function RecipeInfo(props: {recipeId: number, servingSize: number
     function fetchRecipeMetadata() {
         if (recipeName) {
             getRecipeMetadata(recipeName, servingSize).then(response => {
-                console.log(response);
 
                 const inYourKitchens: InYourKitchen[] = response['in_your_kitchens'].map(item => {
                     return {

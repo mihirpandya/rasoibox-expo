@@ -6,7 +6,6 @@ import { rasoiBoxGrey } from '../../constants/Colors';
 
 export default function ViewRecipeMetadata(props: {servingSize: number, recipeMetadata: RecipeMetadata}) {
     const { servingSize, recipeMetadata } = props;
-    console.log(recipeMetadata);
 
     return (
         <View style={styles.card}>
