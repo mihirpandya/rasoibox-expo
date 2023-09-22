@@ -68,6 +68,7 @@ export default function OrderInformation(props: {orderNumber: any}) {
     const [authtoken, setAuthToken] = useState<string | undefined>()
     const [orderInfo, setOrderInfo] = useState<OrderInformationResponse>()
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>();
 
     function fetchToken() {
         AsyncStorage.getItem(Storage.ACCESS_TOKEN).then(async token => {

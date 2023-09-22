@@ -5,6 +5,7 @@ import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from
 import Modal from "react-native-modal";
 import { rasoiBoxGrey, rasoiBoxYellow } from "../../constants/Colors";
 import { updateCart } from '../../app/api/rasoibox-backend';
+import Tags from './Tags';
 
 interface MealKitModalProps {
     isVisible: boolean,
@@ -63,7 +64,6 @@ export default function MealKitModal(props: MealKitModalProps) {
 
     function addToCart(recipeName: string, servingSize: number) {
         if (verificationCode != undefined) {
-            console.log("adding " + recipeName + " " + servingSize);
             updateCart(verificationCode, recipeName, servingSize).then(_response => closeModal())
         } else {
             closeModal()
@@ -81,9 +81,7 @@ export default function MealKitModal(props: MealKitModalProps) {
                     <ScrollView>
                         <View style={styles.header}>
                             <Text style={styles.title}>{name}</Text>
-                            <View style={styles.tags}>
-                            {tags.map(tag => <Text key={tag} style={styles.tag}>{tag}</Text>)}
-                        </View>
+                            <Tags tags={tags} tagStyle={{marginTop: 5, height: 20}} />
                         </View>
                         <Image style={styles.image} source={{uri: imageUrl}} />
                         <Text style={styles.description}>{description}</Text>
@@ -161,23 +159,6 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontSize: 15,
         marginTop: 10,
-    },
-    tags: {
-        flexDirection: 'row',
-    },
-    tag: {
-        fontSize: 12,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 2,
-        paddingBottom: 2,
-        height: 20,
-        marginRight: 10,
-        fontFamily: 'AvenirLight',
-        backgroundColor: rasoiBoxYellow,
-        borderRadius: 10,
-        color: 'white',
-        marginTop: 5
     },
     servings: {
         marginTop: 30,

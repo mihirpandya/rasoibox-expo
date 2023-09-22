@@ -48,7 +48,6 @@ export default function SignInForm() {
         setLoading(true);
         const loginResponse = await login(email, password)
         setLoading(false);
-        console.log(loginResponse);
 
         if (loginResponse["status"] == 0) {
             AsyncStorage.setItem(Storage.ACCESS_TOKEN, loginResponse[Storage.ACCESS_TOKEN])

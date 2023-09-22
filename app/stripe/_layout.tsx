@@ -28,15 +28,6 @@ export default function StripePage() {
         fetchToken()
       }, [])
 
-    // useEffect(() => {
-    //     if (authtoken) {
-    //         initiateOrderV2(authtoken, 1000).then(response => {
-    //             console.log(response);
-    //             setClientSecret(response["client_secret"])
-    //         })
-    //     }
-    // }, [authtoken])
-
     const options = {
         // passing the client secret obtained from the server
         clientSecret: clientSecret,

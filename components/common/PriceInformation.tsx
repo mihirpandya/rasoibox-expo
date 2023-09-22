@@ -16,7 +16,6 @@ interface PriceInformationProps {
 
 export default function PriceInformation(props: PriceInformationProps) {
     const { appliedPromoCode, subtotal, total, showDelete, deleteAppliedPromoCode, showTaxes } = props;
-    console.log(appliedPromoCode)
     return (
         <View>
             <View style={styles.subtotal}>

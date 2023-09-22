@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { Card } from 'react-native-paper';
 import { rasoiBoxYellow } from '../../constants/Colors';
+import Tags from "./Tags";
 
 type MealKitCardProps = {
     id: number,
@@ -39,9 +40,7 @@ export default function MealKitCard(props: MealKitCardProps) {
                     <Text style={styles.description}>
                         {description}
                     </Text>
-                    <View style={styles.tags}>
-                        {tags.map(tag => <Text key={tag} style={styles.tag}>{tag}</Text>)}
-                    </View>
+                    <Tags tags={tags} containerStyle={{position: 'absolute', marginTop: 95}}/>
                 </Card.Content>
             </Card>
         </Pressable>

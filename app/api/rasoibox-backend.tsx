@@ -246,3 +246,42 @@ export function getOrderHistory(token: string) {
         throw error;
     })
 }
+
+export function getRecipeById(id: number) {
+    return fetch(BACKEND + "recipe/get_by_id?id=" + id).then((response) => {
+        if (response.status == 200) {
+            return response.json();
+        } else {
+            throw Error();
+        }
+    }).catch((error) => {
+        console.error(error);
+        throw error;
+    })
+}
+
+export function getRecipeMetadata(recipeName: string, servingSize: number) {
+    return fetch(BACKEND + "recipe/get_recipe_metadata?name=" + recipeName + "&serving_size=" + servingSize).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else {
+            throw Error();
+        }
+    }).catch((error) => {
+        console.error(error);
+        throw error;
+    })
+}
+
+export function getRecipeSteps(recipeName: string, servingSize: number) {
+    return fetch(BACKEND + "recipe/get_recipe_steps?name=" + recipeName + "&serving_size=" + servingSize).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else {
+            throw Error();
+        }
+    }).catch((error) => {
+        console.error(error);
+        throw error;
+    })
+}

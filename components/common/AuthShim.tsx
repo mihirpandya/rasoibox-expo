@@ -32,7 +32,6 @@ export default function AuthShim(props: IAuthShimProps) {
                 authenticated: false
             }
         }).finally(async () => {
-            console.log(authDetails);
             setAuthDetails(authDetails)
             await Storage.storeAuthDetails(authDetails);
         })

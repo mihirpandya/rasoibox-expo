@@ -5,7 +5,6 @@ import OrderInformation from "../../components/order/OrderInformation";
 
 export default function ViewOrder() {
     const { orderNumber } = useLocalSearchParams();
-    console.log(orderNumber);
     
     return (
         orderNumber != undefined ? 

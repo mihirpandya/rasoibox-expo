@@ -103,7 +103,6 @@ export default function StripeCheckoutForm(props: {
         }
 
         if (inputUserInfo == undefined || !inputUserInfo.complete) {
-            console.log(inputUserInfo);
             setError("Please fill in your delivery details.");
             return;
         }
