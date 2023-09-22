@@ -30,7 +30,7 @@ export default function ViewRecipeMetadata(props: {servingSize: number, recipeMe
 const styles = StyleSheet.create({
     card: {
         marginTop: 30,
-        flexDirection: 'row',
+        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         alignItems: 'center',
