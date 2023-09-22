@@ -2,6 +2,7 @@ import React from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import RecipeConclusion from './RecipeConclusion';
 import { RecipeStep } from "./RecipeInfo";
+import Carousel from 'react-native-reanimated-carousel';
 
 function stepTitle(title: string): string {
     const upperCase = title.charAt(0).toUpperCase()
@@ -26,16 +27,18 @@ function ViewStep(props: { step: RecipeStep }) {
             {
                 (step.gifUrl != undefined && step.gifUrl.length > 0) && 
                 <View style={styles.imageContainer}>
-                    <ScrollView 
-                        horizontal
-                        pagingEnabled={true}
-                        showsHorizontalScrollIndicator={true}
-                    >
-                        {step.gifUrl.map(url => (
-                                <Image style={styles.stepImage} key={url} source={{uri: url}} />
-                            )
+                    <Carousel
+                        loop
+                        width={styles.stepImage.width}
+                        height={styles.stepImage.height}
+                        autoPlay={false}
+                        data={step.gifUrl}
+                        scrollAnimationDuration={1000}
+                        onSnapToItem={(index) => console.log('current index:', index)}
+                        renderItem={({ item }) => (
+                            <Image style={styles.stepImage} source={{uri: item}} />
                         )}
-                    </ScrollView>
+                    />
                 </View>
             }
         </View>
@@ -51,6 +54,20 @@ export default function ViewRecipeSteps(props: {recipeSteps: RecipeStep[]}) {
             <RecipeConclusion />
         </View>
     )
+}
+
+function getImageWidth() {
+    const windowWidth = Dimensions.get('window').width
+    if (windowWidth < 700) {
+        return windowWidth - 10
+    } else {
+        return 636
+    }
+}
+
+function getImageHeight() {
+    const width = getImageWidth()
+    return width * 0.75
 }
 
 const styles = StyleSheet.create({
@@ -73,12 +90,13 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     stepImage: {
-        width: 636,
-        height: 487,
-        borderRadius: 10
+        width: getImageWidth(),
+        height: getImageHeight(),
+        borderRadius: 10,
     },
     imageContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 30
     }
 })
