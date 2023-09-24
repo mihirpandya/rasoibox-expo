@@ -19,9 +19,9 @@ export default function Pagination(props: { index: number, slideList: number[] }
                         ? styles.paginationDotActive
                         : styles.paginationDotInactive,
                     ]}
-              />
-            );
-          })}
+                />
+              );
+            })}
         </View>
       );
 }

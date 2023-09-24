@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     card: {
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
-        padding: 30,
-        paddingTop: 100
+        padding: Dimensions.get('window').width < 700 ? 0 : 30,
+        paddingTop: 100,
     },
     instructions: {
         fontFamily: 'AvenirLight',

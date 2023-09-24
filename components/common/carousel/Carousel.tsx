@@ -56,7 +56,7 @@ export default function Carousel(props: {
         removeClippedSubviews: true,
         scrollEventThrottle: 16,
         windowSize: 2,
-        keyExtractor: useCallback(s => String(s.id), []),
+        keyExtractor: useCallback(s => s.imageUrl, []),
         getItemLayout: useCallback(
             (_, index) => ({
                 index,
@@ -83,7 +83,7 @@ export default function Carousel(props: {
             onScroll={onScroll}
             {...flatListOptimizationProps}
           />
-          <Pagination index={index} slideList={[...new Array(carouselData.length)]}/>
+          {carouselData.length > 1 && <Pagination index={index} slideList={[...new Array(carouselData.length)]}/>}
         </View>
       );
 

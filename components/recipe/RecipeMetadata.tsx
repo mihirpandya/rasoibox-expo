@@ -4,6 +4,20 @@ import { RecipeMetadata } from "./RecipeInfo";
 import Tags from '../menu/Tags';
 import { rasoiBoxGrey } from '../../constants/Colors';
 
+function getImageWidth() {
+    const windowWidth = Dimensions.get('window').width
+    if (windowWidth < 700) {
+        return windowWidth - 10
+    } else {
+        return 477
+    }
+}
+
+function getImageHeight() {
+    const width = getImageWidth()
+    return width * 0.75
+}
+
 export default function ViewRecipeMetadata(props: {servingSize: number, recipeMetadata: RecipeMetadata}) {
     const { servingSize, recipeMetadata } = props;
 
@@ -36,11 +50,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     info: {
-        width: Dimensions.get('window').width < 700 ? Dimensions.get('window').width - 10 : Dimensions.get('window').width / 3,
+        width: Dimensions.get('window').width < 700 ? Dimensions.get('window').width - 30 : Dimensions.get('window').width / 3,
+        paddingBottom: 30
     },
     recipeImage: {
-        width: 477,
-        height: 350,
+        width: getImageWidth(),
+        height: getImageHeight(),
         borderRadius: 10,
     },
     recipeName: {
