@@ -1,7 +1,5 @@
 import { Redirect, useLocalSearchParams } from "expo-router";
 import React from "react";
-import { Text } from 'react-native';
-import AuthShim from "../../components/common/AuthShim";
 import RecipeInfo from "../../components/recipe/RecipeInfo";
 
 export default function ViewRecipe() {

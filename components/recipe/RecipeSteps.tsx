@@ -1,8 +1,8 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import Carousel from "../common/carousel/Carousel";
 import RecipeConclusion from './RecipeConclusion';
 import { RecipeStep } from "./RecipeInfo";
-import Carousel from 'react-native-reanimated-carousel';
 
 function stepTitle(title: string): string {
     const upperCase = title.charAt(0).toUpperCase()
@@ -26,20 +26,15 @@ function ViewStep(props: { step: RecipeStep }) {
             })}
             {
                 (step.gifUrl != undefined && step.gifUrl.length > 0) && 
-                <View style={styles.imageContainer}>
-                    <Carousel
-                        loop
-                        width={styles.stepImage.width}
-                        height={styles.stepImage.height}
-                        autoPlay={false}
-                        data={step.gifUrl}
-                        scrollAnimationDuration={1000}
-                        onSnapToItem={(index) => console.log('current index:', index)}
-                        renderItem={({ item }) => (
-                            <Image style={styles.stepImage} source={{uri: item}} />
-                        )}
-                    />
-                </View>
+                <Carousel 
+                    width={styles.stepImage.width}
+                    height={styles.stepImage.height}
+                    carouselData={step.gifUrl.map(url => {
+                        return {
+                            imageUrl: url
+                        }
+                    })}
+                />
             }
         </View>
     )
