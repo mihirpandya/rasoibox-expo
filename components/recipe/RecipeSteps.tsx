@@ -1,10 +1,11 @@
+import { Foundation } from '@expo/vector-icons';
 import React from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import { borderGrey, rasoiBoxPink } from '../../constants/Colors';
+import { capitalizeFirst } from '../../constants/utils';
 import Carousel from "../common/carousel/Carousel";
 import RecipeConclusion from './RecipeConclusion';
 import { RecipeStep } from "./RecipeInfo";
-import { borderGrey, rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
-import { capitalizeFirst } from '../../constants/utils';
 
 function ViewStep(props: { step: RecipeStep }) {
     const { step } = props;
@@ -32,6 +33,16 @@ function ViewStep(props: { step: RecipeStep }) {
                         }
                     })}
                 />
+            }
+            {
+                (step.tips != undefined && step.tips.length > 0) &&
+                <View style={styles.tip}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Foundation name="lightbulb" size={20} color={rasoiBoxPink} />
+                        <Text style={styles.tipTitle}>Tips:</Text>
+                    </View>
+                    {step.tips.map(tip => <Text style={styles.tipContent} key={tip}>{tip}</Text>)}
+                </View>
             }
         </View>
     )
@@ -99,5 +110,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 30
+    },
+    tip: {
+        backgroundColor: 'rgba(241, 122, 126, 0.1)', // rasoi box pink with opacity
+        borderRadius: 20,
+        padding: 20,
+        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
+        marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
+        marginBottom: 30
+    },
+    tipTitle: {
+        color: rasoiBoxPink,
+        fontSize: 17,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        fontFamily: 'AvenirLight',
+        fontWeight: 'bold'
+    },
+    tipContent: {
+        fontFamily: 'AvenirLight',
+        color: rasoiBoxPink,
+        fontSize: 15,
+        paddingTop: 10,
+        lineHeight: 25
     }
 })

@@ -1,25 +1,23 @@
 import React from "react";
-import {
-  StyleSheet, View
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { rasoiBoxYellow } from "../../../constants/Colors";
 
 export default function Pagination(props: { index: number, slideList: number[] }) {
     const { index, slideList } = props;
 
     return (
-        <View style={styles.pagination} pointerEvents="none">
+        <View style={styles.pagination}>
             {slideList.map((_, i) => {
                 return (
-                <View
-                    key={i}
-                    style={[
-                        styles.paginationDot,
-                        index === i
-                        ? styles.paginationDotActive
-                        : styles.paginationDotInactive,
-                    ]}
-                />
+                  <View
+                      key={i}
+                      style={[
+                          styles.paginationDot,
+                          index === i
+                          ? styles.paginationDotActive
+                          : styles.paginationDotInactive,
+                      ]}
+                  />
               );
             })}
         </View>
