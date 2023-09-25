@@ -285,3 +285,20 @@ export function getRecipeSteps(recipeName: string, servingSize: number) {
         throw error;
     })
 }
+
+export function getActiveRecipes(token: string) {
+    return fetch(BACKEND + "order/get_active_recipes", {
+        "method": "get",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        }
+        console.error(response);
+        throw Error();
+    });
+}

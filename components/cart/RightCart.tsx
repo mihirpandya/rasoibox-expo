@@ -59,7 +59,7 @@ export default function RightCart(props: {closeLightbox: () => void}) {
     }
 
     if (loading) {
-        return (<ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/>);
+        return (<ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}} />);
     } else {
         return (
                 <View style={{flex: 1}}>
