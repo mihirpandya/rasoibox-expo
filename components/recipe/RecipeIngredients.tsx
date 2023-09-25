@@ -53,6 +53,7 @@ export default function ViewRecipeIngredients(props: {
     return (
         <View style={styles.card}>
             <Text style={styles.title}>Ingredients</Text>
+            <View style={{alignItems: 'center'}}>
             <View style={styles.container}>
                 <View style={styles.column}>
                     <Text style={styles.subtitle}>In your Rasoi Box:</Text>
@@ -71,6 +72,7 @@ export default function ViewRecipeIngredients(props: {
                     }/>
                 </View>
             </View>
+            </View>
         </View>
     )
 }
@@ -80,10 +82,15 @@ const styles = StyleSheet.create({
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         padding: Dimensions.get('window').width < 700 ? 0 : 30,
-        paddingTop: 100,
+        paddingTop: 50,
     },
     container: {
-        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row'
+        marginTop: 20,
+        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
+        borderRadius: 20,
+        width: Dimensions.get('window').width < 700 ? Dimensions.get('window').width - 30 : Dimensions.get('window').width / 3,
+        justifyContent: 'center',
+        boxShadow: '2px 2px 20px 2px rgba(0, 0, 0, 0.2)'
     },
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
@@ -101,6 +108,7 @@ const styles = StyleSheet.create({
     },
     column: {
         width: Dimensions.get('window').width < 700 ? '100%' : '50%',
+        padding: 20
     },
     ingredient: {
         fontFamily: 'AvenirLight',

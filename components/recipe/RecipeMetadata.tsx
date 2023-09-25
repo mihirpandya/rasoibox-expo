@@ -42,21 +42,20 @@ export default function ViewRecipeMetadata(props: {servingSize: number, recipeMe
 
 const styles = StyleSheet.create({
     card: {
-        marginTop: 30,
-        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
-        alignItems: 'center',
-        justifyContent: 'center',
+        marginTop: 30,
+        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
+        padding: Dimensions.get('window').width < 700 ? 0 : 30,
     },
     info: {
         width: Dimensions.get('window').width < 700 ? Dimensions.get('window').width - 30 : Dimensions.get('window').width / 3,
-        paddingBottom: 30
     },
     recipeImage: {
         width: getImageWidth(),
         height: getImageHeight(),
         borderRadius: 10,
+        marginLeft: Dimensions.get('window').width < 700 ? '-1.25%' : '0%'
     },
     recipeName: {
         fontFamily: 'CormorantGaramondSemiBold',
