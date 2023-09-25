@@ -1,11 +1,12 @@
 import { Foundation } from '@expo/vector-icons';
 import React from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
-import { borderGrey, rasoiBoxPink } from '../../constants/Colors';
+import { borderGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { capitalizeFirst } from '../../constants/utils';
 import Carousel from "../common/carousel/Carousel";
 import RecipeConclusion from './RecipeConclusion';
 import { RecipeStep } from "./RecipeInfo";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function ViewStep(props: { step: RecipeStep }) {
     const { step } = props;
@@ -42,6 +43,17 @@ function ViewStep(props: { step: RecipeStep }) {
                         <Text style={styles.tipTitle}>Tips:</Text>
                     </View>
                     {step.tips.map(tip => <Text style={styles.tipContent} key={tip}>{tip}</Text>)}
+                </View>
+            }
+
+            {
+                (step.chefsHats != undefined && step.chefsHats.length > 0) &&
+                <View style={styles.chefsHat}>
+                    <View style={{flexDirection: 'row'}}>
+                        <MaterialCommunityIcons name="chef-hat" size={20} color={rasoiBoxYellow} style={{marginTop: 3}}/>
+                        <Text style={styles.chefsHatTitle}>Chef's Hat:</Text>
+                    </View>
+                    {step.chefsHats.map(chefsHat => <Text style={styles.chefsHatContent} key={chefsHat}>{chefsHat}</Text>)}
                 </View>
             }
         </View>
@@ -118,6 +130,29 @@ const styles = StyleSheet.create({
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginBottom: 30
+    },
+    chefsHat: {
+        backgroundColor: 'rgba(249, 166, 108, 0.1)', // rasoi box yellow with opacity
+        borderRadius: 20,
+        padding: 20,
+        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
+        marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
+        marginBottom: 30
+    },
+    chefsHatTitle: {
+        color: rasoiBoxYellow,
+        fontSize: 17,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        fontFamily: 'AvenirLight',
+        fontWeight: 'bold'
+    },
+    chefsHatContent: {
+        fontFamily: 'AvenirLight',
+        color: rasoiBoxYellow,
+        fontSize: 15,
+        paddingTop: 10,
+        lineHeight: 25
     },
     tipTitle: {
         color: rasoiBoxPink,
