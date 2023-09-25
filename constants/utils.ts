@@ -124,3 +124,8 @@ export function orderJsonToOrderInformationResponse(orderJson: any): OrderInform
         recipes: recipes
     }
 }
+
+export function capitalizeFirst(title: string): string {
+    const upperCase = title.charAt(0).toUpperCase()
+    return upperCase + title.substring(1)
+}

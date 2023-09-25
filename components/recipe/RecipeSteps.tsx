@@ -3,11 +3,8 @@ import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import Carousel from "../common/carousel/Carousel";
 import RecipeConclusion from './RecipeConclusion';
 import { RecipeStep } from "./RecipeInfo";
-
-function stepTitle(title: string): string {
-    const upperCase = title.charAt(0).toUpperCase()
-    return upperCase + title.substring(1)
-}
+import { borderGrey, rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
+import { capitalizeFirst } from '../../constants/utils';
 
 function ViewStep(props: { step: RecipeStep }) {
     const { step } = props;
@@ -15,7 +12,7 @@ function ViewStep(props: { step: RecipeStep }) {
     return (
         <View>
             <Text style={styles.stepName}>
-                {step.stepNumber}. {stepTitle(step.title)}
+                {step.stepNumber}. {capitalizeFirst(step.title)}
             </Text>
             {step.instructions.map(line => {
                 return (
@@ -45,6 +42,7 @@ export default function ViewRecipeSteps(props: {recipeSteps: RecipeStep[]}) {
 
     return (
         <View style={styles.card}>
+            <Text style={styles.directions}>Directions</Text>
             <FlatList data={recipeSteps} renderItem={({item}) => <ViewStep step={item} />}/>
             <RecipeConclusion />
         </View>
@@ -66,11 +64,19 @@ function getImageHeight() {
 }
 
 const styles = StyleSheet.create({
+    directions: {
+        fontFamily: 'CormorantGaramondSemiBold',
+        color: rasoiBoxPink,
+        fontSize: 25,
+        paddingBottom: 20,
+        paddingTop: 30,
+        borderTopWidth: 1,
+        borderTopColor: borderGrey
+    },
     card: {
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         padding: Dimensions.get('window').width < 700 ? 0 : 30,
-        paddingTop: 100,
     },
     instructions: {
         fontFamily: 'AvenirLight',

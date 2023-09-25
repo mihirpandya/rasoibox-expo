@@ -6,6 +6,7 @@ import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import ViewRecipeMetadata from "./RecipeMetadata";
 import ViewRecipeSteps from "./RecipeSteps";
+import ViewRecipeIngredients from "./RecipeIngredients";
 import { rasoiBoxPink } from '../../constants/Colors';
 
 export interface Quantity {
@@ -144,7 +145,7 @@ export default function RecipeInfo(props: {recipeId: number, servingSize: number
                     recipeMetadata ? <ViewRecipeMetadata servingSize={servingSize} recipeMetadata={recipeMetadata} /> :
                     <ActivityIndicator color={rasoiBoxPink} size="large" style={{margin: 30}}/>
                 }
-                
+                {recipeMetadata && <ViewRecipeIngredients servingSize={servingSize} ingredients={recipeMetadata.ingredients} inYourKitchen={recipeMetadata.inYourKitchens}/>}
                 {recipeMetadata && recipeSteps.length > 0 && <ViewRecipeSteps recipeSteps={recipeSteps} />}
                 
                 <Footer />
