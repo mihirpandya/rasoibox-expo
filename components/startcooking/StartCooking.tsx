@@ -126,14 +126,14 @@ export default function ViewStartCooking() {
 
 const styles = StyleSheet.create({
     card: {
-        paddingLeft: Dimensions.get('window').width < 700 ? 0 : '20%',
-        paddingRight: Dimensions.get('window').width < 700 ? 0 : '20%',
+        paddingLeft: Dimensions.get('window').width < 700 ? '2.5%' : '20%',
+        paddingRight: Dimensions.get('window').width < 700 ? '2.5%' : '20%',
         justifyContent: 'center',
         alignItems: 'center',
     },
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
-        fontSize: 35,
+        fontSize: Dimensions.get('window').width < 700 ? 30 : 35,
         paddingTop: 20,
         paddingBottom: 30,
     },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     recipeCard: {
         borderBottomWidth: 1,
         borderColor: borderGrey,
-        padding: 20,
+        padding: Dimensions.get('window').width < 700 ? 10 : 20,
         width: Dimensions.get('window').width < 700 ? '95%': 500,
         flexDirection: 'row'
     },
@@ -179,12 +179,12 @@ const styles = StyleSheet.create({
     },
     servings: {
         fontFamily: 'AvenirLight',
-        fontSize: 17,
+        fontSize: 15,
         color: rasoiBoxGrey
     },
     orderDate: {
         fontFamily: 'AvenirLight',
-        fontSize: 17,
+        fontSize: 15,
         fontStyle: 'italic',
         color: rasoiBoxGrey
     }
