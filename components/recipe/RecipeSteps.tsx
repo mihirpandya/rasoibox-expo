@@ -8,6 +8,15 @@ import RecipeConclusion from './RecipeConclusion';
 import { RecipeStep } from "./RecipeInfo";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+function parseTip(tip: string): string {
+    let newTip = tip.replaceAll('<br />', '\n')
+    newTip = newTip.replaceAll('<ul>', '')
+    newTip = newTip.replaceAll('</ul>', '')
+    newTip = newTip.replaceAll('<li>', '  - ')
+    newTip = newTip.replaceAll('</li>', '\n')
+    return newTip
+}
+
 function ViewStep(props: { step: RecipeStep }) {
     const { step } = props;
 
@@ -42,7 +51,7 @@ function ViewStep(props: { step: RecipeStep }) {
                         <Foundation name="lightbulb" size={20} color={rasoiBoxPink} />
                         <Text style={styles.tipTitle}>Tips:</Text>
                     </View>
-                    {step.tips.map(tip => <Text style={styles.tipContent} key={tip}>{tip}</Text>)}
+                    {step.tips.map(tip => <Text style={styles.tipContent} key={tip}>{parseTip(tip)}</Text>)}
                 </View>
             }
 
@@ -53,7 +62,7 @@ function ViewStep(props: { step: RecipeStep }) {
                         <MaterialCommunityIcons name="chef-hat" size={20} color={rasoiBoxYellow} style={{marginTop: 3}}/>
                         <Text style={styles.chefsHatTitle}>Chef's Hat:</Text>
                     </View>
-                    {step.chefsHats.map(chefsHat => <Text style={styles.chefsHatContent} key={chefsHat}>{chefsHat}</Text>)}
+                    {step.chefsHats.map(chefsHat => <Text style={styles.chefsHatContent} key={chefsHat}>{parseTip(chefsHat)}</Text>)}
                 </View>
             }
         </View>
@@ -132,7 +141,7 @@ const styles = StyleSheet.create({
         marginBottom: 30
     },
     chefsHat: {
-        backgroundColor: 'rgba(249, 166, 108, 0.1)', // rasoi box yellow with opacity
+        backgroundColor: 'rgba(249, 166, 108, 0.08)', // rasoi box yellow with opacity
         borderRadius: 20,
         padding: 20,
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
