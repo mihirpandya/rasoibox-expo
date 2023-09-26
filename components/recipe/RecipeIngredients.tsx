@@ -2,7 +2,7 @@ import React from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { borderGrey, rasoiBoxPink } from '../../constants/Colors';
 import { InYourKitchen, Ingredient } from "./RecipeInfo";
-import { capitalizeFirst } from '../../constants/utils';
+import { capitalizeFirst, pluralize } from '../../constants/utils';
 
 function showNumber(fraction: number) {
 	if (fraction == 0.5) {
@@ -23,7 +23,7 @@ function ViewIngredient(props: { servingSize: number, ingredient: Ingredient }) 
     const amount: number = ingredient.quantities.filter(q => q.servingSize === servingSize)[0].amount
     return (
         <Text style={styles.ingredient}>
-            {showNumber(amount) + " " + ingredient.unit + " " + ingredient.name}
+            {showNumber(amount) + " " + ingredient.unit + " " + pluralize(ingredient.name, amount)}
         </Text>
     )
 }

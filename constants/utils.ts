@@ -129,3 +129,17 @@ export function capitalizeFirst(title: string): string {
     const upperCase = title.charAt(0).toUpperCase()
     return upperCase + title.substring(1)
 }
+
+export function pluralize(name: string, amount: number) {
+	if (amount <= 1) {
+		return name;
+	}
+
+	if (name == "tomato") {
+		return "tomatoes"
+	} else if (name == "onion") {
+		return "onions"
+	}
+
+	return name;
+}

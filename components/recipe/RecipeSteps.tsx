@@ -2,7 +2,7 @@ import { Foundation } from '@expo/vector-icons';
 import React from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { borderGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
-import { capitalizeFirst } from '../../constants/utils';
+import { capitalizeFirst, pluralize } from '../../constants/utils';
 import Carousel from "../common/carousel/Carousel";
 import RecipeConclusion from './RecipeConclusion';
 import { RecipeStep } from "./RecipeInfo";
@@ -17,6 +17,51 @@ function parseTip(tip: string): string {
     return newTip
 }
 
+function RenderInstructions(props: { instruction: string, ingredients: string[] }) { 
+    const { instruction, ingredients } = props;
+
+	const words = instruction.split(" ")
+    
+    const instructions: React.ReactNode[] = []
+
+	for (let i = 0; i < words.length; i++) {
+		let word_with_new_lines = words[i];
+		let words_wo_new_lines = word_with_new_lines.split("\n")
+		for (let j = 0; j < word_with_new_lines.length; j++) {
+			const word = words_wo_new_lines[j];
+			if (word != undefined) {
+				const matchingIngredient = ingredients.find(ingredient => {
+					if (word.match(ingredient) != null || word.match(pluralize(ingredient, 2)) != null) {
+						return true;
+					}
+
+					const ingredient_words = ingredient.split(" ")
+					const matchingIngredientWord = ingredient_words.find(ingredient_word => {
+						return (word.match(ingredient_word) != null || word.match(pluralize(ingredient_word, 2)) != null)
+					})
+					return (matchingIngredientWord != undefined)
+				})
+
+				if (matchingIngredient != undefined) {
+					words_wo_new_lines[j] = "<b>" + word + "</b>"
+                    instructions.push(<Text style={styles.bold}>{word}</Text>)
+				} else {
+                    instructions.push(<Text style={styles.instructions}>{word}</Text>)
+                }
+			}
+		}
+		words[i] = words_wo_new_lines.join("\n")
+	}
+
+    return (
+        <View style={{flexDirection: 'row', flexWrap: 'wrap', paddingBottom: 20}}>
+            {instructions}
+        </View>
+    )
+
+	// return "<div style='font-family: Avenir Light; font-size: 15px; line-height: 1.6'>" + words.join(" ").replaceAll("\n", "<br />") + "</div>"
+}
+
 function ViewStep(props: { step: RecipeStep }) {
     const { step } = props;
 
@@ -27,9 +72,10 @@ function ViewStep(props: { step: RecipeStep }) {
             </Text>
             {step.instructions.map(line => {
                 return (
-                    <Text key={line} style={styles.instructions}>
-                        {line}
-                    </Text>     
+                    <RenderInstructions key={line} instruction={line} ingredients={step.ingredients} />
+                    // <Text key={line} style={styles.instructions}>
+                    //     {line}
+                    // </Text>     
                 )
             })}
             {
@@ -113,9 +159,14 @@ const styles = StyleSheet.create({
     instructions: {
         fontFamily: 'AvenirLight',
         fontSize: 17,
-        paddingBottom: 20,
-        paddingLeft: 20,
-        paddingRight: 20
+        paddingRight: 5,
+    },
+    bold: {
+        fontFamily: 'AvenirLight',
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: rasoiBoxPink,
+        paddingRight: 5
     },
     stepName: {
         fontSize: 20,
@@ -135,6 +186,7 @@ const styles = StyleSheet.create({
     tip: {
         backgroundColor: 'rgba(241, 122, 126, 0.1)', // rasoi box pink with opacity
         borderRadius: 20,
+        marginTop: 20,
         padding: 20,
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
         marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
