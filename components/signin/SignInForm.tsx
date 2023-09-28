@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
         fontSize: 35,
-        paddingBottom: 50
+        paddingBottom: 50,
+        paddingTop: Dimensions.get('window').width < 700 ? 0 : 50,
     },
     fieldTitle: {
         fontFamily: 'AvenirLight',
