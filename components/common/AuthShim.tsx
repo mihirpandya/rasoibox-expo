@@ -33,6 +33,20 @@ export default function AuthShim(props: IAuthShimProps) {
             }
         }).finally(async () => {
             setAuthDetails(authDetails)
+            Storage.getAuthDetails().then(async oldAuthDetails => {
+                let newAuthDetails: AuthDetails
+                if (oldAuthDetails) {
+                    newAuthDetails = {
+                        ...oldAuthDetails,
+                        ...authDetails
+                    }
+                } else {
+                    newAuthDetails = {
+                        ...authDetails
+                    }
+                }
+                await Storage.storeAuthDetails(newAuthDetails)
+            })
             await Storage.storeAuthDetails(authDetails);
         })
     }

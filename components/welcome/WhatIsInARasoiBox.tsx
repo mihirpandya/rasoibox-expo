@@ -80,6 +80,10 @@ const styles = StyleSheet.create({
     },
     leftCard: {
         margin: Dimensions.get('window').width < 700 ? 10 : 40,
+        paddingLeft: Dimensions.get('window').width < 700 ? 10 : 60,
+        paddingRight: Dimensions.get('window').width < 700 ? 10 : 60,
+        paddingTop: Dimensions.get('window').width < 700 ? 10 : 30,
+        paddingBottom: Dimensions.get('window').width < 700 ? 10 : 30,
         backgroundColor: 'white',
         borderRadius: Dimensions.get('window').width < 700 ? 20 : 0
     },

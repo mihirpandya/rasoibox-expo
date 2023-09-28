@@ -1,12 +1,14 @@
 import { Link, Redirect } from 'expo-router';
-import React, { useState } from 'react';
-import { ActivityIndicator, Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import { signup } from "../../app/api/rasoibox-backend";
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { generateCode } from '../../constants/utils';
 import { validateEmail, validateZipcode } from "../../validators/Validators";
 import ErrorText from "../common/ErrorText";
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
+import * as Storage from "../common/Storage";
 
 export const errorIds = ['no_error', 'email', 'password', 'name', 'zipcode', 'invalid_login'] as const;
 type ErrorID = typeof errorIds[number];
@@ -29,12 +31,25 @@ export default function SignUpForm() {
     const [zipcode, setZipCode] = useState("")
     const [error, setError] = useState<ErrorID>('no_error')
     const [loading, setLoading] = useState<boolean>(false);
+    const [verificationCode, setVerificationCode] = useState<string | undefined>()
+
+    function fetchAuthDetails() {
+        return Storage.getAuthDetails().then(response => {
+            setVerificationCode(response?.verification_code)
+        })
+    }
+
+    useEffect(() => {
+        fetchAuthDetails()
+    }, [])
 
     function submitIfEnter(event: any) {
         if (event.key === "Enter") {
             submit();
         }
     }
+
+    const code: string = !!verificationCode ? verificationCode : generateCode()
 
     async function submit() {
         setError('no_error');
@@ -61,7 +76,7 @@ export default function SignUpForm() {
 
         setLoading(true);
         // const loginResponse = await login(email, password)
-        const signupResponse = await signup(email, password, firstName, lastName, zipcode, new Date(), verificationCode)
+        const signupResponse = await signup(email, password, firstName, lastName, zipcode, new Date(), code)
         setLoading(false);
 
         // if (loginResponse["status"] == 0) {

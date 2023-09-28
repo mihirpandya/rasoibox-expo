@@ -147,7 +147,8 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline'
     },
     form: {
-        padding: 50
+        paddingLeft: Dimensions.get('window').width < 700 ? 20 : 50,
+        paddingRight: Dimensions.get('window').width < 700 ? 20 : 50
     },
     button: {
         marginTop: 30,

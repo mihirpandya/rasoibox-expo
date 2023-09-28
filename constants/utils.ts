@@ -1,6 +1,11 @@
 import { PromoCode } from "../components/checkout/Checkout";
 import { DeliveryAddress, OrderBreakdown, OrderInformationResponse, RecipeInfo } from "../components/order/OrderInformation";
 
+
+export function generateCode(): string {
+	return Math.floor(Math.random() * 1_000_000).toString(16);
+}
+
 export function twoDecimals(num: number): string {
     return num.toFixed(2)
 }
