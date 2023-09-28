@@ -21,7 +21,7 @@ export default function WelcomePage() {
 
                 <WhatIsInARasoiBox />
 
-                {/* <UnlockTheFlavors /> */}
+                <UnlockTheFlavors />
 
                 <Footer />
             </ScrollView>
