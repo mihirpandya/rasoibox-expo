@@ -1,16 +1,27 @@
-import { Link, Redirect } from 'expo-router';
+import { Link, Redirect, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import { signup } from "../../app/api/rasoibox-backend";
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
-import { generateCode } from '../../constants/utils';
+import { generateCode, loginSession } from '../../constants/utils';
 import { validateEmail, validateZipcode } from "../../validators/Validators";
 import ErrorText from "../common/ErrorText";
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
 import * as Storage from "../common/Storage";
 
-export const errorIds = ['no_error', 'email', 'password', 'name', 'zipcode', 'invalid_login'] as const;
+export const errorIds = [
+    'no_error', 
+    'email', 
+    'password', 
+    'name', 
+    'zipcode',
+    'already_exists',
+    'unknown_error',
+    'success',
+    'success_verified',
+    'invalid_login'
+] as const;
 type ErrorID = typeof errorIds[number];
 
 const ERRORS: Record<ErrorID, string> = {
@@ -19,6 +30,10 @@ const ERRORS: Record<ErrorID, string> = {
     password: "Password is a required field.",
     name: "Please enter a first and last name.",
     zipcode: "Please enter a valid US zip code.",
+    already_exists: "This account already exists. If you have forgotten your password, go to the log in page to reset your password.",
+    success: "Your account has been created successfully. Please check your email to verify your account.",
+    success_verified: "Your account has been successfully verified! Signing you in and redirecting you to our menu.",
+    unknown_error: "We could not create your account. Please check your entries and try submitting the form again.",
     invalid_login: "Unable to log in with provided credentials."
 }
 
@@ -75,25 +90,25 @@ export default function SignUpForm() {
         }
 
         setLoading(true);
-        // const loginResponse = await login(email, password)
         const signupResponse = await signup(email, password, firstName, lastName, zipcode, new Date(), code)
         setLoading(false);
 
-        // if (loginResponse["status"] == 0) {
-        //     AsyncStorage.setItem(Storage.ACCESS_TOKEN, loginResponse[Storage.ACCESS_TOKEN])
-        //     setError('no_error')
-        //     setLoggedIn(true)
-        //     const authDetails: AuthDetails = {
-        //         authenticated: true,
-        //         first_name: loginResponse["first_name"],
-        //         last_name: loginResponse["last_name"],
-        //         email: loginResponse["email"],
-        //         verification_code: loginResponse["verification_code"]
-        //     }
-        //     await Storage.storeAuthDetails(authDetails)
-        // } else {
-        //     setError('invalid_login')
-        // }
+        const signupStatus: number | undefined = signupResponse["status"]
+
+        if (signupStatus == 0) {
+            setError('success')
+        } else if (signupStatus == 1) {
+            setError('success_verified')
+            loginSession(email, password).then(_success => {
+                setLoggedIn(true);
+            }).catch(_error => {
+                setError('invalid_login')
+            })
+        } else if (signupStatus == -1) {
+            setError('already_exists')
+        } else {
+            setError('unknown_error')
+        }
     }
 
     if (loggedIn) {

@@ -13,15 +13,11 @@ import { generateCode } from '../../constants/utils';
 
 
 export default function WelcomePage() {
-    const [verificationCode, setVerificationCode] = useState("")
     
-    function fetchVerificationCode() {
+    function setVerificationCode() {
         Storage.getAuthDetails().then(async authDetails => {
             let code: string | undefined = authDetails?.verification_code
-            console.log(authDetails)
-            if (code) {
-                await setVerificationCode(code)
-            } else {
+            if (!code) {
                 code = generateCode()
                 let newAuthDetails: AuthDetails
                 if (authDetails) {
@@ -41,7 +37,7 @@ export default function WelcomePage() {
     }
 
     useEffect(() => {
-        fetchVerificationCode()
+        setVerificationCode()
     }, [])
 
     return (

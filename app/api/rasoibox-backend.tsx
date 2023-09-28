@@ -343,3 +343,15 @@ export function signup(
         throw error;
     })
 }
+
+export function verify(verificationCode: string) {
+    return fetch(BACKEND + "verify/email?id=" + verificationCode, {"method": "get"})
+        .then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+                return response.json();
+            } else {
+                console.log("error: " + response);
+                throw new Error(response.statusText);
+            }
+        });
+}

@@ -1,15 +1,12 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, Redirect } from 'expo-router';
 import React, { useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
-import { login } from "../../app/api/rasoibox-backend";
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { loginSession } from '../../constants/utils';
 import { validateEmail } from "../../validators/Validators";
-import { AuthDetails } from '../common/AuthShim';
 import ErrorText from "../common/ErrorText";
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
-import * as Storage from "../common/Storage";
 
 export const errorIds = ['no_error', 'email', 'password', 'invalid_login'] as const;
 type ErrorID = typeof errorIds[number];
@@ -35,6 +32,8 @@ export default function SignInForm() {
     }
 
     async function submit() {
+        setError('no_error')
+
         if (!validateEmail(email)) {
             setError('email');
             return;
@@ -46,24 +45,12 @@ export default function SignInForm() {
         }
 
         setLoading(true);
-        const loginResponse = await login(email, password)
-        setLoading(false);
-
-        if (loginResponse["status"] == 0) {
-            AsyncStorage.setItem(Storage.ACCESS_TOKEN, loginResponse[Storage.ACCESS_TOKEN])
-            setError('no_error')
-            setLoggedIn(true)
-            const authDetails: AuthDetails = {
-                authenticated: true,
-                first_name: loginResponse["first_name"],
-                last_name: loginResponse["last_name"],
-                email: loginResponse["email"],
-                verification_code: loginResponse["verification_code"]
-            }
-            await Storage.storeAuthDetails(authDetails)
-        } else {
+        loginSession(email, password).then(_success => {
+            setLoggedIn(true);
+        }).catch(error => {
             setError('invalid_login')
-        }
+        })
+        setLoading(false);
     }
 
     if (loggedIn) {

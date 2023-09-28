@@ -1,6 +1,31 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { login } from "../app/api/rasoibox-backend";
 import { PromoCode } from "../components/checkout/Checkout";
 import { DeliveryAddress, OrderBreakdown, OrderInformationResponse, RecipeInfo } from "../components/order/OrderInformation";
+import * as Storage from "../components/common/Storage";
+import { AuthDetails } from "../components/common/AuthShim";
 
+
+export function loginSession(email: string, password: string): Promise<void> {
+    return login(email, password).then(loginResponse => {
+        if (loginResponse["status"] == 0) {
+            AsyncStorage.setItem(Storage.ACCESS_TOKEN, loginResponse[Storage.ACCESS_TOKEN])
+            const authDetails: AuthDetails = {
+                authenticated: true,
+                first_name: loginResponse["first_name"],
+                last_name: loginResponse["last_name"],
+                email: loginResponse["email"],
+                verification_code: loginResponse["verification_code"]
+            }
+            return Storage.storeAuthDetails(authDetails)
+        } else {
+            throw Error()
+        }
+    }).catch(error => {
+        console.error(error);
+        throw Error(error);
+    })
+}
 
 export function generateCode(): string {
 	return Math.floor(Math.random() * 1_000_000).toString(16);
