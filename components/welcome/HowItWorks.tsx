@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     },
     howItWorks: {
         fontFamily: 'CormorantGaramondSemiBold',
-        fontSize: 56,
+        fontSize: Dimensions.get('window').width < 700 ? 35 : 56,
         padding: 40,
     },
     repeaters: {

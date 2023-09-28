@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     leftCard: {
         margin: Dimensions.get('window').width < 700 ? 10 : 40,
         backgroundColor: 'white',
+        borderRadius: Dimensions.get('window').width < 700 ? 20 : 0
     },
     right: {
         width: Dimensions.get('window').width < 700 ? '100%' : '40%',
@@ -92,7 +93,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     repeater: {
-        // height: Dimensions.get('window').width < 700 ? 250 : 150,
         flexDirection: Dimensions.get('window').width < 700 ? 'row' : 'row',
         width: Dimensions.get('window').width < 700 ? '100%' : '60%',
         padding: 20,

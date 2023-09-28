@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         paddingBottom: Dimensions.get('window').width < 700 ? 30 : 100,
         paddingLeft: Dimensions.get('window').width < 700 ? 5 : 100,
         paddingRight: Dimensions.get('window').width < 700 ? 5 : 100,
-        fontSize: 75,
+        fontSize: Dimensions.get('window').width < 700 ? 35 : 75,
         fontFamily: 'CormorantGaramondSemiBold'
     },
     right: {
