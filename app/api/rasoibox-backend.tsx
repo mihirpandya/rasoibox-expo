@@ -302,3 +302,44 @@ export function getActiveRecipes(token: string) {
         throw Error();
     });
 }
+
+export function signup(
+    email: string, 
+    password: string, 
+    firstName: string, 
+    lastName: string, 
+    zipcode: string, 
+    joinDate: Date, 
+    verificationCode: string
+) {
+    const request_body = {
+        "email": email,
+        "password": password,
+        "first_name": firstName,
+        "last_name": lastName,
+        "zipcode": zipcode,
+        "join_date": joinDate,
+        "verification_code": verificationCode
+    }
+
+    return fetch(BACKEND + "users/create", {
+        "method": "post",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        "body": JSON.stringify(request_body)
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else {
+            console.error(response);
+            return {
+                "status": -2
+            }
+        }
+    }).catch ((error) => {
+        console.error(error);
+        throw error;
+    })
+}
