@@ -36,16 +36,20 @@ export default function WhatIsInARasoiBox() {
                     </Text>
                     <View style={styles.repeaters}>
                         <Repeater 
-                            title="Personalize your Plate" 
-                            subtitle="Is prepared food too spicy or salty? Let our meal kits and your tastebuds guide you in the kitchen."
+                            title="Pre-Portioned Spices" 
+                            subtitle="No more buying bulk spices from specialty grocery stores, just to try a new cuisine."
                         />
                         <Repeater 
-                            title="Flexible Selections" 
-                            subtitle="Date night, family dinner, or group fun. Order what you want, when you want. No subscriptions, no commitments. "
+                            title="Fresh Produce and Herbs" 
+                            subtitle="High quality and seasonal, sourced locally."
                         />
                         <Repeater 
-                            title="Rotational Menu" 
-                            subtitle="Explore unique dishes not usually found in restaurants, every week. "
+                            title="Accompaniments" 
+                            subtitle="Condiments. Chutneys. Pickle. Papadum."
+                        />
+                        <Repeater 
+                            title="Step-by-Step Recipe Card" 
+                            subtitle="Clear instructions and cooking tips, complete with access to a video guide."
                         />
                     </View>
                 </View>
