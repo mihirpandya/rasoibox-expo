@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import { ScrollView } from 'react-native-gesture-handler';
-import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { rasoiBoxYellow } from '../../constants/Colors';
 
 export default function OurStory() {
     
