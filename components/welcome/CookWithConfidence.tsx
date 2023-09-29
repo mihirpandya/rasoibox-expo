@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width < 700 ? '100%' : '50%',
         color: rasoiBoxGrey,
         paddingTop: 20,
+        paddingBottom: 20
     },
     button: {
         marginTop: 50,

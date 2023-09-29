@@ -9,6 +9,7 @@ import ErrorText from "../common/ErrorText";
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
 import * as Storage from "../common/Storage";
+import { AuthDetails } from '../common/AuthShim';
 
 export const errorIds = [
     'no_error', 
@@ -46,13 +47,21 @@ export default function SignUpForm() {
     const [zipcode, setZipCode] = useState("")
     const [error, setError] = useState<ErrorID>('no_error')
     const [loading, setLoading] = useState<boolean>(false);
-    const [verificationCode, setVerificationCode] = useState<string | undefined>()
+    const [authDetails, setAuthDetails] = useState<AuthDetails | undefined>()
 
     function fetchAuthDetails() {
         return Storage.getAuthDetails().then(response => {
-            setVerificationCode(response?.verification_code)
+            if (response != null) {
+                setAuthDetails(response)
+            }
         })
     }
+
+    useEffect(() => {
+        if (authDetails?.email) {
+            setEmail(authDetails.email)
+        }
+    }, [authDetails])
 
     useEffect(() => {
         fetchAuthDetails()
@@ -64,7 +73,7 @@ export default function SignUpForm() {
         }
     }
 
-    const code: string = !!verificationCode ? verificationCode : generateCode()
+    const code: string = !!authDetails?.verification_code ? authDetails.verification_code : generateCode()
 
     async function submit() {
         setError('no_error');
@@ -126,15 +135,15 @@ export default function SignUpForm() {
                                 <View style={styles.row}>
                                     <View style={styles.rowItem}>
                                         <FormKey>First Name</FormKey>
-                                        <FormValue onChangeText={setFirstName} onKeyPress={submitIfEnter} />
+                                        <FormValue onChangeText={setFirstName} onKeyPress={submitIfEnter} defaultValue={firstName}/>
                                     </View>
                                     <View style={styles.rowItem}>
                                         <FormKey>Last Name</FormKey>
-                                        <FormValue onChangeText={setLastName} onKeyPress={submitIfEnter} />
+                                        <FormValue onChangeText={setLastName} onKeyPress={submitIfEnter} defaultValue={lastName}/>
                                     </View>
                                 </View>
                                 <FormKey>Email</FormKey>
-                                <FormValue secureTextEntry={false} onChangeText={setEmail} onKeyPress={submitIfEnter} />
+                                <FormValue secureTextEntry={false} onChangeText={setEmail} onKeyPress={submitIfEnter} defaultValue={email}/>
                                 <View style={styles.row}>
                                     <View style={styles.rowItem}>
                                         <FormKey>Password</FormKey>

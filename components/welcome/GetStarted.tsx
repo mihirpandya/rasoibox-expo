@@ -2,19 +2,69 @@ import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Dimensions, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { validateEmail } from '../../validators/Validators';
+import * as Storage from "../common/Storage";
+import { AuthDetails } from '../common/AuthShim';
+import { router } from 'expo-router';
+import ErrorText from '../common/ErrorText';
+
+export const errorIds = [
+    'no_error', 
+    'email', 
+] as const;
+type ErrorID = typeof errorIds[number];
+
+const ERRORS: Record<ErrorID, string> = {
+    no_error: "There is no error. No message to show.",
+    email: "Please enter a valid email address.",
+}
 
 export default function GetStarted() {
-    const [text, setText] = useState("");
+    const [email, setEmail] = useState("");
+    const [error, setError] = useState<ErrorID>('no_error')
+
+    function submitIfEnter(event: any) {
+        if (event.key === "Enter") {
+            onPress();
+        }
+    }
 
     function onPress() {
+        setError('no_error')
+        if (!validateEmail(email)) {
+            setError('email');
+            return;
+        } else {
+            Storage.getAuthDetails().then(oldAuthDetails => {
+                let newAuthDetails: AuthDetails;
+                if (oldAuthDetails == null) {
+                    newAuthDetails = {
+                        authenticated: false,
+                        email: email
+                    }
+                } else {
+                    newAuthDetails = {
+                        ...oldAuthDetails,
+                        email: email
+                    }
+                }
+
+                Storage.storeAuthDetails(newAuthDetails).then(_response => {
+                    router.replace("/signup")
+                })
+            })
+        }
     }
 
     return (
         <View style={styles.card}>
-            <TextInput style={styles.input} placeholder={"Enter email to get started"} onChangeText={setText}/>
-            <Pressable style={styles.button} onPress={onPress}>
-                <AntDesign name="rightcircle" size={40} color={rasoiBoxYellow} />
-            </Pressable>
+            {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
+            <View style={styles.form}>
+                <TextInput style={styles.input} placeholder={"Enter email to get started"} onChangeText={setEmail} onKeyPress={submitIfEnter}/>
+                <Pressable style={styles.button} onPress={onPress}>
+                    <AntDesign name="rightcircle" size={40} color={rasoiBoxYellow} />
+                </Pressable>
+            </View>
         </View>
     )
 }
@@ -22,12 +72,14 @@ export default function GetStarted() {
 const styles = StyleSheet.create({
     card: {
         width: Dimensions.get('screen').width < 700 ? '100%' : '90%',
+    },
+    form: {
         marginTop: 30,
         marginBottom: 30,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     input: {
         height: 50,
