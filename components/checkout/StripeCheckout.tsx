@@ -19,7 +19,7 @@ const appearance = {
 
 export default function StripeCheckout(props: {cartEmpty: boolean, firstName?: string, lastName?: string, promoCode?: string}) {
     const { cartEmpty, firstName, lastName, promoCode } = props;
-    const [orderId, setOrderId] = useState<string | undefined>();
+    const [orderId, setOrderId] = useState<string>();
     const [clientSecret, setClientSecret] = useState<string | undefined>()
     const options = {
         clientSecret: clientSecret,
@@ -53,9 +53,9 @@ export default function StripeCheckout(props: {cartEmpty: boolean, firstName?: s
     }, [authtoken])
 
     return (
-        clientSecret &&
+        clientSecret && orderId &&
         <Elements stripe={stripePromise} options={options}>
-            <StripeCheckoutForm cartEmpty={cartEmpty} authToken={authtoken} firstName={firstName} lastName={lastName} promoCode={promoCode}/>
+            <StripeCheckoutForm cartEmpty={cartEmpty} orderId={orderId} authToken={authtoken} firstName={firstName} lastName={lastName} promoCode={promoCode} />
         </Elements>
     )
 }

@@ -355,3 +355,19 @@ export function verify(verificationCode: string) {
             }
         });
 }
+
+export function isDeliverableZipcode(zipcode: string) {
+    return fetch(BACKEND + "is_deliverable_zipcode?zipcode=" + zipcode, {
+        "method": "get",
+        "headers": {
+			"Content-Type": "application/json"
+		},
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    })
+}

@@ -4,7 +4,7 @@ import { ActivityIndicator, Dimensions, StyleSheet, Text, View } from 'react-nat
 import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
 import ErrorText from '../common/ErrorText';
 import { StripeAddressElementOptions } from '@stripe/stripe-js';
-import { OrderBackendApi, initiatePlaceOrder } from '../../app/api/rasoibox-backend';
+import { OrderBackendApi, initiatePlaceOrder, isDeliverableZipcode } from '../../app/api/rasoibox-backend';
 import { rasoiBoxPink } from '../../constants/Colors';
 
 // https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=elements
@@ -38,13 +38,14 @@ function getFirstAndLastName(fullName: string) {
 }
 
 export default function StripeCheckoutForm(props: {
-    cartEmpty: boolean, 
+    cartEmpty: boolean,
+    orderId: string,
     authToken?: string,
     firstName?: string,
     lastName?: string,
-    promoCode?: string
+    promoCode?: string,
 }) {
-    const { cartEmpty, authToken, firstName, lastName, promoCode } = props;
+    const { cartEmpty, orderId, authToken, firstName, lastName, promoCode } = props;
     const stripe = useStripe();
     const elements = useElements();
     
@@ -129,7 +130,18 @@ export default function StripeCheckoutForm(props: {
                 state: inputUserInfo.value.address.state,
                 zipcode: inputUserInfo.value.address.postal_code
             }
+        }
 
+        const deliverable: boolean = await isDeliverableZipcode(orderDetails.delivery_address.zipcode).then(response => {
+            return response["status"] == 0
+        }).catch(error => {
+            console.error(error);
+            return false;
+        })
+
+        if (!deliverable) {
+            setError("Rasoi Box only delivers to the greater San Francisco area. Please stay tuned as we work to expand our delivery zone!")
+            return;
         }
 
         // initiate order in rasoibox-backend
@@ -141,7 +153,7 @@ export default function StripeCheckoutForm(props: {
                 stripe.confirmPayment({
                     elements,
                     confirmParams: {
-                        return_url: 'https://www.rasoibox.com/'
+                        return_url: 'https://www.rasoibox.com/order/' + orderId
                     }
                 }).then(response => {
                     const { error } = response;
