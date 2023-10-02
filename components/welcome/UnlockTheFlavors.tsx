@@ -1,12 +1,16 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import FormKey from '../common/FormKey';
-import FormValue from '../common/FormValue';
 import GetStarted from './GetStarted';
 
-export default function UnlockTheFlavors() {
+export default function UnlockTheFlavors(props: {
+    setCoordinate: (coordinate: number) => void
+}) {
+
+    const { setCoordinate } = props;
     return (
-        <View style={styles.card}>
+        <View style={styles.card} onLayout={(event) => {
+                setCoordinate(event.nativeEvent.layout.y)
+            }}>
             <Text style={styles.title}>
                 Unlock the flavors of Rasoi Box!
             </Text>
@@ -22,7 +26,6 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: 'white',
         paddingTop: 40,
-        // width: Dimensions.get('window').width < 700 ? '95%' : '60%',
         paddingLeft: 15,
         paddingRight: 15,
         alignItems: 'center',

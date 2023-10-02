@@ -1,6 +1,6 @@
-import React from 'react';
-import { Dimensions, StyleSheet, View, Text } from 'react-native';
-import GetStarted from "./GetStarted";
+import { router } from 'expo-router';
+import React, { RefObject } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { rasoiBoxGrey, rasoiBoxYellow, titleColor } from '../../constants/Colors';
 
 function getSloganFontSize(): number {
@@ -21,14 +21,41 @@ function getDescriptionFontSize(): number {
     }
 }
 
-export default function CookWithConfidence() {
+export default function CookWithConfidence(props: {
+    scrollView: RefObject<ScrollView>,
+    coordinate: number
+}) {
+    const { scrollView, coordinate } = props;
+
     return (
         <View style={styles.card}>
             <Text style={styles.slogan}>COOK WITH CONFIDENCE</Text>
             <Text style={styles.description}>
                 Discover the joy of cooking easy, healthy, fresh and delicious Indian meals with ready-to-cook ingredients and step-by-step instructions from Rasoi Box.
             </Text>
-            <GetStarted />
+            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 50 }}>
+                <Pressable onPress={() => {
+                    if (scrollView.current) {
+                        scrollView.current.scrollTo({
+                            x: 0,
+                            y: coordinate
+                        })
+                    }
+                }}>
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>
+                            Get Started
+                        </Text>
+                    </View>
+                </Pressable>
+                <Pressable onPress={() => router.replace("/menu")}>
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>
+                            View Menu
+                        </Text>
+                    </View>
+                </Pressable>
+            </View>
         </View>
     )
 }
@@ -46,26 +73,34 @@ const styles = StyleSheet.create({
         fontSize: getSloganFontSize(),
         fontFamily: 'CormorantGaramondSemiBold',
         textAlign: 'center',
-        color: titleColor
+        color: titleColor,
+        paddingTop: 50
     },
     description: {
         fontSize: getDescriptionFontSize(),
         fontFamily: 'AvenirLight',
         width: Dimensions.get('screen').width < 700 ? '100%' : '50%',
         color: rasoiBoxGrey,
-        paddingTop: 20,
+        paddingTop: 30,
         paddingBottom: 20
     },
     button: {
-        marginTop: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
         backgroundColor: rasoiBoxYellow,
-        fontSize: 20,
-        fontFamily: 'AvenirLight',
+        paddingTop: 5,
+        paddingBottom: 5,
+        alignContent: 'center',
+        justifyContent: 'center',
+        margin: 10,
+        borderRadius: 20,
+        height: 40
     },
+    buttonText: {
+        fontFamily: 'AvenirLight',
+        color: 'white',
+        fontSize: 15,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 5,
+        paddingBottom: 5
+    }
 });

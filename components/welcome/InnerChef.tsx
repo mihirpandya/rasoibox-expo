@@ -29,7 +29,9 @@ export default function InnerChef() {
     return (
         <View style={styles.card}>
             <View style={styles.left}>
-                Unleash your Inner Chef
+                <Text style={styles.innerChef}>
+                    Unleash your Inner Chef
+                </Text>
             </View>
             <View style={styles.right}>
                 <Repeater 
@@ -56,10 +58,8 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: rasoiBoxPink,
         flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
-        color: 'white',
         alignItems: 'center',
         justifyContent: 'center',
-        textAlign: 'center'
     },
     left: {
         width: Dimensions.get('window').width < 700 ? '100%' : '50%',
@@ -67,8 +67,12 @@ const styles = StyleSheet.create({
         paddingBottom: Dimensions.get('window').width < 700 ? 30 : 100,
         paddingLeft: Dimensions.get('window').width < 700 ? 5 : 100,
         paddingRight: Dimensions.get('window').width < 700 ? 5 : 100,
+    },
+    innerChef: {
         fontSize: Dimensions.get('window').width < 700 ? 35 : 75,
-        fontFamily: 'CormorantGaramondSemiBold'
+        fontFamily: 'CormorantGaramondSemiBold',
+        color: 'white',
+        textAlign: 'center'
     },
     right: {
         width: Dimensions.get('window').width < 700 ? '100%' : '50%',

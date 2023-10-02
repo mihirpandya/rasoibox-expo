@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { rasoiBoxYellow } from '../../constants/Colors';
 
 export enum CheckoutStatus { checkout, loading, success }

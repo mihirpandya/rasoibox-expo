@@ -1,12 +1,12 @@
 import { AntDesign } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Dimensions, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { validateEmail } from '../../validators/Validators';
-import * as Storage from "../common/Storage";
 import { AuthDetails } from '../common/AuthShim';
-import { router } from 'expo-router';
 import ErrorText from '../common/ErrorText';
+import * as Storage from "../common/Storage";
 
 export const errorIds = [
     'no_error', 
