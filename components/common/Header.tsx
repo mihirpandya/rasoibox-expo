@@ -60,11 +60,9 @@ export default function Header() {
                 <LeftMenu authDetails={authDetails} onNav={toggleMenuPressed}/>
             </Lightbox>
             <LogoTitle />
-            {authDetails?.authenticated && 
-                <Pressable style={styles.cart} onPress={toggleCartPressed}>
-                    <Ionicons name="cart-outline" size={25} color={rasoiBoxPink}/>
-                </Pressable>
-            }
+            <Pressable style={styles.cart} onPress={toggleCartPressed}>
+                <Ionicons name="cart-outline" size={25} color={rasoiBoxPink}/>
+            </Pressable>
             <Lightbox isVisible={cartPressed} width={350} side={LightboxSide.right} closeLightbox={toggleCartPressed}>
                 <RightCart closeLightbox={toggleCartPressed}/>
             </Lightbox>
