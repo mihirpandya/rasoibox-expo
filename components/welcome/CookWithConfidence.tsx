@@ -33,7 +33,7 @@ export default function CookWithConfidence(props: {
             <Text style={styles.description}>
                 Discover the joy of cooking easy, healthy, fresh and delicious Indian meals with ready-to-cook ingredients and step-by-step instructions from Rasoi Box.
             </Text>
-            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 50 }}>
+            <View style={styles.buttons}>
                 <Pressable onPress={() => {
                     if (scrollView.current) {
                         scrollView.current.scrollTo({
@@ -84,22 +84,26 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         paddingBottom: 20
     },
+    buttons: {
+        flexDirection: 'row',
+        paddingTop: 20,
+        paddingBottom: 50,
+    },
     button: {
         backgroundColor: rasoiBoxYellow,
         paddingTop: 5,
         paddingBottom: 5,
-        alignContent: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
         margin: 10,
         borderRadius: 20,
-        height: 40
+        height: 40,
+        width: 130,
     },
     buttonText: {
         fontFamily: 'AvenirLight',
         color: 'white',
         fontSize: 15,
-        paddingLeft: 30,
-        paddingRight: 30,
         paddingTop: 5,
         paddingBottom: 5
     }
