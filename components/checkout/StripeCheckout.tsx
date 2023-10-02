@@ -35,7 +35,6 @@ export default function StripeCheckout(props: { cartEmpty: boolean, firstName?: 
             }
         }).catch(error => {
             console.error(error);
-
         });
     }
 
