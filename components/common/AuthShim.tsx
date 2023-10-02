@@ -12,10 +12,10 @@ interface IAuthShimProps {
 
 export interface AuthDetails {
     authenticated: boolean,
+    verification_code?: string
     first_name?: string,
     last_name?: string,
     email?: string,
-    verification_code?: string
 }
 
 export default function AuthShim(props: IAuthShimProps) {

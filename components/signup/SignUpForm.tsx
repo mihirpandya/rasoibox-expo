@@ -1,11 +1,11 @@
 import { Link, Redirect, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
-import { signup } from "../../app/api/rasoibox-backend";
+import { createAccount } from "../../app/api/rasoibox-backend";
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { generateCode, loginSession } from '../../constants/utils';
 import { validateEmail, validateZipcode } from "../../validators/Validators";
-import ErrorText from "../common/ErrorText";
+import ResponseText from "../common/ResponseText";
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
 import * as Storage from "../common/Storage";
@@ -99,7 +99,7 @@ export default function SignUpForm() {
         }
 
         setLoading(true);
-        const signupResponse = await signup(email, password, firstName, lastName, zipcode, new Date(), code)
+        const signupResponse = await createAccount(email, password, firstName, lastName, zipcode, new Date(), code)
         setLoading(false);
 
         const signupStatus: number | undefined = signupResponse["status"]
@@ -154,7 +154,7 @@ export default function SignUpForm() {
                                         <FormValue onChangeText={setZipCode} onKeyPress={submitIfEnter} />
                                     </View>
                                 </View>
-                                {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
+                                {error != 'no_error' && <ResponseText message={ERRORS[error]}/>}
                                 <Pressable style={styles.button} onPress={submit}>
                                     <Text style={styles.buttonText}>Create New Account</Text>
                                 </Pressable>

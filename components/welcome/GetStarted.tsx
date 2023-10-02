@@ -5,7 +5,7 @@ import { Dimensions, Pressable, StyleSheet, TextInput, View } from 'react-native
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { validateEmail } from '../../validators/Validators';
 import { AuthDetails } from '../common/AuthShim';
-import ErrorText from '../common/ErrorText';
+import ResponseText from '../common/ResponseText';
 import * as Storage from "../common/Storage";
 
 export const errorIds = [
@@ -58,7 +58,7 @@ export default function GetStarted() {
 
     return (
         <View style={styles.card}>
-            {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
+            {error != 'no_error' && <ResponseText message={ERRORS[error]}/>}
             <View style={styles.form}>
                 <TextInput style={styles.input} placeholder={"Enter email to get started"} onChangeText={setEmail} onKeyPress={submitIfEnter}/>
                 <Pressable style={styles.button} onPress={onPress}>

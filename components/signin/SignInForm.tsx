@@ -4,7 +4,7 @@ import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { loginSession } from '../../constants/utils';
 import { validateEmail } from "../../validators/Validators";
-import ErrorText from "../common/ErrorText";
+import ResponseText from "../common/ResponseText";
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
 
@@ -73,7 +73,7 @@ export default function SignInForm() {
                                 </Link>
                             </View>
                             <FormValue secureTextEntry={true} onChangeText={setPassword} onKeyPress={submitIfEnter} />
-                            {error != 'no_error' && <ErrorText message={ERRORS[error]}/>}
+                            {error != 'no_error' && <ResponseText message={ERRORS[error]}/>}
                             <Pressable style={styles.button} onPress={submit}>
                                 <Text style={styles.buttonText}>Sign In</Text>
                             </Pressable>

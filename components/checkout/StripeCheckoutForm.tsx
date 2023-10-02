@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { OrderBackendApi, initiatePlaceOrder, isDeliverableZipcode } from '../../app/api/rasoibox-backend';
 import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
-import ErrorText from '../common/ErrorText';
+import ResponseText from '../common/ResponseText';
 
 // https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=elements
 
@@ -197,7 +197,7 @@ export default function StripeCheckoutForm(props: {
             <PaymentElement />
 
             <View style={{ paddingTop: 30 }}>
-                {error && <ErrorText message={error} />}
+                {error && <ResponseText message={error} />}
                 <CheckoutButton checkoutStatus={checkoutStatus} active={!cartEmpty} onPress={submit} />
             </View>
         </View>

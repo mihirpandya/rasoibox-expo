@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import CheckoutButton from '../common/CheckoutButton';
-import ErrorText from '../common/ErrorText';
+import ResponseText from '../common/ResponseText';
 import FormKey from '../common/FormKey';
 import FormValue from '../common/FormValue';
 
@@ -52,7 +52,7 @@ export default function CollectInfo(props: CollectInfoProps) {
                 <FormValue onChangeText={setPhoneNumber} onKeyPress={submitIfEnter}></FormValue>
             </View>
             <View style={{ paddingTop: 30 }}>
-                {errorMessage && <ErrorText message={errorMessage} />}
+                {errorMessage && <ResponseText message={errorMessage} />}
                 <CheckoutButton active={true} onPress={submit} />
             </View>
         </View>

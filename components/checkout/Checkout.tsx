@@ -9,7 +9,7 @@ import Header from '../../components/common/Header';
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from '../common/CartItem';
-import ErrorText from '../common/ErrorText';
+import ResponseText from '../common/ResponseText';
 import PriceInformation from '../common/PriceInformation';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
@@ -251,7 +251,7 @@ export default function Checkout() {
                                 </Pressable>
                             </View>
                         </View>
-                        {promoCodeError != 'no_error' && <ErrorText message={PROMO_CODE_ERRORS[promoCodeError]}/>}
+                        {promoCodeError != 'no_error' && <ResponseText message={PROMO_CODE_ERRORS[promoCodeError]}/>}
                         <PriceInformation
                             appliedPromoCode={appliedPromoCode}
                             subtotal={subtotal}

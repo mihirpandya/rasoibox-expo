@@ -303,7 +303,7 @@ export function getActiveRecipes(token: string) {
     });
 }
 
-export function signup(
+export function createAccount(
     email: string, 
     password: string, 
     firstName: string, 
@@ -370,4 +370,34 @@ export function isDeliverableZipcode(zipcode: string) {
             throw new Error(response.statusText);
         }
     })
+}
+
+export function joinWaitlist(email: string, zipcode: string, verificationCode: string, signupDate: Date, referrer?: string) {
+    const request_body = {
+        "email": email,
+        "zipcode": zipcode,
+        "signup_date": signupDate,
+        "verification_code": verificationCode
+    }
+
+    if (referrer) {
+        request_body["referrer"] = referrer
+    }
+
+    console.log(request_body)
+
+    return fetch(BACKEND + "signup/email", {
+        "method": "post",
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"body": JSON.stringify(request_body)
+        }).then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+                return response.json();
+            } else {
+                console.log("error: " + response);
+                throw new Error(response.statusText);
+            }
+        });
 }

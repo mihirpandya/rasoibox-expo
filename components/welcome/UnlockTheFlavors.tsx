@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, Text, View, Pressable } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import { joinWaitlist } from '../../app/api/rasoibox-backend';
+import { rasoiBoxYellow } from '../../constants/Colors';
+import { generateCode } from '../../constants/utils';
 import { validateEmail, validateZipcode } from '../../validators/Validators';
+import { AuthDetails } from '../common/AuthShim';
 import FormKey from '../common/FormKey';
 import FormValue from '../common/FormValue';
 import * as Storage from "../common/Storage";
-import { AuthDetails } from '../common/AuthShim';
-import { rasoiBoxYellow } from '../../constants/Colors';
+import ResponseText from '../common/ResponseText';
 
 export const errorIds = [
     'no_error',
@@ -20,6 +23,21 @@ const ERRORS: Record<ErrorID, string> = {
     zipcode: "Please enter a valid US zip code."
 }
 
+export const successIds = [
+    'no_success',
+    'already_verified',
+    'signed_up',
+    'not_verified'
+]
+type SuccessID = typeof successIds[number];
+
+const SUCCESS: Record<SuccessID, string> = {
+    no_success: "There is no message to show.",
+    already_verified: "Thanks for your interest; your email has already been verified!",
+    signed_up: "You're almost there! We've sent you an email to complete your sign up. If you don't see it, you may need to check your spam folder.",
+    not_verified: "Looks like you have signed up but we have not been able to verify your email. We have sent you another verification email. If you don't see it, you may need to check your spam folder."
+}
+
 export default function UnlockTheFlavors(props: {
     setCoordinate: (coordinate: number) => void
 }) {
@@ -29,6 +47,7 @@ export default function UnlockTheFlavors(props: {
     const [email, setEmail] = useState("");
     const [zipcode, setZipcode] = useState("");
     const [error, setError] = useState<ErrorID>('no_error')
+    const [success, setSuccess] = useState<SuccessID>('no_success')
 
     function submitIfEnter(event: any) {
         if (event.key === "Enter") {
@@ -38,6 +57,8 @@ export default function UnlockTheFlavors(props: {
 
     function submit() {
         setError('no_error')
+        setSuccess('no_success')
+
         if (!validateEmail(email)) {
             setError('email');
             return;
@@ -58,8 +79,26 @@ export default function UnlockTheFlavors(props: {
                     }
                 }
 
-                Storage.storeAuthDetails(newAuthDetails).then(_response => {
-                    
+                const verificationCode: string = newAuthDetails.verification_code ? newAuthDetails.verification_code : generateCode()
+
+                joinWaitlist(email, zipcode, verificationCode, new Date()).then(response => {
+                    const status = response["status"]
+                    const verificationCode = response["verification_code"]
+                    if (status == 0) {
+                        setSuccess('already_verified')
+                    } else if (status == 1) {
+                        setSuccess('not_verified')
+                    } else {
+                        setSuccess('signed_up')
+                    }
+
+                    return verificationCode
+                }).then(verificationCode => {
+                    const authDetails = {
+                        ...newAuthDetails,
+                        verificationCode: verificationCode
+                    }
+                    Storage.storeAuthDetails(authDetails)
                 })
             })
         }
@@ -67,8 +106,8 @@ export default function UnlockTheFlavors(props: {
 
     return (
         <View style={styles.card} onLayout={(event) => {
-                setCoordinate(event.nativeEvent.layout.y)
-            }}>
+            setCoordinate(event.nativeEvent.layout.y)
+        }}>
             <Text style={styles.title}>
                 Unlock the flavors of Rasoi Box!
             </Text>
@@ -95,6 +134,8 @@ export default function UnlockTheFlavors(props: {
                         <FormValue onChangeText={setZipcode} onKeyPress={submitIfEnter} />
                     </View>
                 </View>
+                {error != 'no_error' && <ResponseText message={ERRORS[error]}/>}
+                {error == 'no_error' && success != 'no_success' && <ResponseText message={SUCCESS[success]} isError={false}/>}
                 <View style={styles.button}>
                     <Pressable onPress={submit}>
                         <Text style={styles.buttonText}>
@@ -132,7 +173,8 @@ const styles = StyleSheet.create({
     },
     row: {
         justifyContent: 'space-between',
-        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row'
+        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
+        paddingBottom: 20,
     },
     email: {
         width: Dimensions.get('window').width < 700 ? '100%' : '62%',
