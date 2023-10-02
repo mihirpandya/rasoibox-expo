@@ -1,11 +1,10 @@
 import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, Dimensions, StyleSheet, Text, View } from 'react-native';
+import { StripeAddressElementOptions } from '@stripe/stripe-js';
+import React, { useState } from 'react';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { OrderBackendApi, initiatePlaceOrder, isDeliverableZipcode } from '../../app/api/rasoibox-backend';
 import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
 import ErrorText from '../common/ErrorText';
-import { StripeAddressElementOptions } from '@stripe/stripe-js';
-import { OrderBackendApi, initiatePlaceOrder, isDeliverableZipcode } from '../../app/api/rasoibox-backend';
-import { rasoiBoxPink } from '../../constants/Colors';
 
 // https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=elements
 
@@ -48,14 +47,14 @@ export default function StripeCheckoutForm(props: {
     const { cartEmpty, orderId, authToken, firstName, lastName, promoCode } = props;
     const stripe = useStripe();
     const elements = useElements();
-    
+
     const [checkoutStatus, setCheckoutStatus] = useState<CheckoutStatus>(CheckoutStatus.checkout);
     const [inputUserInfo, setInputUserInfo] = useState<StripeAddressEvent | undefined>();
     const [error, setError] = useState<string>();
 
     function getAddressElementOptions(): StripeAddressElementOptions {
         if (firstName && lastName) {
-            return  {
+            return {
                 mode: 'shipping',
                 allowedCountries: ['US'],
                 fields: {
@@ -193,13 +192,13 @@ export default function StripeCheckoutForm(props: {
                 options={getAddressElementOptions()}
             />
 
-            <View style={{height: 10}}></View>
+            <View style={{ height: 10 }}></View>
 
             <PaymentElement />
-            
-            <View style={{paddingTop: 30}}>
-                {error && <ErrorText message={error}/>}
-                <CheckoutButton checkoutStatus={checkoutStatus} active={!cartEmpty} onPress={submit}/>
+
+            <View style={{ paddingTop: 30 }}>
+                {error && <ErrorText message={error} />}
+                <CheckoutButton checkoutStatus={checkoutStatus} active={!cartEmpty} onPress={submit} />
             </View>
         </View>
     )
@@ -213,10 +212,10 @@ const styles = StyleSheet.create({
         marginTop: Dimensions.get('window').width < 700 ? 20 : 0,
         borderRadius: 10,
     },
-        title: {
-            fontFamily: 'CormorantGaramondSemiBold',
-            fontSize: 35,
-            paddingBottom: 30,
-            paddingTop: 10
-        },
+    title: {
+        fontFamily: 'CormorantGaramondSemiBold',
+        fontSize: 35,
+        paddingBottom: 30,
+        paddingTop: 10
+    },
 });

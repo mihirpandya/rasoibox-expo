@@ -33,27 +33,27 @@ export default function CollectInfo(props: CollectInfoProps) {
     return (
         <View style={styles.collectInfo}>
             <Text style={styles.title}>Shipping Information</Text>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 20}}>
-                <View style={{width: '45%'}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 20 }}>
+                <View style={{ width: '45%' }}>
                     <FormKey>First Name</FormKey>
                     <FormValue onChangeText={setFirstName} onKeyPress={submitIfEnter} defaultValue={defaultFirstName}></FormValue>
                 </View>
-                <View style={{width: '45%'}}>
+                <View style={{ width: '45%' }}>
                     <FormKey>Last Name</FormKey>
                     <FormValue onChangeText={setLastName} onKeyPress={submitIfEnter} defaultValue={defaultLastName}></FormValue>
                 </View>
             </View>
-            <View style={{paddingTop: 20}}>
+            <View style={{ paddingTop: 20 }}>
                 <FormKey>Shipping Address</FormKey>
                 <FormValue onChangeText={setAddress} onKeyPress={submitIfEnter}></FormValue>
             </View>
-            <View style={{paddingTop: 20}}>
+            <View style={{ paddingTop: 20 }}>
                 <FormKey>Phone Number</FormKey>
                 <FormValue onChangeText={setPhoneNumber} onKeyPress={submitIfEnter}></FormValue>
             </View>
-            <View style={{paddingTop: 30}}>
-                {errorMessage && <ErrorText message={errorMessage}/>}
-                <CheckoutButton active={true} onPress={submit}/>
+            <View style={{ paddingTop: 30 }}>
+                {errorMessage && <ErrorText message={errorMessage} />}
+                <CheckoutButton active={true} onPress={submit} />
             </View>
         </View>
     )

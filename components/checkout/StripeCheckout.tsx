@@ -1,11 +1,11 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import React, { useState, useEffect } from 'react';
-import StripeCheckoutForm from "./StripeCheckoutForm";
-import * as Storage from "../common/Storage";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import { initiateIntent } from '../../app/api/rasoibox-backend';
 import { rasoiBoxPink } from '../../constants/Colors';
+import * as Storage from "../common/Storage";
+import StripeCheckoutForm from "./StripeCheckoutForm";
 
 process.env.STRIPE_PUB_KEY
 
@@ -17,7 +17,7 @@ const appearance = {
     }
 }
 
-export default function StripeCheckout(props: {cartEmpty: boolean, firstName?: string, lastName?: string, promoCode?: string}) {
+export default function StripeCheckout(props: { cartEmpty: boolean, firstName?: string, lastName?: string, promoCode?: string }) {
     const { cartEmpty, firstName, lastName, promoCode } = props;
     const [orderId, setOrderId] = useState<string>();
     const [clientSecret, setClientSecret] = useState<string | undefined>()
@@ -35,13 +35,13 @@ export default function StripeCheckout(props: {cartEmpty: boolean, firstName?: s
             }
         }).catch(error => {
             console.error(error);
-            
+
         });
     }
 
     useEffect(() => {
         fetchToken()
-      }, [])
+    }, [])
 
     useEffect(() => {
         if (authtoken) {
