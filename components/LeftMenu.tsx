@@ -36,16 +36,16 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
             icon: 'compass-outline',
             href: '/our-story'
         },
-        {
-            label: 'Blog',
-            icon: 'book',
-            href: '/blog'
-        },
-        {
-            label: 'Refer a Friend',
-            icon: 'person-add',
-            href: '/refer-a-friend'
-        },
+        // {
+        //     label: 'Blog',
+        //     icon: 'book',
+        //     href: '/blog'
+        // },
+        // {
+        //     label: 'Refer a Friend',
+        //     icon: 'person-add',
+        //     href: '/refer-a-friend'
+        // },
     ]
 
     let data;

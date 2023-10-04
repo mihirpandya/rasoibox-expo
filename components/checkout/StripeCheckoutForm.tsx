@@ -7,6 +7,7 @@ import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
 import ResponseText from '../common/ResponseText';
 import { borderGrey, rasoiBoxPink } from '../../constants/Colors';
 import { validateEmail } from '../../validators/Validators';
+import { RadioButton } from 'react-native-paper';
 
 // https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=elements
 
@@ -199,6 +200,11 @@ export default function StripeCheckoutForm(props: {
 
     return (
         <View style={styles.card}>
+            <Text style={styles.title}>Shipping Information</Text>
+            <View>
+                <RadioButton value="Pick up at Pop-Fest" />
+                <RadioButton value="Ship to Home" />
+            </View>
             <Text style={styles.title}>Payment Information</Text>
             {/* https://stripe.com/docs/elements/address-element/collect-addresses?platform=web */}
             <AddressElement

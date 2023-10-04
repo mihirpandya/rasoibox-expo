@@ -85,6 +85,10 @@ export default function MealKitModal(props: MealKitModalProps) {
                             <Tags tags={tags} tagStyle={{marginTop: 10, height: 20}} />
                         </View>
                         <Image style={styles.image} source={{uri: imageUrl}} />
+                        <View style={styles.timings}>
+                            <Text style={styles.timing} >Prep Time: {prepTime} mins</Text>
+                            <Text style={styles.timing} >Cook Time: {cookTime} mins</Text>
+                        </View>
                         <Text style={styles.description}>{capitalizeFirst(description)}</Text>
                         <View style={{marginTop: 20, flexDirection: 'row'}}>
                             <Text style={styles.price}>
@@ -227,5 +231,15 @@ const styles = StyleSheet.create({
         paddingTop: 8,
         paddingLeft: 8,
         color: 'grey'
+    },
+    timings: {
+        paddingTop: 5,
+        paddingLeft: 5,
+        flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row'
+    },
+    timing: {
+        fontFamily: 'AvenirLight',
+        fontSize: 14,
+        paddingRight: 20,
     }
 });

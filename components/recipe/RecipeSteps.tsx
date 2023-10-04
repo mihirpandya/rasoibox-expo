@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingTop: 30,
         borderTopWidth: 1,
-        borderTopColor: borderGrey
+        borderTopColor: borderGrey,
     },
     card: {
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
