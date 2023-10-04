@@ -9,7 +9,8 @@ import StripeCheckoutForm from "./StripeCheckoutForm";
 
 process.env.STRIPE_PUB_KEY
 
-const stripePromise = loadStripe("pk_live_51NKT9IDgBx8MbUKDEnyWUhYmtAwmdTxnAHNs5eAOsC9J0GTmHVdpQoeTF42EU3pG6rKGbYOZXUPVntxmB4UmWveM00daTVB6BO");
+// const stripePromise = loadStripe("pk_live_51NKT9IDgBx8MbUKDEnyWUhYmtAwmdTxnAHNs5eAOsC9J0GTmHVdpQoeTF42EU3pG6rKGbYOZXUPVntxmB4UmWveM00daTVB6BO");
+const stripePromise = loadStripe("pk_test_51NKT9IDgBx8MbUKDtYV3RNaDYHlZS2DXYqvT7aoY10uxS7Nulza6XaVfw65P2Sqok2pyhlnyqCsEx5x6T1pKy7PQ00UdkwfT7J")
 const appearance = {
     variables: {
         colorPrimary: rasoiBoxPink,
@@ -19,6 +20,7 @@ const appearance = {
 
 export default function StripeCheckout(props: { cartEmpty: boolean, firstName?: string, lastName?: string, promoCode?: string }) {
     const { cartEmpty, firstName, lastName, promoCode } = props;
+    const [verificationCode, setVerificationCode] = useState<string>()
     const [orderId, setOrderId] = useState<string>();
     const [clientSecret, setClientSecret] = useState<string | undefined>()
     const options = {
@@ -26,35 +28,30 @@ export default function StripeCheckout(props: { cartEmpty: boolean, firstName?: 
         appearance: appearance
     };
 
-    const [authtoken, setAuthToken] = useState<string | undefined>()
-
-    function fetchToken() {
-        AsyncStorage.getItem(Storage.ACCESS_TOKEN).then(async token => {
-            if (token != null) {
-                setAuthToken(token);
-            }
-        }).catch(error => {
-            console.error(error);
-        });
-    }
-
     useEffect(() => {
-        fetchToken()
+        Storage.getAuthDetails().then(authDetails => {
+            if (authDetails) {
+                setVerificationCode(authDetails.verification_code)
+            }
+        })
     }, [])
 
     useEffect(() => {
-        if (authtoken) {
-            initiateIntent(authtoken).then(response => {
+        if (verificationCode) {
+            initiateIntent(verificationCode).then(response => {
                 setClientSecret(response["client_secret"])
                 setOrderId(response["order_id"])
             })
         }
-    }, [authtoken])
+    }, [verificationCode])
+
 
     return (
-        clientSecret && orderId &&
+        clientSecret && 
+        orderId &&
+        verificationCode &&
         <Elements stripe={stripePromise} options={options}>
-            <StripeCheckoutForm cartEmpty={cartEmpty} orderId={orderId} authToken={authtoken} firstName={firstName} lastName={lastName} promoCode={promoCode} />
+            <StripeCheckoutForm cartEmpty={cartEmpty} orderId={orderId} verificationCode={verificationCode} firstName={firstName} lastName={lastName} promoCode={promoCode} />
         </Elements>
     )
 }

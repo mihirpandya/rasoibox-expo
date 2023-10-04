@@ -4,6 +4,7 @@ export interface OrderBackendApi {
     order_date: Date,
     recipient_first_name: string,
     recipient_last_name: string,
+    email: string,
     delivery_address: {
         user_input: string,
         street_name: string,
@@ -149,13 +150,12 @@ export function isValidPromoCode(token: string, promo_code: string) {
     })
 }
 
-export function initiateIntent(token: string) {
-    return fetch(BACKEND + "orderV2/initiate_intent", {
+export function initiateIntent(verification_code: string) {
+    return fetch(BACKEND + "orderV2/initiate_intent?verification_code=" + verification_code, {
         "method": "post",
         "headers": {
             "accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
         },
     }).then((response) => {
         if (response.status == 200) {
@@ -172,13 +172,12 @@ export function initiateIntent(token: string) {
     })
 }
 
-export function initiatePlaceOrder(token: string, order: OrderBackendApi) {
-    return fetch(BACKEND + "orderV2/initiate_place_order", {
+export function initiatePlaceOrder(verification_code: string, order: OrderBackendApi) {
+    return fetch(BACKEND + "orderV2/initiate_place_order?verification_code=" + verification_code, {
         "method": "post",
         "headers": {
             "accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
         },
         "body": JSON.stringify(order)
     }).then((response) => {

@@ -1,10 +1,12 @@
 import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { StripeAddressElementOptions } from '@stripe/stripe-js';
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 import { OrderBackendApi, initiatePlaceOrder, isDeliverableZipcode } from '../../app/api/rasoibox-backend';
 import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
 import ResponseText from '../common/ResponseText';
+import { borderGrey, rasoiBoxPink } from '../../constants/Colors';
+import { validateEmail } from '../../validators/Validators';
 
 // https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=elements
 
@@ -39,23 +41,25 @@ function getFirstAndLastName(fullName: string) {
 export default function StripeCheckoutForm(props: {
     cartEmpty: boolean,
     orderId: string,
-    authToken?: string,
+    verificationCode: string,
     firstName?: string,
     lastName?: string,
     promoCode?: string,
 }) {
-    const { cartEmpty, orderId, authToken, firstName, lastName, promoCode } = props;
+    const { cartEmpty, orderId, verificationCode, firstName, lastName, promoCode } = props;
     const stripe = useStripe();
     const elements = useElements();
 
     const [checkoutStatus, setCheckoutStatus] = useState<CheckoutStatus>(CheckoutStatus.checkout);
     const [inputUserInfo, setInputUserInfo] = useState<StripeAddressEvent | undefined>();
+    const [email, setEmail] = useState<string>();
+    const [emailFocus, setEmailFocus] = useState<boolean>(false);
     const [error, setError] = useState<string>();
 
     function getAddressElementOptions(): StripeAddressElementOptions {
         if (firstName && lastName) {
             return {
-                mode: 'shipping',
+                mode: 'billing',
                 allowedCountries: ['US'],
                 fields: {
                     phone: 'always'
@@ -71,10 +75,10 @@ export default function StripeCheckoutForm(props: {
             };
         } else {
             return {
-                mode: 'shipping',
+                mode: 'billing',
                 allowedCountries: ['US'],
                 fields: {
-                    phone: 'always'
+                    phone: 'always',
                 },
                 validation: {
                     phone: {
@@ -90,10 +94,14 @@ export default function StripeCheckoutForm(props: {
         setInputUserInfo(stripeEvent);
     }
 
+    function getEmailInputStyle() {
+        return emailFocus ? styles.emailInputFocus : styles.emailInputBlur
+    }
+
     async function submit() {
         setError(undefined);
 
-        if (!authToken) {
+        if (!verificationCode) {
             return;
         }
 
@@ -109,8 +117,13 @@ export default function StripeCheckoutForm(props: {
 
         const firstAndLastName = getFirstAndLastName(inputUserInfo.value.name)
 
-        if (!firstName || !lastName) {
+        if (!firstAndLastName.firstName || !firstAndLastName.lastName) {
             setError("Please fill in your first and last name.");
+            return;
+        }
+
+        if (!email || !validateEmail(email)) {
+            setError("Please enter a valid email.")
             return;
         }
 
@@ -118,6 +131,7 @@ export default function StripeCheckoutForm(props: {
             order_date: new Date(),
             recipient_first_name: firstAndLastName.firstName,
             recipient_last_name: firstAndLastName.lastName,
+            email: email,
             phone_number: inputUserInfo.value.phone.substring(2),
             promo_codes: promoCode ? [promoCode] : [],
             delivery_address: {
@@ -147,7 +161,7 @@ export default function StripeCheckoutForm(props: {
         // confirm payment on stripe
         // set error if stripe returns error
         setCheckoutStatus(CheckoutStatus.loading);
-        initiatePlaceOrder(authToken, orderDetails).then(response => {
+        initiatePlaceOrder(verificationCode, orderDetails).then(response => {
             if (response["status"] == 0) {
                 stripe.confirmPayment({
                     elements,
@@ -185,14 +199,21 @@ export default function StripeCheckoutForm(props: {
 
     return (
         <View style={styles.card}>
-            <Text style={styles.title}>Delivery & Payment</Text>
+            <Text style={styles.title}>Payment Information</Text>
             {/* https://stripe.com/docs/elements/address-element/collect-addresses?platform=web */}
             <AddressElement
                 onChange={handleAddress}
                 options={getAddressElementOptions()}
             />
 
-            <View style={{ height: 10 }}></View>
+            {stripe && elements && <View style={styles.email}>
+                <Text style={styles.emailText}>
+                    Email
+                </Text>
+                <TextInput style={getEmailInputStyle()} placeholder='Email address' onFocus={(e) => setEmailFocus(true)} onBlur={(e) => setEmailFocus(false)} onChangeText={setEmail} />
+            </View>}
+
+            <View style={{ height: 10 }} />
 
             <PaymentElement />
 
@@ -218,4 +239,34 @@ const styles = StyleSheet.create({
         paddingBottom: 30,
         paddingTop: 10
     },
+    email: {
+        paddingTop: 10,
+        paddingBottom: 20
+    },
+    emailText: {
+        fontFamily: 'AvenirLight',
+        fontSize: 15,
+    },
+    emailInputBlur: {
+        borderWidth: 1,
+        outlineStyle: 'none',
+        fontSize: 16,
+        padding: 12,
+        borderRadius: 5,
+        borderColor: 'rgb(230, 230, 230)',
+        shadowRadius: 1,
+        shadowColor: 'rgb(230, 230, 230)',
+        fontFamily: 'AvenirLight',
+        color: 'grey'
+    },
+    emailInputFocus: {
+        borderWidth: 3,
+        outlineStyle: 'none',
+        fontSize: 16,
+        padding: 12,
+        borderRadius: 5,
+        borderColor: 'rgba(241, 122, 126, 0.4)',
+        fontFamily: 'AvenirLight',
+        color: 'grey'
+    }
 });

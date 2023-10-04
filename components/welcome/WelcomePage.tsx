@@ -43,8 +43,6 @@ export default function WelcomePage() {
         setVerificationCode()
     }, [])
 
-    console.log(unlockCoordinate);
-
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <ScrollView ref={ref}>
