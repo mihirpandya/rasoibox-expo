@@ -112,7 +112,7 @@ export default function UnlockTheFlavors(props: {
                 Unlock the flavors of Rasoi Box!
             </Text>
             <Text style={styles.message}>
-                Sign up for free to get early access to our rotating menu and have a say in what you cook next.
+                Sign up for early access, sneak peeks, and exclusive invitations.
             </Text>
             {/* <GetStarted /> */}
             <View style={styles.form}>

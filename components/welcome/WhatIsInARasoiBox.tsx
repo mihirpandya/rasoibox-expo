@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
         fontSize: Dimensions.get('window').width < 700 ? 30 : 56,
         fontFamily: 'CormorantGaramondSemiBold',
         textAlign: 'center',
-        padding: 20
+        padding: 20,
+        // borderWidth: 1
     },
     leftCard: {
         margin: Dimensions.get('window').width < 700 ? 10 : 40,
@@ -106,8 +107,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     imageContainer: {
-        justifyContent: 'center',
-        alignItems: 'center'
+        paddingTop: 5
     },
     repeaterContent: {
         justifyContent: Dimensions.get('window').width < 700 ? 'flex-start' : 'center',
@@ -123,6 +123,5 @@ const styles = StyleSheet.create({
     repeaterSubtitle: {
         fontFamily: 'AvenirLight',
         fontSize: 14,
-        paddingTop: 10,
     }
 });

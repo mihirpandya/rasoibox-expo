@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     left: {
-        width: Dimensions.get('window').width < 700 ? '100%' : '50%',
+        width: Dimensions.get('window').width < 700 ? '100%' : '40%',
         paddingTop: Dimensions.get('window').width < 700 ? 30 : 100,
         paddingBottom: Dimensions.get('window').width < 700 ? 30 : 100,
         paddingLeft: Dimensions.get('window').width < 700 ? 5 : 100,
@@ -77,7 +77,9 @@ const styles = StyleSheet.create({
     right: {
         width: Dimensions.get('window').width < 700 ? '100%' : '50%',
         fontSize: 25,
-        fontFamily: 'AvenirLight'
+        fontFamily: 'AvenirLight',
+        paddingTop: 30,
+        paddingBottom: 30
     },
     repeater: {
         height: Dimensions.get('window').width < 700 ? 250 : 150,
@@ -102,12 +104,14 @@ const styles = StyleSheet.create({
     repeaterTitle: {
         fontFamily: 'AvenirLight',
         fontSize: 25,
-        color: 'white'
+        color: 'white',
+        fontWeight: 'bold'
     },
     repeaterSubtitle: {
         fontFamily: 'AvenirLight',
         fontSize: 18,
         color: 'white',
-        padding: 10,
+        paddingLeft: Dimensions.get('window').width < 700 ? 20 : 0,
+        paddingRight: Dimensions.get('window').width < 700 ? 20 : 0
     }
 });

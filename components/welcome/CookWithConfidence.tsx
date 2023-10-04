@@ -31,7 +31,7 @@ export default function CookWithConfidence(props: {
         <View style={styles.card}>
             <Text style={styles.slogan}>COOK WITH CONFIDENCE</Text>
             <Text style={styles.description}>
-                Discover the joy of cooking easy, healthy, fresh and delicious Indian meals with ready-to-cook ingredients and step-by-step instructions from Rasoi Box.
+                Discover the joy of cooking easy, healthy, fresh and delicious Indian meals with ready-to-cook ingredients and "bite-sized" instructions from Rasoi Box.
             </Text>
             <View style={styles.buttons}>
                 <Pressable onPress={() => {

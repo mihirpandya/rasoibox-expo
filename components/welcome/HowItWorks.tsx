@@ -40,7 +40,7 @@ export default function InnerChef() {
                 />
                 <Repeater 
                     title="2. Receive your Meals"
-                    subtitle="Your kits will be delivered with all the pre-measured ingredients and a recipe card."
+                    subtitle="Your kits will be delivered with all the pre-measured ingredients."
                     image={require("../../assets/images/receive_meals.svg")}
                 />
                 <Repeater 
@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
     },
     repeaterContent: {
         justifyContent: 'center',
-        paddingLeft: Dimensions.get('window').width < 700 ? 10 : 30,
+        paddingLeft: Dimensions.get('window').width < 700 ? 20 : 30,
+        paddingRight: Dimensions.get('window').width < 700 ? 20 : 30,
         flexWrap: 'wrap',
     },
     repeaterTitle: {
