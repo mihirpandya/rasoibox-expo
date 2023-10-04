@@ -10,14 +10,17 @@ import HowItWorks from "./HowItWorks";
 import InnerChef from "./InnerChef";
 import UnlockTheFlavors from "./UnlockTheFlavors";
 import WhatIsInARasoiBox from "./WhatIsInARasoiBox";
+import { emitEvent } from '../../app/api/rasoibox-backend';
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 
 export default function WelcomePage() {
 
     const [unlockCoordinate, setUnlockCoordinate] = useState(0)
+    const [verificationCode, setVerificationCode] = useState<string>()
     const ref = useRef<ScrollView>(null);
     
-    function setVerificationCode() {
+    function storeVerificationCode() {
         Storage.getAuthDetails().then(async authDetails => {
             let code: string | undefined = authDetails?.verification_code
             if (!code) {
@@ -36,12 +39,20 @@ export default function WelcomePage() {
                 }
                 await Storage.storeAuthDetails(newAuthDetails)
             }
+            console.log(code);
+            setVerificationCode(code)
         })
     }
 
     useEffect(() => {
-        setVerificationCode()
+        storeVerificationCode()
     }, [])
+
+    useEffect(() => {
+        if (verificationCode) {
+            emitEvent(WebsiteEvent.WELCOME, new Date(), verificationCode)
+        }
+    }, [verificationCode])
 
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>

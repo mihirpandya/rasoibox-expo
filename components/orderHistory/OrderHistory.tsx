@@ -4,13 +4,15 @@ import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getOrderHistory } from '../../app/api/rasoibox-backend';
+import { emitEvent, getOrderHistory } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { cleanDate, getTotal, orderJsonToOrderInformationResponse, twoDecimals } from '../../constants/utils';
 import * as Storage from "../common/Storage";
 import { OrderInformationResponse } from '../order/OrderInformation';
+import { AuthDetails } from '../common/AuthShim';
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 function goToOrder(orderNumber: string) {
     router.replace("/order/" + orderNumber);
@@ -86,6 +88,14 @@ export default function OrderHistory() {
     useEffect(() => {
         fetchOrderHistory()
     }, [authtoken])
+
+    useEffect(() => {
+        Storage.getAuthDetails().then((authDetails: AuthDetails | null) => {
+            if (authDetails?.verification_code) {
+                emitEvent(WebsiteEvent.ORDER_HISTORY, new Date(), authDetails?.verification_code)
+            }
+        })
+    }, [orderHistory])
 
     const orderInfos: IndexedOrderInformation[] = Object.keys(orderHistory)
         .map(idx => {

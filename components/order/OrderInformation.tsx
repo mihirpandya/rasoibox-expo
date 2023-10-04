@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getOrder } from '../../app/api/rasoibox-backend';
+import { emitEvent, getOrder } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxPink } from '../../constants/Colors';
@@ -11,6 +11,8 @@ import { PromoCode } from '../checkout/Checkout';
 import CartItem, { CartItemResponse } from '../common/CartItem';
 import PriceInformation from '../common/PriceInformation';
 import * as Storage from "../common/Storage";
+import { AuthDetails } from '../common/AuthShim';
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 
 export interface OrderBreakdown {
@@ -104,6 +106,14 @@ export default function OrderInformation(props: {orderNumber: any}) {
     useEffect(() => {
         fetchOrderInformation()
     }, [authtoken])
+
+    useEffect(() => {
+        Storage.getAuthDetails().then((authDetails: AuthDetails | null) => {
+            if (authDetails?.verification_code) {
+                emitEvent(WebsiteEvent.ORDER_INFO, new Date(), authDetails?.verification_code, orderNumber)
+            }
+        })
+    }, [orderInfo])
 
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>

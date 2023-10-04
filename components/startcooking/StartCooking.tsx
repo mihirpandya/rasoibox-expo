@@ -3,13 +3,15 @@ import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getActiveRecipes } from '../../app/api/rasoibox-backend';
+import { emitEvent, getActiveRecipes } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { borderGrey, rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { cleanDate, orderJsonToOrderInformationResponse } from '../../constants/utils';
 import * as Storage from "../common/Storage";
 import { OrderInformationResponse } from '../order/OrderInformation';
+import { AuthDetails } from '../common/AuthShim';
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 interface OrderRecipeInfo {
     orderNumber: string,
@@ -75,6 +77,14 @@ export default function ViewStartCooking() {
     useEffect(() => {
         fetchOrderHistory()
     }, [authtoken])
+
+    useEffect(() => {
+        Storage.getAuthDetails().then((authDetails: AuthDetails | null) => {
+            if (authDetails?.verification_code) {
+                emitEvent(WebsiteEvent.START_COOKING, new Date(), authDetails?.verification_code)
+            }
+        })
+    }, [orderHistory])
 
     const recipeInfos: OrderRecipeInfo[] = []
     if (orderHistory && orderHistory.length > 0) {

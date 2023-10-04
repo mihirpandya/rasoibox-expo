@@ -1,7 +1,7 @@
 import { Link, Redirect, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
-import { createAccount } from "../../app/api/rasoibox-backend";
+import { createAccount, emitEvent } from "../../app/api/rasoibox-backend";
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { generateCode, loginSession } from '../../constants/utils';
 import { validateEmail, validateZipcode } from "../../validators/Validators";
@@ -10,6 +10,7 @@ import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
 import * as Storage from "../common/Storage";
 import { AuthDetails } from '../common/AuthShim';
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 export const errorIds = [
     'no_error', 
@@ -60,6 +61,9 @@ export default function SignUpForm() {
     useEffect(() => {
         if (authDetails?.email) {
             setEmail(authDetails.email)
+        }
+        if (authDetails?.verification_code) {
+            emitEvent(WebsiteEvent.CREATE_ACCOUNT, new Date(), authDetails.verification_code)
         }
     }, [authDetails])
 

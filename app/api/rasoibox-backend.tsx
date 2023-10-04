@@ -1,3 +1,5 @@
+import { RecipeEvent, WebsiteEvent } from "../../constants/EventTypes";
+
 const BACKEND: string = "https://rasoibox.onrender.com/api/"
 
 export interface OrderBackendApi {
@@ -383,14 +385,79 @@ export function joinWaitlist(email: string, zipcode: string, verificationCode: s
         request_body["referrer"] = referrer
     }
 
-    console.log(request_body)
-
     return fetch(BACKEND + "signup/email", {
         "method": "post",
 		"headers": {
 			"Content-Type": "application/json"
 		},
 		"body": JSON.stringify(request_body)
+        }).then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+                return response.json();
+            } else {
+                console.log("error: " + response);
+                throw new Error(response.statusText);
+            }
+        });
+}
+
+export function emitEvent(eventType: WebsiteEvent, eventTime: Date, verificationCode: string, referrer?: string) {
+    const request_body = {
+        "event_type": eventType.toString(),
+        "event_date": eventTime,
+        "verification_code": verificationCode
+    }
+
+    if (referrer) {
+        request_body["referrer"] = referrer
+    }
+    
+    return fetch(BACKEND + "event", {
+        "method": "post",
+        "headers": {
+			"Content-Type": "application/json"
+		},
+        "body": JSON.stringify(request_body)
+        }).then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+                return response.json();
+            } else {
+                console.log("error: " + response);
+                throw new Error(response.statusText);
+            }
+        });
+}
+
+export function emitRecipeEvent(
+    recipeId: string, 
+    servingSize: number, 
+    stepNumber: number, 
+    eventType: RecipeEvent, 
+    eventTime: Date, 
+    verificationCode: string, 
+    referrer?: string
+) {
+    const request_body = {
+        "recipe_id": recipeId,
+        "serving_size": servingSize,
+        "step_number": stepNumber,
+        "event_type": eventType,
+        "event_date": eventTime,
+        "verification_code": verificationCode
+    }
+
+    if (referrer) {
+        request_body["referrer"] = referrer
+    }
+
+    console.log(request_body)
+    
+    return fetch(BACKEND + "recipe/event", {
+        "method": "post",
+        "headers": {
+			"Content-Type": "application/json"
+		},
+        "body": JSON.stringify(request_body)
         }).then((response) => {
             if (response.status >= 200 && response.status < 300) {
                 return response.json();

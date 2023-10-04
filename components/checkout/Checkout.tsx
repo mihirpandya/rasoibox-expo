@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getCart, isValidPromoCode, updateCart } from '../../app/api/rasoibox-backend';
+import { emitEvent, getCart, isValidPromoCode, updateCart } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
@@ -13,6 +13,7 @@ import ResponseText from '../common/ResponseText';
 import PriceInformation from '../common/PriceInformation';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 export const errorIds = [
     'no_error',
@@ -143,6 +144,9 @@ export default function Checkout() {
 
     useEffect(() => {
         fetchCart()
+        if (authDetails?.verification_code) {
+            emitEvent(WebsiteEvent.CHECKOUT, new Date(), authDetails.verification_code)
+        }
     }, [authDetails])
 
     function submitIfEnter(event: any) {

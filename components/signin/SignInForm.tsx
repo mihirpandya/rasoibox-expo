@@ -1,5 +1,5 @@
 import { Link, Redirect } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { loginSession } from '../../constants/utils';
@@ -7,6 +7,10 @@ import { validateEmail } from "../../validators/Validators";
 import ResponseText from "../common/ResponseText";
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
+import * as Storage from "../common/Storage";
+import { AuthDetails } from '../common/AuthShim';
+import { emitEvent } from '../../app/api/rasoibox-backend';
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 export const errorIds = ['no_error', 'email', 'password', 'invalid_login'] as const;
 type ErrorID = typeof errorIds[number];
@@ -24,6 +28,14 @@ export default function SignInForm() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState<ErrorID>('no_error')
     const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        Storage.getAuthDetails().then((authDetails: AuthDetails | null) => {
+            if (authDetails?.verification_code) {
+                emitEvent(WebsiteEvent.SIGNIN, new Date(), authDetails?.verification_code)
+            }
+        })
+    }, [])
 
     function submitIfEnter(event: any) {
         if (event.key === "Enter") {

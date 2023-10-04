@@ -44,9 +44,9 @@ function RenderInstructions(props: { instruction: string, ingredients: string[] 
 
 				if (matchingIngredient != undefined) {
 					words_wo_new_lines[j] = "<b>" + word + "</b>"
-                    instructions.push(<Text style={styles.bold}>{word}</Text>)
+                    instructions.push(<Text key={i + j} style={styles.bold}>{word}</Text>)
 				} else {
-                    instructions.push(<Text style={styles.instructions}>{word}</Text>)
+                    instructions.push(<Text key={i + j} style={styles.instructions}>{word}</Text>)
                 }
 			}
 		}
@@ -62,8 +62,8 @@ function RenderInstructions(props: { instruction: string, ingredients: string[] 
 	// return "<div style='font-family: Avenir Light; font-size: 15px; line-height: 1.6'>" + words.join(" ").replaceAll("\n", "<br />") + "</div>"
 }
 
-function ViewStep(props: { step: RecipeStep }) {
-    const { step } = props;
+function ViewStep(props: { verificationCode: string, step: RecipeStep }) {
+    const { verificationCode, step } = props;
 
     return (
         <View>
@@ -73,9 +73,6 @@ function ViewStep(props: { step: RecipeStep }) {
             {step.instructions.map(line => {
                 return (
                     <RenderInstructions key={line} instruction={line} ingredients={step.ingredients} />
-                    // <Text key={line} style={styles.instructions}>
-                    //     {line}
-                    // </Text>     
                 )
             })}
             {
@@ -115,13 +112,21 @@ function ViewStep(props: { step: RecipeStep }) {
     )
 }
 
-export default function ViewRecipeSteps(props: {recipeSteps: RecipeStep[]}) {
-    const { recipeSteps } = props;
+export default function ViewRecipeSteps(props: {verificationCode: string, recipeSteps: RecipeStep[]}) {
+    const { verificationCode, recipeSteps } = props;
 
     return (
         <View style={styles.card}>
             <Text style={styles.directions}>Directions</Text>
-            <FlatList data={recipeSteps} renderItem={({item}) => <ViewStep step={item} />}/>
+            <FlatList
+                viewabilityConfig={{
+                    itemVisiblePercentThreshold: 80,
+                    minimumViewTime: 1000
+                }}
+                onViewableItemsChanged={info => {console.log(info)}}
+                data={recipeSteps} 
+                renderItem={({item}) => <ViewStep key={item.stepNumber} verificationCode={verificationCode} step={item} />}
+            />
             <RecipeConclusion />
         </View>
     )

@@ -8,6 +8,8 @@ import ViewRecipeMetadata from "./RecipeMetadata";
 import ViewRecipeSteps from "./RecipeSteps";
 import ViewRecipeIngredients from "./RecipeIngredients";
 import { rasoiBoxPink } from '../../constants/Colors';
+import { AuthDetails } from '../common/AuthShim';
+import * as Storage from "../common/Storage";
 
 export interface Quantity {
     amount: number,
@@ -54,6 +56,7 @@ export default function RecipeInfo(props: {recipeId: number, servingSize: number
     const [recipeName, setRecipeName] = useState<string | undefined>()
     const [recipeMetadata, setRecipeMetadata] = useState<RecipeMetadata>()
     const [recipeSteps, setRecipeSteps] = useState<RecipeStep[]>([])
+    const [authDetails, setAuthDetails] = useState<AuthDetails>()
 
     function fetchRecipeName() {
         getRecipeById(recipeId).then(response => {
@@ -125,6 +128,11 @@ export default function RecipeInfo(props: {recipeId: number, servingSize: number
 
     useEffect(() => {
         fetchRecipeName()
+        Storage.getAuthDetails().then((authDetails: AuthDetails | null) => {
+            if (authDetails) {
+                setAuthDetails(authDetails)
+            }
+        })
     }, [])
 
     useEffect(() => {
@@ -145,8 +153,8 @@ export default function RecipeInfo(props: {recipeId: number, servingSize: number
                     recipeMetadata ? <ViewRecipeMetadata servingSize={servingSize} recipeMetadata={recipeMetadata} /> :
                     <ActivityIndicator color={rasoiBoxPink} size="large" style={{margin: 30}}/>
                 }
-                {recipeMetadata && <ViewRecipeIngredients servingSize={servingSize} ingredients={recipeMetadata.ingredients} inYourKitchen={recipeMetadata.inYourKitchens}/>}
-                {recipeMetadata && recipeSteps.length > 0 && <ViewRecipeSteps recipeSteps={recipeSteps} />}
+                {recipeMetadata && authDetails?.verification_code && <ViewRecipeIngredients servingSize={servingSize} ingredients={recipeMetadata.ingredients} inYourKitchen={recipeMetadata.inYourKitchens}/>}
+                {recipeMetadata && recipeSteps.length > 0 && authDetails?.verification_code && <ViewRecipeSteps verificationCode={authDetails.verification_code} recipeSteps={recipeSteps} />}
                 
                 <Footer />
             </ScrollView>
