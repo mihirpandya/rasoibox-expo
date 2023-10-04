@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { getCart, updateCart } from '../../app/api/rasoibox-backend';
@@ -70,7 +70,7 @@ export default function RightCart(props: {closeLightbox: () => void}) {
                             renderItem={
                                 ({item}) => <CartItem cartItem={item} deleteItem={() => deleteItem(item.recipeName)}/>
                             }/>
-                        <Text style={styles.subtitle}>All orders placed after Thursday will arrive on the following Sunday.</Text>
+                        <Text style={styles.subtitle}>All orders placed before Thursday, Oct 12 can be picked up at <Link style={{textDecorationLine: 'underline'}}href={"https://www.eventbrite.com/e/popfest-2023-tickets-685848420087?aff=rasoibox"}>Pop-Fest</Link> on Oct 15.</Text>
                     </ScrollView>
                     <CheckoutButton checkoutStatus={CheckoutStatus.checkout} active={cart.length > 0} onPress={checkout}/>
                     <Text style={styles.subtitle}>All promo codes will be applied at checkout.</Text>
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 5,
         fontFamily: 'AvenirLight',
-        color: '#808080'
+        color: '#808080',
+        paddingBottom: 20,
     }
 });

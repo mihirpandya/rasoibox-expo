@@ -114,7 +114,6 @@ export default function UnlockTheFlavors(props: {
             <Text style={styles.message}>
                 Sign up for early access, sneak peeks, and exclusive invitations.
             </Text>
-            {/* <GetStarted /> */}
             <View style={styles.form}>
                 <View style={styles.row}>
                     <View style={styles.email}>

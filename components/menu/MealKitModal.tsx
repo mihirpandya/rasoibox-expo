@@ -1,4 +1,4 @@
-import { AntDesign } from '@expo/vector-icons';
+import { EvilIcons } from '@expo/vector-icons';
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -6,6 +6,7 @@ import Modal from "react-native-modal";
 import { rasoiBoxGrey, rasoiBoxYellow } from "../../constants/Colors";
 import { updateCart } from '../../app/api/rasoibox-backend';
 import Tags from './Tags';
+import { capitalizeFirst } from '../../constants/utils';
 
 interface MealKitModalProps {
     isVisible: boolean,
@@ -74,17 +75,17 @@ export default function MealKitModal(props: MealKitModalProps) {
     return (
         <Modal isVisible={isVisible} style={styles.modal} animationIn={'fadeIn'} animationOut={'fadeOut'} onBackdropPress={closeModal}>
             <View style={styles.modalView}>
-                <Pressable>
-                    <AntDesign name="close" style={styles.close} size={25} onPress={closeModal}/>
+                <Pressable style={styles.close}>
+                    <EvilIcons name="close-o" size={25} onPress={closeModal}/>
                 </Pressable>
                 <View style={styles.content}>
                     <ScrollView>
                         <View style={styles.header}>
                             <Text style={styles.title}>{name}</Text>
-                            <Tags tags={tags} tagStyle={{marginTop: 5, height: 20}} />
+                            <Tags tags={tags} tagStyle={{marginTop: 10, height: 20}} />
                         </View>
                         <Image style={styles.image} source={{uri: imageUrl}} />
-                        <Text style={styles.description}>{description}</Text>
+                        <Text style={styles.description}>{capitalizeFirst(description)}</Text>
                         <View style={{marginTop: 20, flexDirection: 'row'}}>
                             <Text style={styles.price}>
                                 ${price}
@@ -130,8 +131,9 @@ const styles = StyleSheet.create({
         position: 'absolute'
     },
     close: {
-        color: rasoiBoxGrey,
         padding: 20,
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
     },
     modal: {
         alignItems: 'center',
@@ -148,7 +150,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
-        fontSize: 30
+        fontSize: 30,
+        paddingLeft: 5
     },
     content: {
         paddingLeft: 20,
@@ -159,6 +162,7 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontSize: 15,
         marginTop: 10,
+        paddingLeft: 5
     },
     servings: {
         marginTop: 30,
@@ -175,7 +179,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: 30,
     },
     a2cText: {
         fontFamily: 'AvenirLight',
@@ -194,7 +198,9 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         marginTop: 10,
         marginRight: 20,
-        marginBottom: 10
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: rasoiBoxYellow
     },
     servingSizeUnselected: {
         fontFamily: 'AvenirLight',

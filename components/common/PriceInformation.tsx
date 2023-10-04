@@ -62,18 +62,21 @@ const styles = StyleSheet.create({
         borderColor: '#808080',
         marginLeft: 20,
         marginRight: 20,
+        paddingTop: 10,
+        paddingBottom: 10
     },
     total: {
         borderTopWidth: 1,
         borderColor: '#808080',
         marginLeft: 20,
         marginRight: 20,
-        paddingBottom: 20
+        paddingBottom: 20,
+        paddingTop: 10
     },
     section: {
         flexDirection: 'row',
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: 4,
+        paddingBottom: 4,
         justifyContent: 'space-between'
     },
     key: {

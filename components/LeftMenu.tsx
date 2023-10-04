@@ -52,11 +52,11 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
 
     if (authDetails?.authenticated) {
         let beginning: MenuItemEntry[] = [
-            {
-                label: 'Profile',
-                icon: 'person-circle',
-                href: '/profile'
-            },
+            // {
+            //     label: 'Profile',
+            //     icon: 'person-circle',
+            //     href: '/profile'
+            // },
             {
                 label: 'Order History',
                 icon: "receipt-outline",

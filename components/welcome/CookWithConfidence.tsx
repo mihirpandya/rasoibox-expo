@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         fontFamily: 'CormorantGaramondSemiBold',
         textAlign: 'center',
         color: titleColor,
-        paddingTop: 50
+        paddingTop: 20
     },
     description: {
         fontSize: getDescriptionFontSize(),

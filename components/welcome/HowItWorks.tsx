@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
         paddingLeft: Dimensions.get('window').width < 700 ? 20 : 30,
         paddingRight: Dimensions.get('window').width < 700 ? 20 : 30,
         flexWrap: 'wrap',
+        paddingBottom: 30,
     },
     repeaterTitle: {
         fontFamily: 'AvenirLight',
