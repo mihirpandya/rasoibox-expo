@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { joinWaitlist } from '../../app/api/rasoibox-backend';
-import { rasoiBoxYellow } from '../../constants/Colors';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { generateCode } from '../../constants/utils';
 import { validateEmail, validateZipcode } from '../../validators/Validators';
 import { AuthDetails } from '../common/AuthShim';
@@ -48,6 +49,7 @@ export default function UnlockTheFlavors(props: {
     const [zipcode, setZipcode] = useState("");
     const [error, setError] = useState<ErrorID>('no_error')
     const [success, setSuccess] = useState<SuccessID>('no_success')
+    const [loading, setLoading] = useState<boolean>(false)
 
     function submitIfEnter(event: any) {
         if (event.key === "Enter") {
@@ -80,7 +82,7 @@ export default function UnlockTheFlavors(props: {
                 }
 
                 const verificationCode: string = newAuthDetails.verification_code ? newAuthDetails.verification_code : generateCode()
-
+                setLoading(true);
                 joinWaitlist(email, zipcode, verificationCode, new Date()).then(response => {
                     const status = response["status"]
                     const verificationCode = response["verification_code"]
@@ -94,12 +96,12 @@ export default function UnlockTheFlavors(props: {
 
                     return verificationCode
                 }).then(verificationCode => {
-                    const authDetails = {
+                    const authDetails: AuthDetails = {
                         ...newAuthDetails,
-                        verificationCode: verificationCode
+                        verification_code: verificationCode
                     }
                     Storage.storeAuthDetails(authDetails)
-                })
+                }).finally(() => setLoading(false))
             })
         }
     }
@@ -115,31 +117,35 @@ export default function UnlockTheFlavors(props: {
                 Sign up for early access, sneak peeks, and exclusive invitations.
             </Text>
             <View style={styles.form}>
-                <View style={styles.row}>
-                    <View style={styles.email}>
-                        <FormKey>
-                            <Text>
-                                Email
-                            </Text>
-                        </FormKey>
-                        <FormValue onChangeText={setEmail} onKeyPress={submitIfEnter} />
+                {
+                    loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}} /> : 
+                    <View style={styles.row}>
+                        <View style={styles.email}>
+                            <FormKey>
+                                <Text>
+                                    Email
+                                </Text>
+                            </FormKey>
+                            <FormValue onChangeText={setEmail} onKeyPress={submitIfEnter} defaultValue={email}/>
+                        </View>
+                        <View style={styles.zipcode}>
+                            <FormKey>
+                                <Text>
+                                    Zipcode
+                                </Text>
+                            </FormKey>
+                            <FormValue onChangeText={setZipcode} onKeyPress={submitIfEnter} defaultValue={zipcode}/>
+                        </View>
                     </View>
-                    <View style={styles.zipcode}>
-                        <FormKey>
-                            <Text>
-                                Zipcode
-                            </Text>
-                        </FormKey>
-                        <FormValue onChangeText={setZipcode} onKeyPress={submitIfEnter} />
-                    </View>
-                </View>
+                }
                 {error != 'no_error' && <ResponseText message={ERRORS[error]}/>}
                 {error == 'no_error' && success != 'no_success' && <ResponseText message={SUCCESS[success]} isError={false}/>}
                 <View style={styles.button}>
-                    <Pressable onPress={submit}>
-                        <Text style={styles.buttonText}>
-                            Submit
-                        </Text>
+                    <Pressable onPress={submit} disabled={success != 'no_success'}>
+                        {
+                            (success == 'no_success') ? <Text style={styles.buttonText}> Submit </Text> :
+                            <Ionicons style={styles.submittedText} name="ios-checkmark-circle-outline" size={24} color="white" />
+                        }
                     </Pressable>
                 </View>
             </View>
@@ -201,5 +207,9 @@ const styles = StyleSheet.create({
         paddingRight: 30,
         paddingTop: 5,
         paddingBottom: 5
+    },
+    submittedText: {
+        textAlign: 'center',
+        color: 'white',
     }
 });
