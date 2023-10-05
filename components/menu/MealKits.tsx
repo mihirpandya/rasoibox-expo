@@ -27,6 +27,7 @@ export default function MealKits() {
     const [selectedItem, setSelectedItem] = useState<MealKit | undefined>(undefined);
     const [authDetails, setAuthDetails] = useState<AuthDetails | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
+    const [updateCart, setUpdateCart] = useState<boolean>(false)
 
     const fetchAvailableItems = () => {
         setLoading(true);
@@ -62,6 +63,11 @@ export default function MealKits() {
         })
     }
 
+    const closeModal = () => {
+        setSelectedItem(undefined);
+        setUpdateCart(true)
+    }
+
     useEffect(() => {
         fetchAvailableItems()
       }, []);
@@ -83,7 +89,7 @@ export default function MealKits() {
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <ScrollView>
-                <Header />
+                <Header updateCart={updateCart} setUpdateCart={setUpdateCart}/>
                 {
                     loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> :
                     <View style={styles.card}>
@@ -102,7 +108,7 @@ export default function MealKits() {
                         />)}
                         {selectedItem != undefined && <MealKitModal 
                             isVisible={selectedItem != undefined}
-                            closeModal={() => setSelectedItem(undefined)}
+                            closeModal={closeModal}
                             id={selectedItem.id}
                             name={selectedItem.name}
                             description={selectedItem.description}

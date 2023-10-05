@@ -8,29 +8,37 @@ import CartItem, { CartItemResponse } from "../common/CartItem";
 import CheckoutButton, { CheckoutStatus } from "../common/CheckoutButton";
 import * as Storage from "../common/Storage";
 
-export default function RightCart(props: {closeLightbox: () => void}) {
+export default function RightCart(props: {
+    loading: boolean,
+    cart: CartItemResponse[],
+    closeLightbox: () => void,
+    fetchCart:() => void
+}) {
     const [authDetails, setAuthDetails] = useState<AuthDetails>();
-    const [cart, setCart] = useState<CartItemResponse[]>([])
-    const [loading, setLoading] = useState<boolean>(true);
+    // const [cart, setCart] = useState<CartItemResponse[]>([])
+    // const [loading, setLoading] = useState<boolean>(true);
 
-    function fetchCart() {
-        if (authDetails?.verification_code != undefined) {
-            setLoading(true);
-            getCart(authDetails.verification_code).then(response => {
-                const cartItems: CartItemResponse[] = Object.values(response).map(item => {
-                    return {
-                        recipeName: item["recipe_name"],
-                        imageUrl: item["image_url"],
-                        servingSize: item["serving_size"],
-                        price: item["price"]
-                    }
-                });
+    const { loading, cart, closeLightbox, fetchCart } = props
 
-                setCart(cartItems);
-                setLoading(false);
-            })
-        }
-    }
+    // function fetchCart() {
+    //     if (authDetails?.verification_code != undefined) {
+    //         setLoading(true);
+    //         getCart(authDetails.verification_code).then(response => {
+    //             const cartItems: CartItemResponse[] = Object.values(response).map(item => {
+    //                 return {
+    //                     recipeName: item["recipe_name"],
+    //                     imageUrl: item["image_url"],
+    //                     servingSize: item["serving_size"],
+    //                     price: item["price"]
+    //                 }
+    //             });
+
+    //             setCart(cartItems);
+    //             setCartSize(cartItems.length)
+    //             setLoading(false);
+    //         })
+    //     }
+    // }
 
     useEffect(() => {
         Storage.getAuthDetails().then(stored => {
@@ -43,9 +51,9 @@ export default function RightCart(props: {closeLightbox: () => void}) {
         })
     }, [])
 
-    useEffect(() => {
-        fetchCart()
-    }, [authDetails])
+    // useEffect(() => {
+    //     fetchCart()
+    // }, [authDetails])
 
     function deleteItem(recipeName: string) {
         if (authDetails?.verification_code != undefined) {
@@ -55,7 +63,7 @@ export default function RightCart(props: {closeLightbox: () => void}) {
 
     function checkout() {
         router.replace("/checkout");
-        props.closeLightbox();
+        closeLightbox();
     }
 
     if (loading) {

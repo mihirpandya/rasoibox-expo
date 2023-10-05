@@ -1,13 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import LeftMenu from "../LeftMenu";
 import RightCart from "../cart/RightCart";
 import { AuthDetails } from './AuthShim';
 import Lightbox, { LightboxSide } from "./Lightbox";
 import * as Storage from "./Storage";
+import { CartItemResponse } from './CartItem';
+import { getCart } from '../../app/api/rasoibox-backend';
 
 function LogoTitle() {
     return (
@@ -21,10 +23,17 @@ function LogoTitle() {
 }
 
 
-export default function Header() {
+export default function Header(props: {
+    updateCart?: boolean
+    setUpdateCart?: (update: boolean) => void
+}) {
+    const { updateCart, setUpdateCart } = props;
     const [authDetails, setAuthDetails] = useState<AuthDetails>();
     const [menuPressed, setMenuPressed] = useState<boolean>(false);
     const [cartPressed, setCartPressed] = useState<boolean>(false);
+    const [cartSize, setCartSize] = useState<number>(0)
+    const [cartLoading, setCartLoading] = useState<boolean>(true);
+    const [cart, setCart] = useState<CartItemResponse[]>([])
 
     const toggleMenuPressed = () => {
         const newPressed = !menuPressed;
@@ -34,6 +43,26 @@ export default function Header() {
     const toggleCartPressed = () => {
         const newPressed = !cartPressed;
         setCartPressed(newPressed);
+    }
+
+    function fetchCart() {
+        if (authDetails?.verification_code != undefined) {
+            setCartLoading(true);
+            getCart(authDetails.verification_code).then(response => {
+                const cartItems: CartItemResponse[] = Object.values(response).map(item => {
+                    return {
+                        recipeName: item["recipe_name"],
+                        imageUrl: item["image_url"],
+                        servingSize: item["serving_size"],
+                        price: item["price"]
+                    }
+                });
+
+                setCart(cartItems);
+                setCartSize(cartItems.length)
+                setCartLoading(false);
+            })
+        }
     }
 
     useEffect(() => {
@@ -46,6 +75,19 @@ export default function Header() {
             setAuthDetails(stored);
         })
     }, [])
+
+    useEffect(() => {
+        fetchCart()
+    }, [authDetails])
+
+    useEffect(() => {
+        if (setUpdateCart && updateCart) {
+            fetchCart()
+            setUpdateCart(false)
+        }
+    }, [updateCart])
+
+    console.log(cartSize)
 
     return (
         <View style={styles.header}>
@@ -62,9 +104,14 @@ export default function Header() {
             <LogoTitle />
             <Pressable style={styles.cart} onPress={toggleCartPressed}>
                 <Ionicons name="cart-outline" size={25} color={rasoiBoxPink}/>
+                {cartSize > 0 && 
+                    <View style={styles.cartSize}>
+                        <Text style={styles.cartSizeText}> {cartSize} </Text>
+                    </View>
+                }
             </Pressable>
             <Lightbox isVisible={cartPressed} width={350} side={LightboxSide.right} closeLightbox={toggleCartPressed}>
-                <RightCart closeLightbox={toggleCartPressed}/>
+                <RightCart loading={cartLoading} cart={cart} closeLightbox={toggleCartPressed} fetchCart={fetchCart}/>
             </Lightbox>
         </View>
     );
@@ -90,5 +137,20 @@ const styles = StyleSheet.create({
     cart: {
         position: 'fixed',
         right: '5%',
+    },
+    cartSize: {
+        backgroundColor: rasoiBoxYellow,
+        marginTop: -10,
+        borderRadius: 10,
+        width: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    cartSizeText: {
+        textAlign: 'center',
+        fontSize: 10,
+        color: 'white',
+        fontFamily: 'AvenirLight',
+        fontWeight: 'bold',
     }
 });

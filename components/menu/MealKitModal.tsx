@@ -1,9 +1,9 @@
 import { EvilIcons } from '@expo/vector-icons';
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Modal from "react-native-modal";
-import { rasoiBoxGrey, rasoiBoxYellow } from "../../constants/Colors";
+import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from "../../constants/Colors";
 import { updateCart } from '../../app/api/rasoibox-backend';
 import Tags from './Tags';
 import { capitalizeFirst } from '../../constants/utils';
@@ -59,13 +59,17 @@ export default function MealKitModal(props: MealKitModalProps) {
     prices.sort()
 
     const [selectedServingSize, setSelectedServingSize] = useState<number>(0)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const servingSize = servingSizes[selectedServingSize];
     const price = prices[selectedServingSize];
 
     function addToCart(recipeName: string, servingSize: number) {
         if (verificationCode != undefined) {
-            updateCart(verificationCode, recipeName, servingSize).then(_response => closeModal())
+            setLoading(true)
+            updateCart(verificationCode, recipeName, servingSize)
+                .then(_response => closeModal())
+                .finally(() => setLoading(false))
         } else {
             closeModal()
             router.replace("/signin")
@@ -110,13 +114,16 @@ export default function MealKitModal(props: MealKitModalProps) {
                             </View>
                         </View>
                     </ScrollView>
-                    <Pressable onPress={() => addToCart(name, servingSizes[selectedServingSize])}>
-                        <View style={styles.a2cButton}>
-                            <Text style={styles.a2cText}>
-                                {verificationCode != undefined ? "Add to cart" : "Sign in to place order"}
-                            </Text>
-                        </View>
-                    </Pressable>
+                    {
+                        loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingBottom: 30}} /> :
+                        <Pressable onPress={() => addToCart(name, servingSizes[selectedServingSize])}>
+                            <View style={styles.a2cButton}>
+                                <Text style={styles.a2cText}>
+                                    {verificationCode != undefined ? "Add to cart" : "Sign in to place order"}
+                                </Text>
+                            </View>
+                        </Pressable>
+                    }
                 </View>
             </View>
         </Modal>
