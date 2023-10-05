@@ -1,13 +1,14 @@
 import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { StripeAddressElementOptions } from '@stripe/stripe-js';
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { OrderBackendApi, initiatePlaceOrder, isDeliverableZipcode } from '../../app/api/rasoibox-backend';
 import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
 import ResponseText from '../common/ResponseText';
-import { borderGrey, rasoiBoxPink } from '../../constants/Colors';
+import { borderGrey, rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
 import { validateEmail } from '../../validators/Validators';
 import { RadioButton } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
 
 // https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=elements
 
@@ -201,9 +202,29 @@ export default function StripeCheckoutForm(props: {
     return (
         <View style={styles.card}>
             <Text style={styles.title}>Shipping Information</Text>
-            <View>
-                <RadioButton value="Pick up at Pop-Fest" />
-                <RadioButton value="Ship to Home" />
+            <View style={styles.shippingOptions}>
+                <View style={styles.shippingOption}>
+                    <Pressable style={{flexDirection: 'row'}}>
+                        <Ionicons name="radio-button-on" size={20} color={rasoiBoxPink} />
+                        <View style={styles.optionContainer}>
+                            <Text style={styles.option}>Pick up</Text>
+                            <Text style={styles.optionDescription}>
+                                Rasoi Boxes will be available for pick up at Pop-Fest on Oct 15.
+                            </Text>
+                        </View>
+                    </Pressable>
+                </View>
+                <View style={styles.shippingOptionDisabled}>
+                    <Ionicons name="radio-button-off" size={20} color='#808080' />
+                    <View style={styles.optionContainer}>
+                        <Text style={styles.option}>
+                            Deliver to address
+                        </Text>
+                        <Text style={styles.optionDescription}>
+                            Orders placed before Thursday will be delivered on Sunday.
+                        </Text>
+                    </View>
+                </View>
             </View>
             <Text style={styles.title}>Payment Information</Text>
             {/* https://stripe.com/docs/elements/address-element/collect-addresses?platform=web */}
@@ -274,5 +295,45 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(241, 122, 126, 0.4)',
         fontFamily: 'AvenirLight',
         color: 'grey'
+    },
+    shippingOptions: {
+        flexDirection: Dimensions.get('window').width < 700 ? 'column': 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: 20,
+    },
+    shippingOption: {
+        margin: 5,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'grey',
+        borderRadius: 5,
+        shadowRadius: 1,
+        shadowColor: rasoiBoxGrey,
+        width: Dimensions.get('window').width < 700 ? '100%' : '50%',
+    },
+    shippingOptionDisabled: {
+        margin: 5,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'grey',
+        borderRadius: 5,
+        backgroundColor: '#f0f0f0',
+        flexDirection: 'row',
+        width: Dimensions.get('window').width < 700 ? '100%' : '50%',
+    },
+    optionContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        paddingLeft: 5
+    },
+    option: {
+        fontFamily: 'AvenirLight',
+        fontWeight: 'bold',
+        fontSize: 14
+    },
+    optionDescription: {
+        fontSize: 10,
+        color: '#808080'
     }
 });
