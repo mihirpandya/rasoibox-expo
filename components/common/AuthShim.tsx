@@ -57,7 +57,7 @@ export default function AuthShim(props: IAuthShimProps) {
 
     if (authDetails == undefined) {
         return (
-            <ActivityIndicator color={rasoiBoxPink} size="large" />
+            <ActivityIndicator style={{paddingTop: 50}} color={rasoiBoxPink} size="large" />
         )
     } else if (authDetails?.authenticated) {
         return authChild;
