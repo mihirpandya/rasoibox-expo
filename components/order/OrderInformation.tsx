@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { emitEvent, getOrder } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import { rasoiBoxPink } from '../../constants/Colors';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { cleanAddress, cleanDate, getSubtotal, getTotal, orderJsonToOrderInformationResponse } from '../../constants/utils';
 import { PromoCode } from '../checkout/Checkout';
 import CartItem, { CartItemResponse } from '../common/CartItem';
@@ -13,6 +13,8 @@ import PriceInformation from '../common/PriceInformation';
 import * as Storage from "../common/Storage";
 import { AuthDetails } from '../common/AuthShim';
 import { WebsiteEvent } from '../../constants/EventTypes';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 
 export interface OrderBreakdown {
@@ -59,7 +61,8 @@ function getCartFromOrderInfo(orderInfo: OrderInformationResponse | undefined): 
             recipeName: recipe[0],
             imageUrl: recipe[1].imageUrl,
             servingSize: recipe[1].servingSize,
-            price: recipe[1].price
+            price: recipe[1].price,
+            recipeId: recipe[1].id
         }
     })
 }
@@ -142,7 +145,13 @@ export default function OrderInformation(props: {orderNumber: any}) {
                             <FlatList
                                 data={getCartFromOrderInfo(orderInfo)}
                                 renderItem={
-                                    ({item}) => <CartItem cartItem={item} hideDelete={true} deleteItem={() => {}}/>
+                                    ({item}) => <CartItem cartItem={item}>
+                                                    <View style={styles.infoButton}>
+                                                        <Pressable onPress={() => router.replace("/recipe/" + item.recipeId + "/" + item.servingSize)}>
+                                                            <Ionicons name="arrow-forward-circle-outline" size={24} color={rasoiBoxYellow} />
+                                                        </Pressable>
+                                                    </View>
+                                                </CartItem>
                                 }/>
                             <PriceInformation 
                                 appliedPromoCode={orderInfo?.orderBreakdown.promoCodes[0]}
@@ -206,5 +215,9 @@ const styles = StyleSheet.create({
         marginTop: Dimensions.get('window').width < 700 ? 20 : 0,
         borderRadius: 10,
         borderWidth: 1
+    },
+    infoButton: {
+        justifyContent: 'center',
+        left: 40
     },
 });

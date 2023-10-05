@@ -8,6 +8,7 @@ import CartItem, { CartItemResponse } from "../common/CartItem";
 import CheckoutButton, { CheckoutStatus } from "../common/CheckoutButton";
 import * as Storage from "../common/Storage";
 import TextLink from '../common/TextLink';
+import RemoveFromCartButton from '../common/RemoveFromCartButton';
 
 export default function RightCart(props: {
     loading: boolean,
@@ -30,12 +31,6 @@ export default function RightCart(props: {
         })
     }, [])
 
-    function deleteItem(recipeName: string) {
-        if (authDetails?.verification_code != undefined) {
-            updateCart(authDetails.verification_code, recipeName, 0).then(_response => fetchCart())
-        }
-    }
-
     function checkout() {
         router.replace("/checkout");
         closeLightbox();
@@ -51,7 +46,13 @@ export default function RightCart(props: {
                         <FlatList 
                             data={cart}
                             renderItem={
-                                ({item}) => <CartItem cartItem={item} deleteItem={() => deleteItem(item.recipeName)}/>
+                                ({item}) => <CartItem cartItem={item}>
+                                                <RemoveFromCartButton 
+                                                    verificationCode={authDetails?.verification_code}
+                                                    recipeName={item.recipeName}
+                                                    updateCartCallback={() => fetchCart()}
+                                                />
+                                            </CartItem>
                             }/>
                         <Text style={styles.subtitle}>All orders placed before Thursday, Oct 12 can be picked up at <TextLink link="https://www.eventbrite.com/e/popfest-2023-tickets-685848420087?aff=rasoibox" text="Pop-Fest" /> on Oct 15.</Text>
                     </ScrollView>

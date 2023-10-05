@@ -14,6 +14,7 @@ import PriceInformation from '../common/PriceInformation';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
 import { WebsiteEvent } from '../../constants/EventTypes';
+import RemoveFromCartButton from '../common/RemoveFromCartButton';
 
 export const errorIds = [
     'no_error',
@@ -161,12 +162,6 @@ export default function Checkout() {
         }
     }
 
-    function deleteItem(recipeName: string) {
-        if (authDetails?.verification_code != undefined) {
-            updateCart(authDetails.verification_code, recipeName, 0).then(_response => fetchCart())
-        }
-    }
-
     function deleteAppliedPromoCode() {
         setAppliedPromoCode(undefined);
     }
@@ -241,7 +236,13 @@ export default function Checkout() {
                         <FlatList 
                             data={cart}
                             renderItem={
-                                ({item}) => <CartItem cartItem={item} deleteItem={() => deleteItem(item.recipeName)}/>
+                                ({item}) => <CartItem cartItem={item}>
+                                                <RemoveFromCartButton 
+                                                    verificationCode={authDetails?.verification_code}
+                                                    recipeName={item.recipeName}
+                                                    updateCartCallback={() => fetchCart()}
+                                                />
+                                            </CartItem>
                             }/>
                         <Text style={styles.subtitle}>Pick up at Pop-Fest on Oct 15!</Text>
                         <View style={styles.promocode}>

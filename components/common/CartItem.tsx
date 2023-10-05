@@ -7,7 +7,8 @@ export interface CartItemResponse {
     recipeName: string,
     imageUrl: string,
     servingSize: number,
-    price: number
+    price: number,
+    recipeId: number
 }
 
 function ellipsify(name: string): string {
@@ -16,10 +17,9 @@ function ellipsify(name: string): string {
 
 export default function CartItem(props: { 
     cartItem: CartItemResponse, 
-    deleteItem: () => void, 
-    hideDelete?: boolean 
+    children?: React.ReactNode
 }) {
-    const { cartItem, deleteItem, hideDelete } = props;
+    const { cartItem, children } = props;
     return (
         <View style={styles.cartItem}>
             <Image style={styles.itemImage} source={{ uri: cartItem.imageUrl }}/>
@@ -28,11 +28,7 @@ export default function CartItem(props: {
                 <Text style={styles.servingSize}>{cartItem.servingSize} servings</Text>
                 <Text style={styles.price}>{cartItem.price}</Text>
             </View>
-            {!hideDelete && <View style={styles.deleteItem}>
-                <Pressable onPress={deleteItem}>
-                    <Ionicons name="trash-outline" size={20} color={rasoiBoxGrey} />
-                </Pressable>
-            </View>}
+            {children}
         </View>
     )
 }
