@@ -141,8 +141,9 @@ const styles = StyleSheet.create({
     cartSize: {
         backgroundColor: rasoiBoxYellow,
         marginTop: -10,
+        marginLeft: 15,
         borderRadius: 10,
-        width: 12,
+        width: 15,
         alignItems: 'center',
         justifyContent: 'center',
     },
