@@ -9,11 +9,13 @@ import { rasoiBoxPink } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
 import { WebsiteEvent } from '../../constants/EventTypes';
+import { generateCode } from '../../constants/utils';
 
 interface MealKit {
     id: number,
     name: string,
     description: string,
+    longDescription: string,
     imageUrl: string,
     servingSizes: number[],
     prices: number[],
@@ -28,6 +30,32 @@ export default function MealKits() {
     const [authDetails, setAuthDetails] = useState<AuthDetails | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [updateCart, setUpdateCart] = useState<boolean>(false)
+    
+    function storeVerificationCode() {
+        Storage.getAuthDetails().then(async authDetails => {
+            let code: string | undefined = authDetails?.verification_code
+            if (!code) {
+                code = generateCode()
+                let newAuthDetails: AuthDetails
+                if (authDetails) {
+                    newAuthDetails = {
+                        ...authDetails,
+                        verification_code: code
+                    }
+                } else {
+                    newAuthDetails = {
+                        authenticated: false,
+                        verification_code: code
+                    }
+                }
+                await Storage.storeAuthDetails(newAuthDetails).finally(() => setAuthDetails(newAuthDetails))
+            }
+        })
+    }
+
+    useEffect(() => {
+        storeVerificationCode()
+    }, [])
 
     const fetchAvailableItems = () => {
         setLoading(true);
@@ -35,11 +63,13 @@ export default function MealKits() {
             const keys = Object.keys(response);
             const values = Object.values(response);
             const items: MealKit[] = []
+            console.log(response);
             for (let i = 0; i < keys.length; i++) {
                 items.push({
                     id: keys[i],
                     name: values[i]['recipe_name'],
                     description: values[i]['description'],
+                    longDescription: values[i]['long_description'],
                     imageUrl: values[i]['image_url'],
                     servingSizes: values[i]['serving_sizes'],
                     prices: values[i]['prices'],
@@ -111,7 +141,7 @@ export default function MealKits() {
                             closeModal={closeModal}
                             id={selectedItem.id}
                             name={selectedItem.name}
-                            description={selectedItem.description}
+                            description={selectedItem.longDescription}
                             imageUrl={selectedItem.imageUrl}
                             servingSizes={selectedItem.servingSizes}
                             prices={selectedItem.prices}
