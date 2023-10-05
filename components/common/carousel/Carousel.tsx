@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
 import {
+    Dimensions,
     FlatList,
     StyleProp,
     StyleSheet,
@@ -72,18 +73,18 @@ export default function Carousel(props: {
 
     return (
         <View style={styles.card}>
-          <FlatList
-            data={carouselData}
-            style={getCarouselStyle(width, height)}
-            renderItem={renderItem}
-            pagingEnabled
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            onScroll={onScroll}
-            {...flatListOptimizationProps}
-          />
-          {carouselData.length > 1 && <Pagination index={index} slideList={[...new Array(carouselData.length)]}/>}
+            <FlatList
+                data={carouselData}
+                style={getCarouselStyle(width, height)}
+                renderItem={renderItem}
+                pagingEnabled
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                bounces={false}
+                onScroll={onScroll}
+                {...flatListOptimizationProps}
+            />
+            {carouselData.length > 1 && <Pagination index={index} slideList={[...new Array(carouselData.length)]}/>}
         </View>
       );
 
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
     card: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginLeft: Dimensions.get('window').width < 700 ? '-2.5%' : '0%',
     },
 })

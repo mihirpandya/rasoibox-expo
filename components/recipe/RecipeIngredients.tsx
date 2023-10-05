@@ -53,7 +53,6 @@ export default function ViewRecipeIngredients(props: {
     return (
         <View style={styles.card}>
             <Text style={styles.title}>Ingredients</Text>
-            <View style={{alignItems: 'center'}}>
             <View style={styles.container}>
                 <View style={styles.column}>
                     <Text style={styles.subtitle}>In your Rasoi Box:</Text>
@@ -71,7 +70,6 @@ export default function ViewRecipeIngredients(props: {
                             ({item}) => <ViewInYourKitchen inYourKitchen={item} />
                     }/>
                 </View>
-            </View>
             </View>
         </View>
     )

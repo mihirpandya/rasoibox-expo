@@ -54,7 +54,7 @@ function RenderInstructions(props: { instruction: string, ingredients: string[] 
 	}
 
     return (
-        <View style={{flexDirection: 'row', flexWrap: 'wrap', paddingBottom: 20}}>
+        <View style={styles.renderInstructions}>
             {instructions}
         </View>
     )
@@ -77,15 +77,17 @@ function ViewStep(props: { verificationCode: string, step: RecipeStep }) {
             })}
             {
                 (step.gifUrl != undefined && step.gifUrl.length > 0) && 
-                <Carousel 
-                    width={styles.stepImage.width}
-                    height={styles.stepImage.height}
-                    carouselData={step.gifUrl.map(url => {
-                        return {
-                            imageUrl: url
-                        }
-                    })}
-                />
+                <View style={{justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                    <Carousel 
+                        width={styles.stepImage.width}
+                        height={styles.stepImage.height}
+                        carouselData={step.gifUrl.map(url => {
+                            return {
+                                imageUrl: url
+                            }
+                        })}
+                    />
+                </View>
             }
             {
                 (step.tips != undefined && step.tips.length > 0) &&
@@ -193,17 +195,19 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginTop: 20,
         padding: 20,
-        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
-        marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
-        marginBottom: 30
+        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '0%',
+        marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '0%',
+        marginBottom: 30,
+        width: Dimensions.get('window').width < 700 ? '95%' : '60%'
     },
     chefsHat: {
         backgroundColor: 'rgba(249, 166, 108, 0.08)', // rasoi box yellow with opacity
         borderRadius: 20,
         padding: 20,
-        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '15%',
-        marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '15%',
-        marginBottom: 30
+        marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : '0%',
+        marginRight:  Dimensions.get('window').width < 700 ? '2.5%' : '0%',
+        marginBottom: 30,
+        width: Dimensions.get('window').width < 700 ? '95%' : '60%'
     },
     chefsHatTitle: {
         color: rasoiBoxYellow,
@@ -234,5 +238,11 @@ const styles = StyleSheet.create({
         fontSize: 15,
         paddingTop: 10,
         lineHeight: 25
+    },
+    renderInstructions: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingBottom: 20,
+        width: Dimensions.get('window').width < 700 ? '100%' : '60%'
     }
 })

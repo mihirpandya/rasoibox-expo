@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { emitEvent, getOrder } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { cleanAddress, cleanDate, getSubtotal, getTotal, orderJsonToOrderInformationResponse } from '../../constants/utils';
 import { PromoCode } from '../checkout/Checkout';
 import CartItem, { CartItemResponse } from '../common/CartItem';
