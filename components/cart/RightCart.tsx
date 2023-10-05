@@ -1,12 +1,13 @@
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { getCart, updateCart } from '../../app/api/rasoibox-backend';
 import { rasoiBoxPink } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from "../common/CartItem";
 import CheckoutButton, { CheckoutStatus } from "../common/CheckoutButton";
 import * as Storage from "../common/Storage";
+import TextLink from '../common/TextLink';
 
 export default function RightCart(props: {
     loading: boolean,
@@ -15,30 +16,8 @@ export default function RightCart(props: {
     fetchCart:() => void
 }) {
     const [authDetails, setAuthDetails] = useState<AuthDetails>();
-    // const [cart, setCart] = useState<CartItemResponse[]>([])
-    // const [loading, setLoading] = useState<boolean>(true);
 
     const { loading, cart, closeLightbox, fetchCart } = props
-
-    // function fetchCart() {
-    //     if (authDetails?.verification_code != undefined) {
-    //         setLoading(true);
-    //         getCart(authDetails.verification_code).then(response => {
-    //             const cartItems: CartItemResponse[] = Object.values(response).map(item => {
-    //                 return {
-    //                     recipeName: item["recipe_name"],
-    //                     imageUrl: item["image_url"],
-    //                     servingSize: item["serving_size"],
-    //                     price: item["price"]
-    //                 }
-    //             });
-
-    //             setCart(cartItems);
-    //             setCartSize(cartItems.length)
-    //             setLoading(false);
-    //         })
-    //     }
-    // }
 
     useEffect(() => {
         Storage.getAuthDetails().then(stored => {
@@ -50,10 +29,6 @@ export default function RightCart(props: {
             setAuthDetails(stored);
         })
     }, [])
-
-    // useEffect(() => {
-    //     fetchCart()
-    // }, [authDetails])
 
     function deleteItem(recipeName: string) {
         if (authDetails?.verification_code != undefined) {
@@ -78,7 +53,7 @@ export default function RightCart(props: {
                             renderItem={
                                 ({item}) => <CartItem cartItem={item} deleteItem={() => deleteItem(item.recipeName)}/>
                             }/>
-                        <Text style={styles.subtitle}>All orders placed before Thursday, Oct 12 can be picked up at <Link style={{textDecorationLine: 'underline'}}href={"https://www.eventbrite.com/e/popfest-2023-tickets-685848420087?aff=rasoibox"}>Pop-Fest</Link> on Oct 15.</Text>
+                        <Text style={styles.subtitle}>All orders placed before Thursday, Oct 12 can be picked up at <TextLink link="https://www.eventbrite.com/e/popfest-2023-tickets-685848420087?aff=rasoibox" text="Pop-Fest" /> on Oct 15.</Text>
                     </ScrollView>
                     <CheckoutButton checkoutStatus={CheckoutStatus.checkout} active={cart.length > 0} onPress={checkout}/>
                     <Text style={styles.subtitle}>All promo codes will be applied at checkout.</Text>
@@ -99,5 +74,5 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         color: '#808080',
         paddingBottom: 20,
-    }
+    },
 });

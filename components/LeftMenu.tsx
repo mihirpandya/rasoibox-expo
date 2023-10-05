@@ -36,11 +36,11 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
             icon: 'compass-outline',
             href: '/our-story'
         },
-        // {
-        //     label: 'Blog',
-        //     icon: 'book',
-        //     href: '/blog'
-        // },
+        {
+            label: 'Blog',
+            icon: 'book',
+            href: 'https://rasoibox.substack.com/'
+        },
         // {
         //     label: 'Refer a Friend',
         //     icon: 'person-add',
@@ -92,7 +92,11 @@ function MenuItem(props: {name: any, iconName: any, href: any, onNav: () => void
     return (
         <Pressable onPress={() => {
             props.onNav();
-            router.replace(props.href);
+            if (props.href.startsWith('/')) {
+                router.replace(props.href);
+            } else {
+                window.open(props.href)
+            }
         }}>
             <View style={styles.menuItem}>
                 <Ionicons name={props.iconName} style={styles.menuIcon} size={25} />

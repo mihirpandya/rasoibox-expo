@@ -61,8 +61,7 @@ export default function SignInForm() {
             setLoggedIn(true);
         }).catch(error => {
             setError('invalid_login')
-        })
-        setLoading(false);
+        }).finally(() => setLoading(false))
     }
 
     if (loggedIn) {
