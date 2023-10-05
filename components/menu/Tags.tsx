@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
 import { rasoiBoxYellow } from '../../constants/Colors';
+import { EvilIcons } from '@expo/vector-icons';
 
 function getContainerStyle(additions: any): StyleProp<ViewStyle> {
     if (additions == undefined) {
@@ -29,13 +30,18 @@ function getTagStyle(additions: any): StyleProp<ViewStyle> {
 }
 
 export default function Tags(props: {
-    tags: string[], 
+    tags: string[],
+    time: number,
     containerStyle?: StyleProp<ViewStyle>,
     tagStyle?: StyleProp<ViewStyle>
 }) {
-    const { tags, containerStyle, tagStyle} = props
+    const { tags, time, containerStyle, tagStyle} = props
     return (
         <View style={getContainerStyle(containerStyle)}>
+            <Text key="time" style={getTagStyle(tagStyle)}>
+                <EvilIcons style={{paddingRight: 2}} name="clock" size={15} color="white" />
+                {time + "m"}
+            </Text>
             {tags.map(tag => <Text key={tag} style={getTagStyle(tagStyle)}>{tag}</Text>)}
         </View>
     )

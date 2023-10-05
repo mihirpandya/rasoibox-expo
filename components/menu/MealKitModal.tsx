@@ -86,13 +86,13 @@ export default function MealKitModal(props: MealKitModalProps) {
                     <ScrollView>
                         <View style={styles.header}>
                             <Text style={styles.title}>{name}</Text>
-                            <Tags tags={tags} tagStyle={{marginTop: 10, height: 20}} />
+                            <Tags tags={tags} time={prepTime + cookTime} tagStyle={{marginTop: 10, height: 20}} />
                         </View>
                         <Image style={styles.image} source={{uri: imageUrl}} />
-                        <View style={styles.timings}>
+                        {/* <View style={styles.timings}>
                             <Text style={styles.timing} >Prep Time: {prepTime} mins</Text>
                             <Text style={styles.timing} >Cook Time: {cookTime} mins</Text>
-                        </View>
+                        </View> */}
                         <Text style={styles.description}>{capitalizeFirst(description)}</Text>
                         <View style={{marginTop: 20, flexDirection: 'row'}}>
                             <Text style={styles.price}>

@@ -40,7 +40,7 @@ export default function MealKitCard(props: MealKitCardProps) {
                     <Text style={styles.description}>
                         {description}
                     </Text>
-                    <Tags tags={tags} containerStyle={{position: 'absolute', marginTop: 95}}/>
+                    <Tags tags={tags} time={prepTime + cookTime} containerStyle={{position: 'absolute', marginTop: 95}}/>
                 </Card.Content>
             </Card>
         </Pressable>
