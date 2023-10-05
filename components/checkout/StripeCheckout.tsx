@@ -9,8 +9,8 @@ import StripeCheckoutForm from "./StripeCheckoutForm";
 
 process.env.STRIPE_PUB_KEY
 
-// const stripePromise = loadStripe("pk_live_51NKT9IDgBx8MbUKDEnyWUhYmtAwmdTxnAHNs5eAOsC9J0GTmHVdpQoeTF42EU3pG6rKGbYOZXUPVntxmB4UmWveM00daTVB6BO");
-const stripePromise = loadStripe("pk_test_51NKT9IDgBx8MbUKDtYV3RNaDYHlZS2DXYqvT7aoY10uxS7Nulza6XaVfw65P2Sqok2pyhlnyqCsEx5x6T1pKy7PQ00UdkwfT7J")
+const stripePromise = loadStripe("pk_live_51NKT9IDgBx8MbUKDEnyWUhYmtAwmdTxnAHNs5eAOsC9J0GTmHVdpQoeTF42EU3pG6rKGbYOZXUPVntxmB4UmWveM00daTVB6BO");
+// const stripePromise = loadStripe("pk_test_51NKT9IDgBx8MbUKDtYV3RNaDYHlZS2DXYqvT7aoY10uxS7Nulza6XaVfw65P2Sqok2pyhlnyqCsEx5x6T1pKy7PQ00UdkwfT7J")
 const appearance = {
     variables: {
         colorPrimary: rasoiBoxPink,
