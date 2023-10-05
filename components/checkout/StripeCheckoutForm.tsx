@@ -221,7 +221,7 @@ export default function StripeCheckoutForm(props: {
                             Deliver to address
                         </Text>
                         <Text style={styles.optionDescription}>
-                            Orders placed before Thursday will be delivered on Sunday.
+                            {"Coming soon!\n\n\n"}
                         </Text>
                     </View>
                 </View>
