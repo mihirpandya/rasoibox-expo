@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { RefObject } from 'react';
-import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { rasoiBoxGrey, rasoiBoxYellow, titleColor } from '../../constants/Colors';
 
 function getSloganFontSize(): number {
@@ -29,6 +29,15 @@ export default function CookWithConfidence(props: {
 
     return (
         <View style={styles.card}>
+            {Dimensions.get('window').width >= 1000 &&
+                <View style={{flex: 1, height: '100%', width: '100%'}}>
+                    <Image style={styles.chanaMasala} source={require('../../assets/images/cover/1.png')}/>
+                    <Image style={styles.tofuBhurji} source={require('../../assets/images/cover/2.png')}/>
+                    <Image style={styles.besanChilla} source={require('../../assets/images/cover/3.png')}/>
+                    <Image style={styles.paneerButterMasala} source={require('../../assets/images/cover/4.png')}/>
+                    <Image style={styles.paneerSaag} source={require('../../assets/images/cover/6.png')}/>
+                </View>
+            }
             <Text style={styles.slogan}>COOK WITH CONFIDENCE</Text>
             <Text style={styles.description}>
                 Discover the joy of cooking easy, healthy, fresh and delicious Indian meals with ready-to-cook ingredients and "bite-sized" instructions from Rasoi Box.
@@ -106,5 +115,40 @@ const styles = StyleSheet.create({
         fontSize: 15,
         paddingTop: 5,
         paddingBottom: 5
+    },
+    chanaMasala: {
+        width: 300,
+        height: 300,
+        position: 'fixed',
+        top: 350,
+        left: 90
+    },
+    tofuBhurji: {
+        width: 200,
+        height: 200,
+        position: 'fixed',
+        top: 100,
+        left: 60
+    },
+    besanChilla: {
+        width: 200,
+        height: 200,
+        position: 'fixed',
+        top: 550,
+        left: 1200
+    },
+    paneerButterMasala: {
+        width: 300,
+        height: 300,
+        position: 'fixed',
+        top: 90,
+        left: 1050
+    },
+    paneerSaag: {
+        width: 150,
+        height: 150,
+        position: 'fixed',
+        top: 420,
+        left: 1000
     }
 });
