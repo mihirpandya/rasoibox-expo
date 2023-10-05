@@ -31,11 +31,11 @@ export default function CookWithConfidence(props: {
         <View style={styles.card}>
             {Dimensions.get('window').width >= 1000 &&
                 <View style={{flex: 1, height: '100%', width: '100%'}}>
-                    <Image style={styles.chanaMasala} source={require('../../assets/images/cover/1.png')}/>
-                    <Image style={styles.tofuBhurji} source={require('../../assets/images/cover/2.png')}/>
-                    <Image style={styles.besanChilla} source={require('../../assets/images/cover/3.png')}/>
-                    <Image style={styles.paneerButterMasala} source={require('../../assets/images/cover/4.png')}/>
-                    <Image style={styles.paneerSaag} source={require('../../assets/images/cover/6.png')}/>
+                    <Image style={styles.chanaMasala} source={require('../../assets/images/cover/chanamasala.png')}/>
+                    <Image style={styles.tofuBhurji} source={require('../../assets/images/cover/tofubhurji.png')}/>
+                    <Image style={styles.besanChilla} source={require('../../assets/images/cover/besanchilla.png')}/>
+                    <Image style={styles.paneerButterMasala} source={require('../../assets/images/cover/paneerbuttermasala.png')}/>
+                    <Image style={styles.paneerSaag} source={require('../../assets/images/cover/paneersaag.png')}/>
                 </View>
             }
             <Text style={styles.slogan}>COOK WITH CONFIDENCE</Text>
