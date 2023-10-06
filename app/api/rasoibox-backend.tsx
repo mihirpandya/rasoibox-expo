@@ -249,6 +249,26 @@ export function getOrder(token: string, orderNumber: string) {
     })
 }
 
+export function getOrderFromIntent(orderNumber: string, paymentIntent: string) {
+    return fetch(BACKEND + "orderV2/get_order_from_intent?order_id=" + orderNumber + "&payment_intent=" + paymentIntent, {
+        "method": "get",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+        },
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else {
+            console.error(response);
+            throw Error();
+        }
+    }).catch((error) => {
+        console.error(error);
+        throw error;
+    })
+}
+
 export function getOrderHistory(token: string) {
     return fetch(BACKEND + "order/get_order_history", {
         "method": "get",

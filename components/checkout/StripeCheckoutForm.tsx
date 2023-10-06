@@ -1,14 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
 import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { StripeAddressElementOptions } from '@stripe/stripe-js';
 import React, { useState } from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { OrderBackendApi, initiatePlaceOrder, isDeliverableZipcode } from '../../app/api/rasoibox-backend';
+import { OrderBackendApi, initiatePlaceOrder } from '../../app/api/rasoibox-backend';
+import { rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
+import { validateEmail } from '../../validators/Validators';
 import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
 import ResponseText from '../common/ResponseText';
-import { borderGrey, rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
-import { validateEmail } from '../../validators/Validators';
-import { RadioButton } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
 
 // https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=elements
 
@@ -168,7 +167,7 @@ export default function StripeCheckoutForm(props: {
                 stripe.confirmPayment({
                     elements,
                     confirmParams: {
-                        return_url: 'https://www.rasoibox.com/order/' + orderId
+                        return_url: 'https://www.rasoibox.com/thankyou?order_id=' + orderId,
                     }
                 }).then(response => {
                     const { error } = response;
