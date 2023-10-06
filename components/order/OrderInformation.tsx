@@ -146,11 +146,11 @@ export default function OrderInformation(props: {orderNumber: any}) {
                                 data={getCartFromOrderInfo(orderInfo)}
                                 renderItem={
                                     ({item}) => <CartItem cartItem={item}>
-                                                    <View style={styles.infoButton}>
+                                                    {/* <View style={styles.infoButton}>
                                                         <Pressable onPress={() => router.replace("/recipe/" + item.recipeId + "/" + item.servingSize)}>
                                                             <Ionicons name="arrow-forward-circle-outline" size={24} color={rasoiBoxYellow} />
                                                         </Pressable>
-                                                    </View>
+                                                    </View> */}
                                                 </CartItem>
                                 }/>
                             <PriceInformation 
