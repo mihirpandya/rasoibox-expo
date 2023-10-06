@@ -87,8 +87,6 @@ export default function Header(props: {
         }
     }, [updateCart])
 
-    console.log(cartSize)
-
     return (
         <View style={styles.header}>
             <Stack.Screen options={{
