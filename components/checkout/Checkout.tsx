@@ -173,29 +173,25 @@ export default function Checkout() {
             return;
         }
         AsyncStorage.getItem(Storage.ACCESS_TOKEN).then(token => {
-            if (token != null) {
-                isValidPopFestPromo(promoCode).then(response => {
-                    const status = response["status"]
-                    if (status == 0) {
-                        setAppliedPromoCode({
-                            name: response["promo_code_name"],
-                            amountOff: response["amount_off"],
-                            percentOff: response["percent_off"]
-                        })
-                    } else if (status == 1) {
-                        setPromoCodeError('already_used')
-                    } else if (status == -1) {
-                        setPromoCodeError('expired')
-                    } else {
-                        setPromoCodeError('invalid')
-                    }
-                }).catch(error => {
-                    console.error(error);
+            isValidPopFestPromo(promoCode).then(response => {
+                const status = response["status"]
+                if (status == 0) {
+                    setAppliedPromoCode({
+                        name: response["promo_code_name"],
+                        amountOff: response["amount_off"],
+                        percentOff: response["percent_off"]
+                    })
+                } else if (status == 1) {
+                    setPromoCodeError('already_used')
+                } else if (status == -1) {
+                    setPromoCodeError('expired')
+                } else {
                     setPromoCodeError('invalid')
-                })
-            } else {
+                }
+            }).catch(error => {
+                console.error(error);
                 setPromoCodeError('invalid')
-            }
+            })
         })
     }
 
