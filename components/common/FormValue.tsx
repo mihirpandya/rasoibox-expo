@@ -6,9 +6,12 @@ export default function FormValue(props: {
     onKeyPress: (event: any) => void,
     secureTextEntry?: boolean, 
     defaultValue?: string
+    editable?: boolean
 }) {
 
     const { secureTextEntry, onChangeText, onKeyPress, defaultValue } = props;
+
+    const editable = (props.editable == undefined) ? true : props.editable
 
     return (
         <TextInput 
@@ -17,6 +20,7 @@ export default function FormValue(props: {
             onChangeText={onChangeText}
             onKeyPress={onKeyPress}
             defaultValue={defaultValue}
+            editable={editable}
         />
     )
 }

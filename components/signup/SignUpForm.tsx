@@ -1,16 +1,16 @@
-import { Link, Redirect, router } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import { createAccount, emitEvent } from "../../app/api/rasoibox-backend";
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { WebsiteEvent } from '../../constants/EventTypes';
 import { generateCode, loginSession } from '../../constants/utils';
 import { validateEmail, validateZipcode } from "../../validators/Validators";
-import ResponseText from "../common/ResponseText";
+import { AuthDetails } from '../common/AuthShim';
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
+import ResponseText from "../common/ResponseText";
 import * as Storage from "../common/Storage";
-import { AuthDetails } from '../common/AuthShim';
-import { WebsiteEvent } from '../../constants/EventTypes';
 
 export const errorIds = [
     'no_error', 

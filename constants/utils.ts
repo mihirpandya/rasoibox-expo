@@ -151,7 +151,8 @@ export function orderJsonToOrderInformationResponse(orderJson: any): OrderInform
         totalDollars: orderJson['order_total_dollars'],
         delivered: orderJson['order_delivered'],
         customerEmail: orderJson['customer_email'],
-        recipes: recipes
+        recipes: recipes,
+        createId: orderJson['order_create_id']
     }
 }
 

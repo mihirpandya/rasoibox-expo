@@ -73,7 +73,7 @@ export default function MealKitModal(props: MealKitModalProps) {
                 .finally(() => setLoading(false))
         } else {
             closeModal()
-            router.replace("/signin")
+            window.open("/signin", "_self")
         }
     }
 

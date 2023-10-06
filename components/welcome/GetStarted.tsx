@@ -50,7 +50,7 @@ export default function GetStarted() {
                 }
 
                 Storage.storeAuthDetails(newAuthDetails).then(_response => {
-                    router.replace("/signup")
+                    window.open("/signup", "_self")
                 })
             })
         }

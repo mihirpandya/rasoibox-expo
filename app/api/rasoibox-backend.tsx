@@ -509,3 +509,43 @@ export function emitRecipeEvent(
             }
         });
 }
+
+export function getCustomerFromIntent(createId: number, paymentIntent: string) {
+    return fetch(BACKEND + "users/get_customer_from_intent?create_id=" + createId + "&payment_intent=" + paymentIntent, {
+        "method": "get",
+        "headers": {
+			"Content-Type": "application/json"
+		},
+        }).then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+                return response.json();
+            } else {
+                console.log("error: " + response);
+                throw new Error(response.statusText);
+            }
+        });
+}
+
+export function createAccountFromIntent(createId: number, paymentIntent: string, password: string) {
+    const request_body = {
+        "create_id": createId,
+        "payment_intent": paymentIntent,
+        "password": password,
+    }
+    
+    return fetch(BACKEND + "recipe/event", {
+        "method": "post",
+        "headers": {
+			"Content-Type": "application/json"
+		},
+        "body": JSON.stringify(request_body)
+        }).then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+                return response.json();
+            } else {
+                console.log("error: " + response);
+                throw new Error(response.statusText);
+            }
+        });
+}
+

@@ -32,7 +32,7 @@ export default function RightCart(props: {
     }, [])
 
     function checkout() {
-        router.replace("/checkout");
+        window.open("/checkout", "_self");
         closeLightbox();
     }
 

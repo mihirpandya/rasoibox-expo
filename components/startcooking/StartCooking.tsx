@@ -26,7 +26,7 @@ function CookItem(props: { recipe: OrderRecipeInfo }) {
     const { recipe } = props;
     const recipeRoute = "/recipe/" + recipe.recipeId + "/" + recipe.servingSize
     return (
-        <Pressable onPress={() => router.replace(recipeRoute)}>
+        <Pressable onPress={() => window.open(recipeRoute, "_self")}>
             <View style={styles.recipeCard}>
                 <Image style={styles.recipeImage} source={{uri: recipe.imageUrl}} />
                 <View style={styles.recipeDetails}>
@@ -120,7 +120,7 @@ export default function ViewStartCooking() {
                         </View> :
                         <View style={styles.card}>
                             <Text style={styles.subtitle}>You have no active orders. Click below to view our menu and start cooking today.</Text>
-                            <Pressable onPress={() => {router.replace('/menu')}}>
+                            <Pressable onPress={() => {window.open('/menu', "_self")}}>
                                 <View style={styles.button}>
                                     <Text style={styles.viewMenu}>
                                         View Menu

@@ -1,20 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { emitEvent, getCart, isValidPopFestPromo, isValidPromoCode, updateCart } from '../../app/api/rasoibox-backend';
+import { emitEvent, getCart, isValidPopFestPromo } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { WebsiteEvent } from '../../constants/EventTypes';
 import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from '../common/CartItem';
-import ResponseText from '../common/ResponseText';
 import PriceInformation from '../common/PriceInformation';
+import RemoveFromCartButton from '../common/RemoveFromCartButton';
+import ResponseText from '../common/ResponseText';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
-import { WebsiteEvent } from '../../constants/EventTypes';
-import RemoveFromCartButton from '../common/RemoveFromCartButton';
 
 export const errorIds = [
     'no_error',

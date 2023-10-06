@@ -57,7 +57,7 @@ export default function CookWithConfidence(props: {
                         </Text>
                     </View>
                 </Pressable>
-                <Pressable onPress={() => router.replace("/menu")}>
+                <Pressable onPress={() => window.open("/menu", "_self")}>
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>
                             View Menu

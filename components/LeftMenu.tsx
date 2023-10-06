@@ -93,7 +93,7 @@ function MenuItem(props: {name: any, iconName: any, href: any, onNav: () => void
         <Pressable onPress={() => {
             props.onNav();
             if (props.href.startsWith('/')) {
-                router.replace(props.href);
+                window.open(props.href, "_self");
             } else {
                 window.open(props.href)
             }

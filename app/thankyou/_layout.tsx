@@ -1,27 +1,41 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native"
+import { router } from "expo-router"
+import { useEffect, useState } from "react"
+import { ActivityIndicator, Linking, Pressable, StyleSheet, Text, View } from "react-native"
 import Footer from "../../components/common/Footer"
 import Header from "../../components/common/Header"
-import { getOrderFromIntent } from "../api/rasoibox-backend"
+import { OrderInformationResponse } from "../../components/order/OrderInformation"
+import { rasoiBoxPink, rasoiBoxYellow } from "../../constants/Colors"
 import { orderJsonToOrderInformationResponse } from "../../constants/utils"
-import OrderInformation, { OrderInformationResponse } from "../../components/order/OrderInformation"
-import { useEffect, useState } from "react"
-import { rasoiBoxPink } from "../../constants/Colors"
+import { getOrderFromIntent } from "../api/rasoibox-backend"
 
 function OrderConfirmed(props: {
     orderId: string,
+    createId: number,
     email: string
+    paymentIntent: string
 }) {
+    const { orderId, createId, email, paymentIntent } = props;
     return (
         <View style={styles.card}>
             <Text style={styles.title}>
                 Thank you!
             </Text>
             <Text style={styles.subtitle}>
-                Your Order #{props.orderId} has been successfully confirmed!
+                Your Order #{orderId} has been successfully confirmed!
             </Text>
             <Text style={styles.message}>
-                We're getting started on your order right away, and you will receive a confirmation email and receipt shortly to {props.email}.
+                We're getting started on your order right away, and you will receive a confirmation email and receipt shortly to {email}.
             </Text>
+            <Text style={styles.message}>
+
+            </Text>
+            <Pressable onPress={() => {window.open("/createpassword?create_id=" + createId + "&payment_intent=" + paymentIntent, "_self")}}>
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>
+                        Create Account Password
+                    </Text>
+                </View>
+            </Pressable>
         </View>
     )
 }
@@ -71,9 +85,14 @@ export default function ThanksForYourOrder() {
         <View>
             <Header />
             {
-                loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50, backgroundColor: 'white'}}/> :
-                    orderInfo ?
-                        <OrderConfirmed orderId={orderInfo.orderNumber} email={orderInfo.customerEmail} /> :
+                loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{ paddingTop: 50, backgroundColor: 'white' }} /> :
+                    orderInfo && paymentIntent ?
+                        <OrderConfirmed 
+                            orderId={orderInfo.orderNumber} 
+                            createId={orderInfo.createId} 
+                            email={orderInfo.customerEmail} 
+                            paymentIntent={paymentIntent}
+                        /> :
                         <NotFound />
             }
             <Footer />
@@ -102,6 +121,24 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontSize: 20,
         width: '60%',
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingBottom: 20
+    },
+    button: {
+        backgroundColor: rasoiBoxYellow,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        alignContent: 'center',
+        justifyContent: 'center',
+        margin: 10,
+        borderRadius: 20,
+        height: 40
+    },
+    buttonText: {
+        fontFamily: 'AvenirLight',
+        color: 'white',
+        fontSize: 15,
     }
 });

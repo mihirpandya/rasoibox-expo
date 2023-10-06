@@ -15,7 +15,7 @@ import { AuthDetails } from '../common/AuthShim';
 import { WebsiteEvent } from '../../constants/EventTypes';
 
 function goToOrder(orderNumber: string) {
-    router.replace("/order/" + orderNumber);
+    window.open("/order/" + orderNumber, "_self");
 }
 
 interface IndexedOrderInformation {

@@ -1,20 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { emitEvent, getOrder } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { rasoiBoxPink } from '../../constants/Colors';
+import { WebsiteEvent } from '../../constants/EventTypes';
 import { cleanAddress, cleanDate, getSubtotal, getTotal, orderJsonToOrderInformationResponse } from '../../constants/utils';
 import { PromoCode } from '../checkout/Checkout';
+import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from '../common/CartItem';
 import PriceInformation from '../common/PriceInformation';
 import * as Storage from "../common/Storage";
-import { AuthDetails } from '../common/AuthShim';
-import { WebsiteEvent } from '../../constants/EventTypes';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 
 
 export interface OrderBreakdown {
@@ -48,7 +46,8 @@ export interface OrderInformationResponse {
     totalDollars: number,
     delivered: boolean,
     recipes: { [recipeName: string] : RecipeInfo }
-    customerEmail: string
+    customerEmail: string,
+    createId: number
 }
 
 function getCartFromOrderInfo(orderInfo: OrderInformationResponse | undefined): CartItemResponse[] {
