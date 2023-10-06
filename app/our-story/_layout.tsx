@@ -6,6 +6,7 @@ import Header from '../../components/common/Header';
 import { rasoiBoxYellow } from '../../constants/Colors';
 
 export default function OurStory() {
+    document.title = "Our Story | Rasoi Box"
     
     return (
         <View style={styles.body}>

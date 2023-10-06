@@ -40,6 +40,8 @@ function CookItem(props: { recipe: OrderRecipeInfo }) {
 }
 
 export default function ViewStartCooking() {
+    document.title = "Start Cooking | Rasoi Box"
+
     const [authtoken, setAuthToken] = useState<string | undefined>()
     const [orderHistory, setOrderHistory] = useState<OrderInformationResponse[]>([])
     const [loading, setLoading] = useState<boolean>(true)

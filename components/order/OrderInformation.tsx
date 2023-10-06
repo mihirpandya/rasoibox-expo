@@ -68,6 +68,8 @@ function getCartFromOrderInfo(orderInfo: OrderInformationResponse | undefined): 
 }
 
 export default function OrderInformation(props: {orderNumber: any}) {
+    document.title = "Order Information | Rasoi Box"
+    
     const { orderNumber } = props;
 
     const [authtoken, setAuthToken] = useState<string | undefined>()

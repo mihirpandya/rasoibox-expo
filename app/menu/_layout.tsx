@@ -3,6 +3,8 @@ import MealKits from "../../components/menu/MealKits";
 import { verify } from '../api/rasoibox-backend';
 
 export default function Menu() {
+    document.title = "Menu | Rasoi Box"
+    
     const parsedUrl: URL = new URL(location.href)
     const [showSuccessToast, setShowSuccessToast] = useState<boolean>(false);
 

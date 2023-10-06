@@ -85,6 +85,7 @@ function totalAfterPromo(total: number, promoCode: PromoCode): number {
 }
 
 export default function Checkout() {
+    document.title = "Checkout | Rasoi Box"
     const [authDetails, setAuthDetails] = useState<AuthDetails | undefined>(undefined);
     const [firstName, setFirstName] = useState<string>("")
     const [lastName, setLastName] = useState<string>("")

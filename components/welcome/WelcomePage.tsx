@@ -16,6 +16,8 @@ import { WebsiteEvent } from '../../constants/EventTypes';
 
 export default function WelcomePage() {
 
+    document.title = "Rasoi Box - Fresh Indian Meal Kits"
+
     const [unlockCoordinate, setUnlockCoordinate] = useState(0)
     const [verificationCode, setVerificationCode] = useState<string>()
     const ref = useRef<ScrollView>(null);

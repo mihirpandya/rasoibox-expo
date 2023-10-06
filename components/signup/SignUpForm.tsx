@@ -40,6 +40,8 @@ const ERRORS: Record<ErrorID, string> = {
 }
 
 export default function SignUpForm() {
+    document.title = "Create Account | Rasoi Box"
+
     const [loggedIn, setLoggedIn] = useState<boolean>(false)
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")

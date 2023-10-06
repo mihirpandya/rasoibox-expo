@@ -23,6 +23,7 @@ const ERRORS: Record<ErrorID, string> = {
 }
 
 export default function SignInForm() {
+    document.title = "Sign In | Rasoi Box"
     const [loggedIn, setLoggedIn] = useState<boolean>(false)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

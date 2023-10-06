@@ -20,12 +20,13 @@ function getImageHeight() {
 
 export default function ViewRecipeMetadata(props: {servingSize: number, recipeMetadata: RecipeMetadata}) {
     const { servingSize, recipeMetadata } = props;
+    document.title = recipeMetadata.recipeName + " | Rasoi Box"
 
     return (
         <View style={styles.card}>
             <View style={styles.info}>
                 <Text style={styles.recipeName}>{recipeMetadata.recipeName}</Text>
-                <Tags tags={recipeMetadata.tags} />
+                <Tags tags={recipeMetadata.tags} time={recipeMetadata.cookTime + recipeMetadata.prepTime} />
                 <Text style={styles.description}>
                     {recipeMetadata.longDescription}
                 </Text>

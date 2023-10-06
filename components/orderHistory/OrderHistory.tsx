@@ -51,6 +51,8 @@ function OrderSummary(props: {orderInfo: IndexedOrderInformation}) {
 }
 
 export default function OrderHistory() {
+    document.title = "Order History | Rasoi Box"
+
     const [authtoken, setAuthToken] = useState<string | undefined>()
     const [orderHistory, setOrderHistory] = useState<OrderInformationResponse[]>([])
     const [loading, setLoading] = useState<boolean>(true)
