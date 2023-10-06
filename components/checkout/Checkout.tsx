@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { emitEvent, getCart, isValidPromoCode, updateCart } from '../../app/api/rasoibox-backend';
+import { emitEvent, getCart, isValidPopFestPromo, isValidPromoCode, updateCart } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
@@ -174,7 +174,7 @@ export default function Checkout() {
         }
         AsyncStorage.getItem(Storage.ACCESS_TOKEN).then(token => {
             if (token != null) {
-                isValidPromoCode(token, promoCode).then(response => {
+                isValidPopFestPromo(promoCode).then(response => {
                     const status = response["status"]
                     if (status == 0) {
                         setAppliedPromoCode({

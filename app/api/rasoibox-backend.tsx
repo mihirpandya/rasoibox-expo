@@ -152,6 +152,28 @@ export function isValidPromoCode(token: string, promo_code: string) {
     })
 }
 
+export function isValidPopFestPromo(promo_code: string) {
+    return fetch(BACKEND + "popfest/is_valid_promo_code?promo_code=" + promo_code, {
+        "method": "get",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+        },
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        } else if (response.status == 400) {
+            return {
+                "status": -1
+            }
+        } else {
+            return {
+                "status": -2
+            }
+        }
+    })
+}
+
 export function initiateIntent(verification_code: string) {
     return fetch(BACKEND + "orderV2/initiate_intent?verification_code=" + verification_code, {
         "method": "post",
