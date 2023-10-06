@@ -1,12 +1,13 @@
 import { EvilIcons } from '@expo/vector-icons';
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Modal from "react-native-modal";
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from "../../constants/Colors";
-import { updateCart } from '../../app/api/rasoibox-backend';
+import { emitEvent, updateCart } from '../../app/api/rasoibox-backend';
 import Tags from './Tags';
 import { capitalizeFirst } from '../../constants/utils';
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 interface MealKitModalProps {
     isVisible: boolean,
@@ -75,6 +76,12 @@ export default function MealKitModal(props: MealKitModalProps) {
             router.replace("/signin")
         }
     }
+
+    useEffect(() => {
+        if (verificationCode) {
+            emitEvent(WebsiteEvent.MENU_ITEM, new Date(), verificationCode, name)
+        }
+    }, [])
 
     return (
         <Modal isVisible={isVisible} style={styles.modal} animationIn={'fadeIn'} animationOut={'fadeOut'} onBackdropPress={closeModal}>

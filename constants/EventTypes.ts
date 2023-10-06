@@ -1,6 +1,7 @@
 export enum WebsiteEvent {
     WELCOME = "WELCOME",
     MENU_PRICES = "MENU_PRICES",
+    MENU_ITEM = "MENU_ITEM",
     OUR_STORY = "OUR_STORY",
     REFER_FRIEND = "REFER_FRIEND",
     SIGNIN = "SIGNIN",
