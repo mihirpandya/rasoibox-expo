@@ -27,7 +27,7 @@ export default function Header(props: {
     updateCart?: boolean
     setUpdateCart?: (update: boolean) => void
 }) {
-    const { updateCart, setUpdateCart } = props;
+    const { updateCart, setUpdateCart, openCart } = props;
     const [authDetails, setAuthDetails] = useState<AuthDetails>();
     const [menuPressed, setMenuPressed] = useState<boolean>(false);
     const [cartPressed, setCartPressed] = useState<boolean>(false);
@@ -74,7 +74,7 @@ export default function Header(props: {
             }
             setAuthDetails(stored);
         })
-    }, [])
+    }, [updateCart])
 
     useEffect(() => {
         fetchCart()

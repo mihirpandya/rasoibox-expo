@@ -91,7 +91,6 @@ export default function ViewStartCooking() {
         orderHistory.sort((o1, o2) => o1.orderDate > o2.orderDate ? -1 : 1)
             .forEach(order => {
                 Object.entries(order.recipes).forEach(entry => {
-                    console.log(entry);
                     recipeInfos.push({
                         orderNumber: order.orderNumber,
                         orderDate: order.orderDate,

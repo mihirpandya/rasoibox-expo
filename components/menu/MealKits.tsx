@@ -48,7 +48,10 @@ export default function MealKits() {
                         verification_code: code
                     }
                 }
-                await Storage.storeAuthDetails(newAuthDetails).finally(() => setAuthDetails(newAuthDetails))
+                await Storage.storeAuthDetails(newAuthDetails).finally(() => {
+                    setAuthDetails(newAuthDetails)
+                    setUpdateCart(true)
+                })
             }
         })
     }
@@ -63,7 +66,6 @@ export default function MealKits() {
             const keys = Object.keys(response);
             const values = Object.values(response);
             const items: MealKit[] = []
-            console.log(response);
             for (let i = 0; i < keys.length; i++) {
                 items.push({
                     id: keys[i],
@@ -119,7 +121,7 @@ export default function MealKits() {
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <ScrollView>
-                <Header updateCart={updateCart} setUpdateCart={setUpdateCart}/>
+                <Header updateCart={updateCart} setUpdateCart={setUpdateCart} />
                 {
                     loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> :
                     <View style={styles.card}>
