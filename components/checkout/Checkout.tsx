@@ -258,7 +258,7 @@ export default function Checkout() {
                             subtotal={subtotal}
                             total={total}
                             showDelete={true}
-                            showTaxes={true}
+                            showTaxes={false}
                             deleteAppliedPromoCode={deleteAppliedPromoCode}
                         />
                     </View>

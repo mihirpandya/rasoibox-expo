@@ -135,20 +135,20 @@ const styles = StyleSheet.create({
         height: 200,
         position: 'fixed',
         top: 550,
-        left: 1200
+        right: 100
     },
     paneerButterMasala: {
         width: 300,
         height: 300,
         position: 'fixed',
         top: 90,
-        left: 1050
+        right: 150
     },
     paneerSaag: {
         width: 150,
         height: 150,
         position: 'fixed',
         top: 420,
-        left: 1000
+        right: 350
     }
 });
