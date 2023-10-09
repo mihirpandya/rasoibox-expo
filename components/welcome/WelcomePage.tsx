@@ -12,6 +12,7 @@ import UnlockTheFlavors from "./UnlockTheFlavors";
 import WhatIsInARasoiBox from "./WhatIsInARasoiBox";
 import { emitEvent } from '../../app/api/rasoibox-backend';
 import { WebsiteEvent } from '../../constants/EventTypes';
+import { MODE } from '@env';
 
 
 export default function WelcomePage() {
@@ -54,6 +55,8 @@ export default function WelcomePage() {
             emitEvent(WebsiteEvent.WELCOME, new Date(), verificationCode)
         }
     }, [verificationCode])
+
+    console.log(MODE);
 
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>

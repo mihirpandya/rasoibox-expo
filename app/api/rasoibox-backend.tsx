@@ -1,6 +1,8 @@
+// import { BACKEND } from "@env";
 import { RecipeEvent, WebsiteEvent } from "../../constants/EventTypes";
 
 const BACKEND: string = "https://rasoibox.onrender.com/api/"
+// const BACKEND: string = "http://localhost:9000/api/"
 
 export interface OrderBackendApi {
     order_date: Date,
@@ -347,12 +349,12 @@ export function getActiveRecipes(token: string) {
 }
 
 export function createAccount(
-    email: string, 
-    password: string, 
-    firstName: string, 
-    lastName: string, 
-    zipcode: string, 
-    joinDate: Date, 
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    zipcode: string,
+    joinDate: Date,
     verificationCode: string
 ) {
     const request_body = {
@@ -381,14 +383,14 @@ export function createAccount(
                 "status": -2
             }
         }
-    }).catch ((error) => {
+    }).catch((error) => {
         console.error(error);
         throw error;
     })
 }
 
 export function verify(verificationCode: string) {
-    return fetch(BACKEND + "verify/email?id=" + verificationCode, {"method": "get"})
+    return fetch(BACKEND + "verify/email?id=" + verificationCode, { "method": "get" })
         .then((response) => {
             if (response.status >= 200 && response.status < 300) {
                 return response.json();
@@ -403,8 +405,8 @@ export function isDeliverableZipcode(zipcode: string) {
     return fetch(BACKEND + "is_deliverable_zipcode?zipcode=" + zipcode, {
         "method": "get",
         "headers": {
-			"Content-Type": "application/json"
-		},
+            "Content-Type": "application/json"
+        },
     }).then((response) => {
         if (response.status >= 200 && response.status < 300) {
             return response.json();
@@ -429,18 +431,18 @@ export function joinWaitlist(email: string, zipcode: string, verificationCode: s
 
     return fetch(BACKEND + "signup/email", {
         "method": "post",
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"body": JSON.stringify(request_body)
-        }).then((response) => {
-            if (response.status >= 200 && response.status < 300) {
-                return response.json();
-            } else {
-                console.log("error: " + response);
-                throw new Error(response.statusText);
-            }
-        });
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": JSON.stringify(request_body)
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    });
 }
 
 export function emitEvent(eventType: WebsiteEvent, eventTime: Date, verificationCode: string, referrer?: string | null) {
@@ -453,30 +455,30 @@ export function emitEvent(eventType: WebsiteEvent, eventTime: Date, verification
     if (referrer && referrer != null) {
         request_body["referrer"] = referrer
     }
-    
+
     return fetch(BACKEND + "event", {
         "method": "post",
         "headers": {
-			"Content-Type": "application/json"
-		},
+            "Content-Type": "application/json"
+        },
         "body": JSON.stringify(request_body)
-        }).then((response) => {
-            if (response.status >= 200 && response.status < 300) {
-                return response.json();
-            } else {
-                console.log("error: " + response);
-                throw new Error(response.statusText);
-            }
-        });
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    });
 }
 
 export function emitRecipeEvent(
-    recipeId: string, 
-    servingSize: number, 
-    stepNumber: number, 
-    eventType: RecipeEvent, 
-    eventTime: Date, 
-    verificationCode: string, 
+    recipeId: string,
+    servingSize: number,
+    stepNumber: number,
+    eventType: RecipeEvent,
+    eventTime: Date,
+    verificationCode: string,
     referrer?: string
 ) {
     const request_body = {
@@ -493,37 +495,37 @@ export function emitRecipeEvent(
     }
 
     console.log(request_body)
-    
+
     return fetch(BACKEND + "recipe/event", {
         "method": "post",
         "headers": {
-			"Content-Type": "application/json"
-		},
+            "Content-Type": "application/json"
+        },
         "body": JSON.stringify(request_body)
-        }).then((response) => {
-            if (response.status >= 200 && response.status < 300) {
-                return response.json();
-            } else {
-                console.log("error: " + response);
-                throw new Error(response.statusText);
-            }
-        });
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    });
 }
 
 export function getCustomerFromIntent(createId: number, paymentIntent: string) {
     return fetch(BACKEND + "users/get_customer_from_intent?create_id=" + createId + "&payment_intent=" + paymentIntent, {
         "method": "get",
         "headers": {
-			"Content-Type": "application/json"
-		},
-        }).then((response) => {
-            if (response.status >= 200 && response.status < 300) {
-                return response.json();
-            } else {
-                console.log("error: " + response);
-                throw new Error(response.statusText);
-            }
-        });
+            "Content-Type": "application/json"
+        },
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    });
 }
 
 export function createAccountFromIntent(createId: number, paymentIntent: string, password: string) {
@@ -532,20 +534,20 @@ export function createAccountFromIntent(createId: number, paymentIntent: string,
         "payment_intent": paymentIntent,
         "password": password,
     }
-    
+
     return fetch(BACKEND + "recipe/event", {
         "method": "post",
         "headers": {
-			"Content-Type": "application/json"
-		},
+            "Content-Type": "application/json"
+        },
         "body": JSON.stringify(request_body)
-        }).then((response) => {
-            if (response.status >= 200 && response.status < 300) {
-                return response.json();
-            } else {
-                console.log("error: " + response);
-                throw new Error(response.statusText);
-            }
-        });
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    });
 }
 
