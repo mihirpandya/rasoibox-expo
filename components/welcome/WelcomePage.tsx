@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { emitEvent } from '../../app/api/rasoibox-backend';
+import { WebsiteEvent } from '../../constants/EventTypes';
 import { generateCode } from '../../constants/utils';
 import { AuthDetails } from '../common/AuthShim';
 import Footer from "../common/Footer";
@@ -10,8 +12,6 @@ import HowItWorks from "./HowItWorks";
 import InnerChef from "./InnerChef";
 import UnlockTheFlavors from "./UnlockTheFlavors";
 import WhatIsInARasoiBox from "./WhatIsInARasoiBox";
-import { emitEvent } from '../../app/api/rasoibox-backend';
-import { WebsiteEvent } from '../../constants/EventTypes';
 
 
 export default function WelcomePage() {

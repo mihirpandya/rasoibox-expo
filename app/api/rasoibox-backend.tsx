@@ -1,9 +1,6 @@
-// import { BACKEND } from "@env";
 import { BACKEND } from '@env';
 import { RecipeEvent, WebsiteEvent } from "../../constants/EventTypes";
 
-// const BACKEND: string = "https://rasoibox.onrender.com/api/"
-// const BACKEND: string = "http://localhost:9000/api/"
 
 export interface OrderBackendApi {
     order_date: Date,
