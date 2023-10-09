@@ -27,7 +27,7 @@ export default function Header(props: {
     updateCart?: boolean
     setUpdateCart?: (update: boolean) => void
 }) {
-    const { updateCart, setUpdateCart, openCart } = props;
+    const { updateCart, setUpdateCart } = props;
     const [authDetails, setAuthDetails] = useState<AuthDetails>();
     const [menuPressed, setMenuPressed] = useState<boolean>(false);
     const [cartPressed, setCartPressed] = useState<boolean>(false);
