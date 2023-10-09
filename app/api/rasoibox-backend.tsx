@@ -443,14 +443,14 @@ export function joinWaitlist(email: string, zipcode: string, verificationCode: s
         });
 }
 
-export function emitEvent(eventType: WebsiteEvent, eventTime: Date, verificationCode: string, referrer?: string) {
+export function emitEvent(eventType: WebsiteEvent, eventTime: Date, verificationCode: string, referrer?: string | null) {
     const request_body = {
         "event_type": eventType.toString(),
         "event_date": eventTime,
         "verification_code": verificationCode
     }
 
-    if (referrer) {
+    if (referrer && referrer != null) {
         request_body["referrer"] = referrer
     }
     

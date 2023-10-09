@@ -110,7 +110,9 @@ export default function MealKits() {
 
     useEffect(() => {
         if (authDetails?.verification_code) {
-            emitEvent(WebsiteEvent.MENU_PRICES, new Date(), authDetails.verification_code)
+            const parsedUrl: URL = new URL(location.href)
+            const referrer: string | null = parsedUrl.searchParams.get('ref')
+            emitEvent(WebsiteEvent.MENU_PRICES, new Date(), authDetails.verification_code, referrer)
         }
     }, [authDetails])
 
