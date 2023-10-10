@@ -549,3 +549,47 @@ export function createAccountFromIntent(createId: number, paymentIntent: string,
     });
 }
 
+export function initiateInvitation(referrerEmail: string, referredEmails: string[], verificationCode?: string) {
+    const request_body = {
+        referrer_email: referrerEmail,
+        referred_emails: {
+            referred_emails: referredEmails
+        }
+    }
+
+    if (verificationCode != undefined) {
+        request_body["referrer_verification_code"] = verificationCode
+    }
+
+    return fetch(BACKEND + "recipe_prices/initiate_invitation", {
+        "method": "post",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        "body": JSON.stringify(request_body)
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        }
+
+        throw Error();
+    });
+}
+
+export function isVerified(verificationCode: string) {
+    return fetch(BACKEND + "verified?id=" + verificationCode, {
+        "method": "get",
+        "headers": {
+			"Content-Type": "application/json"
+		},
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    })
+}
+

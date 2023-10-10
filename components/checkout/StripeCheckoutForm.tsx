@@ -45,15 +45,16 @@ export default function StripeCheckoutForm(props: {
     verificationCode: string,
     firstName?: string,
     lastName?: string,
+    defaultEmail?: string,
     promoCode?: string,
 }) {
-    const { cartEmpty, orderId, verificationCode, firstName, lastName, promoCode } = props;
+    const { cartEmpty, orderId, verificationCode, firstName, lastName, defaultEmail, promoCode } = props;
     const stripe = useStripe();
     const elements = useElements();
 
     const [checkoutStatus, setCheckoutStatus] = useState<CheckoutStatus>(CheckoutStatus.checkout);
     const [inputUserInfo, setInputUserInfo] = useState<StripeAddressEvent | undefined>();
-    const [email, setEmail] = useState<string>();
+    const [email, setEmail] = useState<string | undefined>(defaultEmail);
     const [emailFocus, setEmailFocus] = useState<boolean>(false);
     const [error, setError] = useState<string>();
 
@@ -236,7 +237,7 @@ export default function StripeCheckoutForm(props: {
                 <Text style={styles.emailText}>
                     Email
                 </Text>
-                <TextInput style={getEmailInputStyle()} placeholder='Email address' onFocus={(e) => setEmailFocus(true)} onBlur={(e) => setEmailFocus(false)} onChangeText={setEmail} />
+                <TextInput style={getEmailInputStyle()} placeholder='Email address' defaultValue={defaultEmail} onFocus={(e) => setEmailFocus(true)} onBlur={(e) => setEmailFocus(false)} onChangeText={setEmail} />
             </View>}
 
             <View style={{ height: 10 }} />
@@ -283,7 +284,6 @@ const styles = StyleSheet.create({
         shadowRadius: 1,
         shadowColor: 'rgb(230, 230, 230)',
         fontFamily: 'AvenirLight',
-        color: 'grey'
     },
     emailInputFocus: {
         borderWidth: 3,
@@ -293,7 +293,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: 'rgba(241, 122, 126, 0.4)',
         fontFamily: 'AvenirLight',
-        color: 'grey'
     },
     shippingOptions: {
         flexDirection: Dimensions.get('window').width < 700 ? 'column': 'row',

@@ -1,7 +1,7 @@
 import { Link, Redirect } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
-import { createAccount, emitEvent } from "../../app/api/rasoibox-backend";
+import { createAccount, emitEvent, isVerified } from "../../app/api/rasoibox-backend";
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { WebsiteEvent } from '../../constants/EventTypes';
 import { generateCode, loginSession } from '../../constants/utils';
@@ -41,6 +41,7 @@ const ERRORS: Record<ErrorID, string> = {
 
 export default function SignUpForm() {
     document.title = "Create Account | Rasoi Box"
+    const parsedUrl: URL = new URL(location.href)
 
     const [loggedIn, setLoggedIn] = useState<boolean>(false)
     const [firstName, setFirstName] = useState("")
@@ -60,6 +61,23 @@ export default function SignUpForm() {
         })
     }
 
+    function fetchEmail() {
+        const queryParamCode: string | null = parsedUrl.searchParams.get('id')
+        if (queryParamCode != null) {
+            isVerified(queryParamCode).then(response => {
+                const email = response['email']
+                const zipcode = response['zipcode']
+                if (email) {
+                    setEmail(email)
+                }
+
+                if (zipcode) {
+                    setZipCode(zipcode)
+                }
+            })
+        }
+    }
+
     useEffect(() => {
         if (authDetails?.email) {
             setEmail(authDetails.email)
@@ -73,13 +91,29 @@ export default function SignUpForm() {
         fetchAuthDetails()
     }, [])
 
+    useEffect(() => {
+        fetchEmail()
+    }, [])
+
+    function getVerificationCode(): string {
+        const queryParamCode: string | null = parsedUrl.searchParams.get('id')
+        
+        if (authDetails?.verification_code) {
+            return authDetails.verification_code
+        }
+
+        if (queryParamCode != null) {
+            return queryParamCode
+        }
+
+        return generateCode()
+    }
+
     function submitIfEnter(event: any) {
         if (event.key === "Enter") {
             submit();
         }
     }
-
-    const code: string = !!authDetails?.verification_code ? authDetails.verification_code : generateCode()
 
     async function submit() {
         setError('no_error');
@@ -105,7 +139,7 @@ export default function SignUpForm() {
         }
 
         setLoading(true);
-        const signupResponse = await createAccount(email, password, firstName, lastName, zipcode, new Date(), code)
+        const signupResponse = await createAccount(email, password, firstName, lastName, zipcode, new Date(), getVerificationCode())
         setLoading(false);
 
         const signupStatus: number | undefined = signupResponse["status"]
@@ -160,7 +194,7 @@ export default function SignUpForm() {
                                         <FormValue onChangeText={setZipCode} onKeyPress={submitIfEnter} />
                                     </View>
                                 </View>
-                                {error != 'no_error' && <ResponseText message={ERRORS[error]}/>}
+                                {error != 'no_error' && <ResponseText message={ERRORS[error]} isError={error != 'success' && error != 'success_verified'}/>}
                                 <Pressable style={styles.button} onPress={submit}>
                                     <Text style={styles.buttonText}>Create New Account</Text>
                                 </Pressable>

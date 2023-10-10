@@ -52,6 +52,9 @@ export default function MealKits() {
                     setAuthDetails(newAuthDetails)
                     setUpdateCart(true)
                 })
+            } else if (authDetails) {
+                setAuthDetails(authDetails)
+                setUpdateCart(true)
             }
         })
     }

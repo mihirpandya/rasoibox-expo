@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { emitEvent, getCart, isValidPopFestPromo } from '../../app/api/rasoibox-backend';
+import { emitEvent, getCart, isValidPopFestPromo, isValidPromoCode } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
@@ -14,6 +14,7 @@ import RemoveFromCartButton from '../common/RemoveFromCartButton';
 import ResponseText from '../common/ResponseText';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const errorIds = [
     'no_error',
@@ -166,14 +167,8 @@ export default function Checkout() {
         setAppliedPromoCode(undefined);
     }
 
-    function submitPromoCode() {
-        setPromoCodeError('no_error')
-        if (appliedPromoCode != undefined) {
-            setPromoCodeError('more_than_one')
-            return;
-        }
-        
-        isValidPopFestPromo(promoCode).then(response => {
+    function applyPopFestPromoIfValid() {
+        return isValidPopFestPromo(promoCode).then(response => {
             const status = response["status"]
             if (status == 0) {
                 setAppliedPromoCode({
@@ -191,6 +186,41 @@ export default function Checkout() {
         }).catch(error => {
             console.error(error);
             setPromoCodeError('invalid')
+        })
+    }
+
+    function submitPromoCode() {
+        setPromoCodeError('no_error')
+        if (appliedPromoCode != undefined) {
+            setPromoCodeError('more_than_one')
+            return;
+        }
+
+        AsyncStorage.getItem(Storage.ACCESS_TOKEN).then(token => {
+            if (token == null) {
+                throw Error()
+            } else {
+                isValidPromoCode(token, promoCode).then(response => {
+                    const status = response["status"]
+                    if (status == 0) {
+                        setAppliedPromoCode({
+                            name: response["promo_code_name"],
+                            amountOff: response["amount_off"],
+                            percentOff: response["percent_off"]
+                        })
+                    } else if (status == 1) {
+                        setPromoCodeError('already_used')
+                    } else if (status == -1) {
+                        setPromoCodeError('expired')
+                    } else {
+                        throw Error()
+                    }
+                }).catch(_error => {
+                    applyPopFestPromoIfValid()
+                })
+            }
+        }).catch(_error => {
+            applyPopFestPromoIfValid()
         })
     }
 
@@ -223,7 +253,7 @@ export default function Checkout() {
             <ScrollView>
                 <Header />
                 <View style={styles.card}>
-                    <StripeCheckout cartEmpty={cart.length == 0} firstName={authDetails?.first_name} lastName={authDetails?.last_name} promoCode={appliedPromoCode?.name}/>
+                    <StripeCheckout cartEmpty={cart.length == 0} firstName={authDetails?.first_name} lastName={authDetails?.last_name} email={authDetails?.email} promoCode={appliedPromoCode?.name}/>
                     <View style={styles.summary}>
                         <View style={{marginLeft: 20}}>
                             <Text style={styles.title}>Order Summary</Text>
