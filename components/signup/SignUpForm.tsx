@@ -97,13 +97,13 @@ export default function SignUpForm() {
 
     function getVerificationCode(): string {
         const queryParamCode: string | null = parsedUrl.searchParams.get('id')
-        
-        if (authDetails?.verification_code) {
-            return authDetails.verification_code
-        }
 
         if (queryParamCode != null) {
             return queryParamCode
+        }
+        
+        if (authDetails?.verification_code) {
+            return authDetails.verification_code
         }
 
         return generateCode()

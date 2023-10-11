@@ -60,6 +60,7 @@ export default function ReferAFriend() {
         Storage.getAuthDetails().then(async authDetails => {
             if (authDetails != null) {
                 setAuthDetails(authDetails)
+                setReferrerEmail(authDetails.email)
             }
         })
     }
@@ -123,7 +124,7 @@ export default function ReferAFriend() {
                         <View style={styles.referralForm}>
                             <View style={{paddingBottom: 30}}>
                                 <FormKey>Your Email</FormKey>
-                                <FormValue onChangeText={setReferrerEmail} onKeyPress={submitIfEnter} defaultValue={authDetails?.email}></FormValue>
+                                <FormValue onChangeText={setReferrerEmail} onKeyPress={submitIfEnter} defaultValue={referrerEmail}></FormValue>
                             </View>
                             <View style={{paddingBottom: 30}}>
                                 <FormKey>Your friends' email</FormKey>
@@ -136,7 +137,7 @@ export default function ReferAFriend() {
                         {error != 'no_error' && <ResponseText message={ERRORS[error]} isError={error != 'success'}/>}
                         {referralFails.length > 0 && <ResponseText message={getReferralFailureMessage()} />}
                         <View style={referrerEmail && referredEmails ? styles.button : styles.inactiveButton}>
-                            <Pressable disabled={!referrerEmail || !referredEmails}>
+                            <Pressable onPress={submit} disabled={!referrerEmail || !referredEmails}>
                                 {loading ? <ActivityIndicator size={"small"} color='white'/> : 
                                 <Text style={styles.submit}>
                                     Submit
