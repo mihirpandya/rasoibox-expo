@@ -9,7 +9,8 @@ import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
 import ResponseText from "../common/ResponseText";
 import * as Storage from "../common/Storage";
-import { initiateInvitation } from "../../app/api/rasoibox-backend";
+import { emitEvent, initiateInvitation } from "../../app/api/rasoibox-backend";
+import { WebsiteEvent } from "../../constants/EventTypes";
 
 export const errorIds = ['no_error', 'email', 'self', 'success'] as const;
 type ErrorID = typeof errorIds[number];
@@ -68,6 +69,14 @@ export default function ReferAFriend() {
     useEffect(() => {
         storeAuthDetails()
     }, [])
+
+    useEffect(() => {
+        if (authDetails?.verification_code) {
+            const parsedUrl: URL = new URL(location.href)
+            const referrer: string | null = parsedUrl.searchParams.get('ref')
+            emitEvent(WebsiteEvent.REFER_FRIEND, new Date(), authDetails.verification_code, referrer)
+        }
+    }, [authDetails])
 
     function submitIfEnter(event: any) {
         if (event.key === "Enter") {
@@ -148,7 +157,7 @@ export default function ReferAFriend() {
                 </View>
                 {Dimensions.get('window').width >= 700 && 
                     <View style={styles.container}>
-                        <Image style={styles.image} source={{uri: 'https://static.wixstatic.com/media/3c4850d23564462ea668ee4b352b5a56.jpg/v1/crop/x_0,y_357,w_3569,h_4638/fill/w_890,h_1158,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Herbs%20and%20Spices.jpg'}}/>
+                        <Image style={styles.image} source={{uri: 'https://static.wixstatic.com/media/bbf858_496477da5c3b440885139801b90377ae~mv2.png'}}/>
                     </View>
                 }
             </View>
@@ -158,22 +167,26 @@ export default function ReferAFriend() {
 
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: 'rgba(241, 122, 126, 0.5)', // rasoi box pink with opacity,
+        backgroundColor: 'white', // rasoi box pink with opacity,
         flex: 1,
     },
     card: {
         backgroundColor: 'white',
-        margin: Dimensions.get('window').width < 700 ? 0 : 50,
+        // margin: Dimensions.get('window').width < 700 ? 0 : 50,
         flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
         alignItems: 'center',
         justifyContent: 'center'
     },
     refer: {
-        padding: Dimensions.get('window').width < 700 ? 20 : 150,
+        paddingLeft: Dimensions.get('window').width < 700 ? 20 : 150,
+        paddingRight: Dimensions.get('window').width < 700 ? 20 : 150,
+        paddingTop: Dimensions.get('window').width < 700 ? 20 : 50,
+        paddingBottom: Dimensions.get('window').width < 700 ? 20 : 50,
         alignItems: 'center',
         justifyContent: 'center',
     },
     image: {
+        marginTop: 50,
         width: Dimensions.get('window').width * 0.3,
         height: Dimensions.get('window').height * 0.7,
     },

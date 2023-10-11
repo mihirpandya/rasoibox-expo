@@ -11,7 +11,7 @@ export enum WebsiteEvent {
     CHECKOUT = "CHECKOUT",
     START_COOKING = "START_COOKING",
     ORDER_HISTORY = "ORDER_HISTORY",
-    ORDER_INFO = "ORDER_INFO"
+    ORDER_INFO = "ORDER_INFO",
 }
 
 export enum RecipeEvent {
