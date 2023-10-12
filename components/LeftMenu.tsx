@@ -41,11 +41,11 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
             icon: 'book',
             href: 'https://rasoibox.substack.com/'
         },
-        // {
-        //     label: 'Refer a Friend',
-        //     icon: 'person-add',
-        //     href: '/refer-a-friend'
-        // },
+        {
+            label: 'Refer a Friend',
+            icon: 'person-add',
+            href: '/refer'
+        },
     ]
 
     let data;

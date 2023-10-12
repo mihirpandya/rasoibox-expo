@@ -1,6 +1,6 @@
-import { router } from "expo-router"
 import { useEffect, useState } from "react"
-import { ActivityIndicator, Linking, Pressable, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
+import { ScrollView } from "react-native-gesture-handler"
 import Footer from "../../components/common/Footer"
 import Header from "../../components/common/Header"
 import { OrderInformationResponse } from "../../components/order/OrderInformation"
@@ -25,9 +25,6 @@ function OrderConfirmed(props: {
             </Text>
             <Text style={styles.message}>
                 We're getting started on your order right away, and you will receive a confirmation email and receipt shortly to {email}.
-            </Text>
-            <Text style={styles.message}>
-
             </Text>
             <Pressable onPress={() => {window.open("/createpassword?create_id=" + createId + "&payment_intent=" + paymentIntent, "_self")}}>
                 <View style={styles.button}>
@@ -83,19 +80,21 @@ export default function ThanksForYourOrder() {
 
     return (
         <View>
-            <Header />
-            {
-                loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{ paddingTop: 50, backgroundColor: 'white' }} /> :
-                    orderInfo && paymentIntent ?
-                        <OrderConfirmed 
-                            orderId={orderInfo.orderNumber} 
-                            createId={orderInfo.createId} 
-                            email={orderInfo.customerEmail} 
-                            paymentIntent={paymentIntent}
-                        /> :
-                        <NotFound />
-            }
-            <Footer />
+            <ScrollView>
+                <Header />
+                {
+                    loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{ paddingTop: 50, backgroundColor: 'white' }} /> :
+                        orderInfo && paymentIntent ?
+                            <OrderConfirmed 
+                                orderId={orderInfo.orderNumber} 
+                                createId={orderInfo.createId} 
+                                email={orderInfo.customerEmail} 
+                                paymentIntent={paymentIntent}
+                            /> :
+                            <NotFound />
+                }
+                <Footer />
+            </ScrollView>
         </View>
     )
 }
