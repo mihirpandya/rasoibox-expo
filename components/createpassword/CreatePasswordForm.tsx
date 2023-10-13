@@ -66,6 +66,7 @@ export default function CreatePasswordForm(props: {
         createAccountFromIntent(createId, paymentIntent, password).then(_success => {
             loginSession(email, password).then(_success => {
                 setLoggedIn(true);
+                window.open("/startcooking", "_self")
             }).catch(error => {
                 setError('invalid_login')
             })

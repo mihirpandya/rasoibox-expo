@@ -533,7 +533,7 @@ export function createAccountFromIntent(createId: number, paymentIntent: string,
         "password": password,
     }
 
-    return fetch(BACKEND + "recipe/event", {
+    return fetch(BACKEND + "users/create_account_from_intent", {
         "method": "post",
         "headers": {
             "Content-Type": "application/json"
