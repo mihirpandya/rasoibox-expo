@@ -8,6 +8,7 @@ import { PromoCode } from "../checkout/Checkout";
 interface PriceInformationProps {
     appliedPromoCode: PromoCode | undefined,
     subtotal: number,
+    shipping: number,
     total: number,
     showDelete?: boolean,
     deleteAppliedPromoCode?: () => void,
@@ -15,7 +16,7 @@ interface PriceInformationProps {
 }
 
 export default function PriceInformation(props: PriceInformationProps) {
-    const { appliedPromoCode, subtotal, total, showDelete, deleteAppliedPromoCode, showTaxes } = props;
+    const { appliedPromoCode, subtotal, shipping, total, showDelete, deleteAppliedPromoCode, showTaxes } = props;
     return (
         <View>
             <View style={styles.subtotal}>
@@ -25,7 +26,7 @@ export default function PriceInformation(props: PriceInformationProps) {
                 </View>
                 <View style={styles.section}>
                     <Text style={styles.key}>Shipping</Text>
-                    <Text style={styles.value}>Free</Text>
+                    <Text style={styles.value}>${shipping}</Text>
                 </View>
                 {
                     appliedPromoCode != undefined &&

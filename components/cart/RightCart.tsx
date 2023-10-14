@@ -9,6 +9,7 @@ import CheckoutButton, { CheckoutStatus } from "../common/CheckoutButton";
 import * as Storage from "../common/Storage";
 import TextLink from '../common/TextLink';
 import RemoveFromCartButton from '../common/RemoveFromCartButton';
+import { getEstimatedDelivery } from '../../constants/utils';
 
 export default function RightCart(props: {
     loading: boolean,
@@ -54,10 +55,10 @@ export default function RightCart(props: {
                                                 />
                                             </CartItem>
                             }/>
-                        <Text style={styles.subtitle}>All orders placed before Thursday, Oct 12 can be picked up at <TextLink link="https://www.eventbrite.com/e/popfest-2023-tickets-685848420087?aff=rasoibox" text="Pop-Fest" /> on Oct 15.</Text>
+                        <Text style={styles.subtitle}>Estimated delivery: {getEstimatedDelivery()}</Text>
                     </ScrollView>
                     <CheckoutButton checkoutStatus={CheckoutStatus.checkout} active={cart.length > 0} onPress={checkout}/>
-                    <Text style={styles.subtitle}>All promo codes will be applied at checkout.</Text>
+                    <Text style={styles.subtitle}>Promo codes can be applied at checkout.</Text>
                 </View>
             );
     }

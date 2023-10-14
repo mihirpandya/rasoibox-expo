@@ -3,7 +3,7 @@ import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/
 import { StripeAddressElementOptions } from '@stripe/stripe-js';
 import React, { useState } from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { OrderBackendApi, initiatePlaceOrder } from '../../app/api/rasoibox-backend';
+import { OrderBackendApi, initiatePlaceOrder, isDeliverableZipcode } from '../../app/api/rasoibox-backend';
 import { rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
 import { validateEmail } from '../../validators/Validators';
 import CheckoutButton, { CheckoutStatus } from '../common/CheckoutButton';
@@ -61,7 +61,7 @@ export default function StripeCheckoutForm(props: {
     function getAddressElementOptions(): StripeAddressElementOptions {
         if (firstName && lastName) {
             return {
-                mode: 'billing',
+                mode: 'shipping',
                 allowedCountries: ['US'],
                 fields: {
                     phone: 'always'
@@ -77,7 +77,7 @@ export default function StripeCheckoutForm(props: {
             };
         } else {
             return {
-                mode: 'billing',
+                mode: 'shipping',
                 allowedCountries: ['US'],
                 fields: {
                     phone: 'always',
@@ -147,17 +147,17 @@ export default function StripeCheckoutForm(props: {
             }
         }
 
-        // const deliverable: boolean = await isDeliverableZipcode(orderDetails.delivery_address.zipcode).then(response => {
-        //     return response["status"] == 0
-        // }).catch(error => {
-        //     console.error(error);
-        //     return false;
-        // })
+        const deliverable: boolean = await isDeliverableZipcode(orderDetails.delivery_address.zipcode).then(response => {
+            return response["status"] == 0
+        }).catch(error => {
+            console.error(error);
+            return false;
+        })
 
-        // if (!deliverable) {
-        //     setError("Rasoi Box only delivers to the greater San Francisco area. Please stay tuned as we work to expand our delivery zone!")
-        //     return;
-        // }
+        if (!deliverable) {
+            setError("Rasoi Box only delivers to the greater San Francisco area. Please stay tuned as we work to expand our delivery zone!")
+            return;
+        }
 
         // initiate order in rasoibox-backend
         // confirm payment on stripe
@@ -201,8 +201,8 @@ export default function StripeCheckoutForm(props: {
 
     return (
         <View style={styles.card}>
-            <Text style={styles.title}>Shipping Information</Text>
-            <View style={styles.shippingOptions}>
+            <Text style={styles.title}>Payment & Shipping</Text>
+            {/* <View style={styles.shippingOptions}>
                 <View style={styles.shippingOption}>
                     <Pressable style={{flexDirection: 'row'}}>
                         <Ionicons name="radio-button-on" size={20} color={rasoiBoxPink} />
@@ -226,7 +226,7 @@ export default function StripeCheckoutForm(props: {
                     </View>
                 </View>
             </View>
-            <Text style={styles.title}>Payment Information</Text>
+            <Text style={styles.title}>Payment Information</Text> */}
             {/* https://stripe.com/docs/elements/address-element/collect-addresses?platform=web */}
             <AddressElement
                 onChange={handleAddress}

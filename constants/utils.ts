@@ -75,7 +75,7 @@ export function getTotal(orderInfo: OrderInformationResponse | undefined): numbe
     }
 }
 
-export function cleanDate(date: Date): string {
+export function cleanDate(date: Date, hideYear?: boolean): string {
 	let tzDate = new Date()
 	tzDate.setUTCDate(date.getDate())
 	tzDate.setUTCMonth(date.getMonth())
@@ -84,7 +84,11 @@ export function cleanDate(date: Date): string {
 	tzDate.setUTCMinutes(date.getMinutes())
 	tzDate.setUTCSeconds(date.getSeconds())
 	tzDate.setUTCMilliseconds(date.getMilliseconds())
-	return (tzDate).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+    if (hideYear) {
+        return (tzDate).toLocaleDateString('en-us', { weekday:"short", month:"short", day:"numeric"})
+    } else {
+        return (tzDate).toLocaleDateString('en-us', { weekday:"short", year:"numeric", month:"short", day:"numeric"})
+    }
 }
 
 export function cleanAddress(address: DeliveryAddress): string {
@@ -173,4 +177,17 @@ export function pluralize(name: string, amount: number) {
 	}
 
 	return name;
+}
+
+export function getEstimatedDelivery(): string {
+    let now = new Date()
+    const daysInMillis = 60 * 60 * 24 * 1000
+    console.log(now)
+    let daysToSunday: number;
+    if (now.getDay() < 4) {
+        daysToSunday = 7 - now.getDay()
+    } else {
+        daysToSunday = 7 + 7 - now.getDay()
+    }
+    return cleanDate(new Date(now.getTime() + daysToSunday * daysInMillis), true)
 }

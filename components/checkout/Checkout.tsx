@@ -15,6 +15,7 @@ import ResponseText from '../common/ResponseText';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { cleanDate, getEstimatedDelivery } from '../../constants/utils';
 
 export const errorIds = [
     'no_error',
@@ -98,6 +99,7 @@ export default function Checkout() {
     const [promoCodeError, setPromoCodeError] = useState<PromoCodeErrorId>('no_error');
     const [appliedPromoCode, setAppliedPromoCode] = useState<PromoCode | undefined>(undefined)
     const [subtotal, setSubtotal] = useState<number>(0)
+    const [shipping, setShipping] = useState<number>(5)
     const [total, setTotal] = useState<number>(0)
 
     const fetchAuthDetails = () => {
@@ -133,6 +135,7 @@ export default function Checkout() {
         let total = 0;
         cart.forEach(cartItem => total += cartItem.price);
         setSubtotal(total);
+        total = total + shipping
         if (appliedPromoCode != undefined) {
             total = totalAfterPromo(total, appliedPromoCode)
         }
@@ -269,7 +272,7 @@ export default function Checkout() {
                                                 />
                                             </CartItem>
                             }/>
-                        <Text style={styles.subtitle}>Pick up at Pop-Fest on Oct 15!</Text>
+                        <Text style={styles.subtitle}>Estimated delivery: {getEstimatedDelivery()}</Text>
                         <View style={styles.promocode}>
                             <Ionicons style={{marginRight: -30}} name="pricetags" size={20} color={rasoiBoxPink} />
                             <TextInput style={styles.promocodeText} placeholder='Promo code' onChangeText={setPromoCode} onKeyPress={submitPromoCodeIfEnter}/>
@@ -285,6 +288,7 @@ export default function Checkout() {
                         <PriceInformation
                             appliedPromoCode={appliedPromoCode}
                             subtotal={subtotal}
+                            shipping={shipping}
                             total={total}
                             showDelete={true}
                             showTaxes={false}
