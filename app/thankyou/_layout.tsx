@@ -79,7 +79,7 @@ export default function ThanksForYourOrder() {
     }, [])
 
     return (
-        <View>
+        <View style={{flex: 1}}>
             <ScrollView>
                 <Header />
                 {
