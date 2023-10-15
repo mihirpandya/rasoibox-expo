@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'AvenirLight',
         paddingBottom: 20,
+        marginTop: 20,
     },
     stepImage: {
         width: getImageWidth(),

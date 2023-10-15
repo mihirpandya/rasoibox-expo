@@ -174,7 +174,9 @@ export function pluralize(name: string, amount: number) {
 		return "tomatoes"
 	} else if (name == "onion") {
 		return "onions"
-	}
+	} else if (name == "potato") {
+        return "potatoes"
+    }
 
 	return name;
 }
