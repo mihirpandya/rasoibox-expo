@@ -26,7 +26,7 @@ export default function PriceInformation(props: PriceInformationProps) {
                 </View>
                 <View style={styles.section}>
                     <Text style={styles.key}>Shipping</Text>
-                    <Text style={styles.value}>${shipping}</Text>
+                    <Text style={styles.value}>{shipping == 0 ? "FREE" : "$" + shipping}</Text>
                 </View>
                 {
                     appliedPromoCode != undefined &&

@@ -156,6 +156,7 @@ export default function OrderInformation(props: {orderNumber: any}) {
                                 }/>
                             <PriceInformation 
                                 appliedPromoCode={orderInfo?.orderBreakdown.promoCodes[0]}
+                                shipping={0}
                                 subtotal={getSubtotal(orderInfo)}
                                 total={getTotal(orderInfo)}
                                 showDelete={false}

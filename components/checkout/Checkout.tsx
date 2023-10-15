@@ -99,7 +99,7 @@ export default function Checkout() {
     const [promoCodeError, setPromoCodeError] = useState<PromoCodeErrorId>('no_error');
     const [appliedPromoCode, setAppliedPromoCode] = useState<PromoCode | undefined>(undefined)
     const [subtotal, setSubtotal] = useState<number>(0)
-    const [shipping, setShipping] = useState<number>(5)
+    const [shipping, setShipping] = useState<number>(0)
     const [total, setTotal] = useState<number>(0)
 
     const fetchAuthDetails = () => {

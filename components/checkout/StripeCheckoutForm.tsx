@@ -147,17 +147,17 @@ export default function StripeCheckoutForm(props: {
             }
         }
 
-        const deliverable: boolean = await isDeliverableZipcode(orderDetails.delivery_address.zipcode).then(response => {
-            return response["status"] == 0
-        }).catch(error => {
-            console.error(error);
-            return false;
-        })
+        // const deliverable: boolean = await isDeliverableZipcode(orderDetails.delivery_address.zipcode).then(response => {
+        //     return response["status"] == 0
+        // }).catch(error => {
+        //     console.error(error);
+        //     return false;
+        // })
 
-        if (!deliverable) {
-            setError("Rasoi Box only delivers to the greater San Francisco area. Please stay tuned as we work to expand our delivery zone!")
-            return;
-        }
+        // if (!deliverable) {
+        //     setError("Rasoi Box only delivers to the greater San Francisco area. Please stay tuned as we work to expand our delivery zone!")
+        //     return;
+        // }
 
         // initiate order in rasoibox-backend
         // confirm payment on stripe
