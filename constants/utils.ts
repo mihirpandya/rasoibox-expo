@@ -124,9 +124,17 @@ export function orderJsonToOrderInformationResponse(orderJson: any): OrderInform
             percentOff: code['percent_off'],
         }
     })
-    const orderBreakdown: OrderBreakdown = {
+    const shippingFee = orderJson['order_breakdown']['shipping_fee']
+    let orderBreakdown: OrderBreakdown = {
         items: items,
-        promoCodes: promoCodes
+        promoCodes: promoCodes,
+    }
+
+    if (!isNaN(shippingFee)) {
+        orderBreakdown = {
+            ...orderBreakdown,
+            shippingFee: shippingFee
+        }
     }
     const deliveryAddress = {
         city: orderJson['order_delivery_address']['city'],

@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 export interface OrderBreakdown {
     items: Record<string, number>,
+    shippingFee?: number,
     promoCodes: PromoCode[]
 }
 
@@ -120,6 +121,14 @@ export default function OrderInformation(props: {orderNumber: any}) {
         })
     }, [orderInfo])
 
+    const shippingFee = () => {
+        const fee: number = Number(orderInfo?.orderBreakdown.shippingFee)
+        if (!isNaN(fee) && fee > 0) {
+            return fee
+        }
+        return 0
+    }
+
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
             <ScrollView>
@@ -157,7 +166,7 @@ export default function OrderInformation(props: {orderNumber: any}) {
                                 }/>
                             <PriceInformation 
                                 appliedPromoCode={orderInfo?.orderBreakdown.promoCodes[0]}
-                                shipping={0}
+                                shipping={shippingFee()}
                                 subtotal={getSubtotal(orderInfo)}
                                 total={getTotal(orderInfo)}
                                 showDelete={false}
