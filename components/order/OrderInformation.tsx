@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { emitEvent, getOrder } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import { rasoiBoxPink } from '../../constants/Colors';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { WebsiteEvent } from '../../constants/EventTypes';
 import { cleanAddress, cleanDate, getSubtotal, getTotal, orderJsonToOrderInformationResponse } from '../../constants/utils';
 import { PromoCode } from '../checkout/Checkout';
@@ -13,6 +13,7 @@ import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from '../common/CartItem';
 import PriceInformation from '../common/PriceInformation';
 import * as Storage from "../common/Storage";
+import { Ionicons } from '@expo/vector-icons';
 
 
 export interface OrderBreakdown {
@@ -147,11 +148,11 @@ export default function OrderInformation(props: {orderNumber: any}) {
                                 data={getCartFromOrderInfo(orderInfo)}
                                 renderItem={
                                     ({item}) => <CartItem cartItem={item}>
-                                                    {/* <View style={styles.infoButton}>
-                                                        <Pressable onPress={() => router.replace("/recipe/" + item.recipeId + "/" + item.servingSize)}>
+                                                    <View style={styles.infoButton}>
+                                                        <Pressable onPress={() => window.open("/recipe/" + item.recipeId + "/" + item.servingSize, "_self")}>
                                                             <Ionicons name="arrow-forward-circle-outline" size={24} color={rasoiBoxYellow} />
                                                         </Pressable>
-                                                    </View> */}
+                                                    </View>
                                                 </CartItem>
                                 }/>
                             <PriceInformation 
