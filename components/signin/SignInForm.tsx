@@ -1,16 +1,16 @@
 import { Link, Redirect } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import { emitEvent } from '../../app/api/rasoibox-backend';
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { WebsiteEvent } from '../../constants/EventTypes';
 import { loginSession } from '../../constants/utils';
 import { validateEmail } from "../../validators/Validators";
-import ResponseText from "../common/ResponseText";
+import { AuthDetails } from '../common/AuthShim';
 import FormKey from "../common/FormKey";
 import FormValue from "../common/FormValue";
+import ResponseText from "../common/ResponseText";
 import * as Storage from "../common/Storage";
-import { AuthDetails } from '../common/AuthShim';
-import { emitEvent } from '../../app/api/rasoibox-backend';
-import { WebsiteEvent } from '../../constants/EventTypes';
 
 export const errorIds = ['no_error', 'email', 'password', 'invalid_login'] as const;
 type ErrorID = typeof errorIds[number];

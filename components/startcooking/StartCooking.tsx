@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,11 +6,11 @@ import { emitEvent, getActiveRecipes } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { borderGrey, rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import { WebsiteEvent } from '../../constants/EventTypes';
 import { cleanDate, orderJsonToOrderInformationResponse } from '../../constants/utils';
+import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
 import { OrderInformationResponse } from '../order/OrderInformation';
-import { AuthDetails } from '../common/AuthShim';
-import { WebsiteEvent } from '../../constants/EventTypes';
 
 interface OrderRecipeInfo {
     orderNumber: string,

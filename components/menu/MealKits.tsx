@@ -6,10 +6,10 @@ import Header from '../../components/common/Header';
 import MealKitCard from "../../components/menu/MealKitCard";
 import MealKitModal from "../../components/menu/MealKitModal";
 import { rasoiBoxPink } from '../../constants/Colors';
-import { AuthDetails } from '../common/AuthShim';
-import * as Storage from "../common/Storage";
 import { WebsiteEvent } from '../../constants/EventTypes';
 import { generateCode } from '../../constants/utils';
+import { AuthDetails } from '../common/AuthShim';
+import * as Storage from "../common/Storage";
 
 interface MealKit {
     id: number,

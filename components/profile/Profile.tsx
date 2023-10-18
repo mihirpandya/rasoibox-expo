@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import { rasoiBoxGrey, rasoiBoxPink } from '../../constants/Colors';
+import { rasoiBoxPink } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
 

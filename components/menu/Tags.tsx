@@ -1,8 +1,8 @@
-import React from 'react';
-import { StyleSheet, Text, View, StyleProp, ViewStyle, Dimensions } from 'react-native';
-import { rasoiBoxYellow } from '../../constants/Colors';
 import { EvilIcons } from '@expo/vector-icons';
+import React from 'react';
+import { Dimensions, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { rasoiBoxYellow } from '../../constants/Colors';
 
 function getContainerStyle(additions: any): StyleProp<ViewStyle> {
     if (additions == undefined) {
