@@ -146,9 +146,7 @@ export default function RecipeInfo(props: {recipeId: number, servingSize: number
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <ScrollView>
-                <Header />
-
-
+                <Header hideStartCooking={true}/>
                 {
                     recipeMetadata ? <ViewRecipeMetadata servingSize={servingSize} recipeMetadata={recipeMetadata} /> :
                     <ActivityIndicator color={rasoiBoxPink} size="large" style={{margin: 30}}/>
