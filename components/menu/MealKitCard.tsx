@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width < 700 ? 170 : 270,
         height: Dimensions.get('window').width < 700 ? 300 : 370,
         backgroundColor: 'white',
-        margin: 5
+        margin: Dimensions.get('window').width < 700 ? 5 : 15,
     },
     cover: {
         borderRadius: 0,

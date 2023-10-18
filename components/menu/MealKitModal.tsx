@@ -96,11 +96,6 @@ export default function MealKitModal(props: MealKitModalProps) {
                             <Tags tags={tags} time={prepTime + cookTime} tagStyle={{marginTop: 10, height: 20}} />
                         </View>
                         <Image style={styles.image} source={{uri: imageUrl}} />
-                        {/* <View style={styles.timings}>
-                            <Text style={styles.timing} >Prep Time: {prepTime} mins</Text>
-                            <Text style={styles.timing} >Cook Time: {cookTime} mins</Text>
-                        </View> */}
-                        <Text style={styles.description}>{capitalizeFirst(description)}</Text>
                         <View style={{marginTop: 20, flexDirection: 'row'}}>
                             <Text style={styles.price}>
                                 ${price}
@@ -120,6 +115,7 @@ export default function MealKitModal(props: MealKitModalProps) {
                                     />)}
                             </View>
                         </View>
+                        <Text style={styles.description}>{capitalizeFirst(description)}</Text>
                     </ScrollView>
                     {
                         loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingBottom: 30}} /> :
@@ -183,7 +179,7 @@ const styles = StyleSheet.create({
         paddingLeft: 5
     },
     servings: {
-        marginTop: 30,
+        marginTop: 20,
     },
     subheading: {
         fontSize: 15,

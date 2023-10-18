@@ -105,7 +105,6 @@ function MenuItem(props: {name: any, icon: React.ReactNode, href: any, onNav: ()
             }
         }}>
             <View style={styles.menuItem}>
-                {/* <Ionicons name={props.iconName} style={styles.menuIcon} size={25} /> */}
                 {props.icon}
                 <Text style={styles.menuText}>{props.name}</Text>
             </View>
