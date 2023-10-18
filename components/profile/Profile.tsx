@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontSize: 15,
         paddingLeft: 30,
-        paddingRight: 100,
+        paddingRight: Dimensions.get('window').width < 700 ? 50 : 100,
         paddingTop: 10,
         paddingBottom: 10,
     },
