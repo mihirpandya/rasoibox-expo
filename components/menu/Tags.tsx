@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
+import { StyleSheet, Text, View, StyleProp, ViewStyle, Dimensions } from 'react-native';
 import { rasoiBoxYellow } from '../../constants/Colors';
 import { EvilIcons } from '@expo/vector-icons';
+import { ScrollView } from 'react-native-gesture-handler';
 
 function getContainerStyle(additions: any): StyleProp<ViewStyle> {
     if (additions == undefined) {
@@ -38,11 +39,13 @@ export default function Tags(props: {
     const { tags, time, containerStyle, tagStyle} = props
     return (
         <View style={getContainerStyle(containerStyle)}>
-            <Text key="time" style={getTagStyle(tagStyle)}>
-                <EvilIcons style={{paddingRight: 2}} name="clock" size={15} color="white" />
-                {time + "m"}
-            </Text>
-            {tags.map(tag => <Text key={tag} style={getTagStyle(tagStyle)}>{tag}</Text>)}
+            <ScrollView horizontal={true}>
+                <Text key="time" style={getTagStyle(tagStyle)}>
+                    <EvilIcons style={{paddingRight: 2}} name="clock" size={15} color="white" />
+                    {time + "m"}
+                </Text>
+                {tags.map(tag => <Text key={tag} style={getTagStyle(tagStyle)}>{tag}</Text>)}
+            </ScrollView>
         </View>
     )
 }
@@ -57,7 +60,7 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingTop: 2,
         paddingBottom: 2,
-        marginRight: 10,
+        marginRight: Dimensions.get('window').width < 700 ? 5 : 10,
         fontFamily: 'AvenirLight',
         backgroundColor: rasoiBoxYellow,
         borderRadius: 10,

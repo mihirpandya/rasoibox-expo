@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { emitEvent, getAvailableItems } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
@@ -167,8 +167,8 @@ export default function MealKits() {
 
 const styles = StyleSheet.create({
     card: {
-        paddingLeft: '10%',
-        paddingRight: '10%',
+        paddingLeft: Dimensions.get('window').width < 700 ? '0%' : '10%',
+        paddingRight: Dimensions.get('window').width < 700 ? '0%' : '10%',
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItem: 'center',

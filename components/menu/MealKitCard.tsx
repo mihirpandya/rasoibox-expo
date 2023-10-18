@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
 import { Card } from 'react-native-paper';
 import { rasoiBoxYellow } from '../../constants/Colors';
 import Tags from "./Tags";
@@ -40,7 +40,7 @@ export default function MealKitCard(props: MealKitCardProps) {
                     <Text style={styles.description}>
                         {description}
                     </Text>
-                    <Tags tags={tags} time={prepTime + cookTime} containerStyle={{position: 'absolute', marginTop: 95}}/>
+                    <Tags tags={tags} time={prepTime + cookTime} containerStyle={styles.containerStyle}/>
                 </Card.Content>
             </Card>
         </Pressable>
@@ -49,41 +49,31 @@ export default function MealKitCard(props: MealKitCardProps) {
 
 const styles = StyleSheet.create({
     card: {
-        width: 270,
-        height: 370,
+        width: Dimensions.get('window').width < 700 ? 170 : 270,
+        height: Dimensions.get('window').width < 700 ? 300 : 370,
         backgroundColor: 'white',
-        margin: 20
+        margin: 5
     },
     cover: {
         borderRadius: 0,
         borderTopLeftRadius: 10,
-        borderTopRightRadius: 10
+        borderTopRightRadius: 10,
+        height: Dimensions.get('window').width < 700 ? 100 : 185
     },
     title: {
         color: 'black',
         fontFamily: 'AvenirLight',
-        fontSize: 20,
+        fontSize: Dimensions.get('window').width < 700 ? 16 : 20,
     },
     description: {
         fontFamily: 'AvenirLight',
-        fontSize: 16,
-        color: 'black'
+        fontSize: Dimensions.get('window').width < 700 ? 14 : 15,
+        color: 'black',
+        marginTop: -10,
     },
-    tags: {
-        flexDirection: 'row',
+    containerStyle: {
         position: 'absolute',
-        marginTop: 95
-    },
-    tag: {
-        fontSize: 12,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 2,
-        paddingBottom: 2,
-        marginRight: 10,
-        fontFamily: 'AvenirLight',
-        backgroundColor: rasoiBoxYellow,
-        borderRadius: 10,
-        color: 'white'
+        marginTop: 95,
+        width: Dimensions.get('window').width < 700 ? 140 : 220
     }
 })
