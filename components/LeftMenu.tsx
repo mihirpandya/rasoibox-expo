@@ -1,9 +1,11 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { AuthDetails } from '../components/common/AuthShim';
 import { rasoiBoxYellow } from '../constants/Colors';
+
+const ICON_SIZE: number = 25
 
 interface LeftMenuProps {
     authDetails: AuthDetails | undefined,
@@ -28,23 +30,23 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
     const unchanged: MenuItemEntry[] = [
         {
             label: 'Menu',
-            icon: 'fast-food',
+            icon: <Ionicons name='fast-food' style={styles.menuIcon} size={ICON_SIZE} />,
             href: '/menu'
         },
         {
+            label: 'Refer a Friend',
+            icon: <Ionicons name='person-add' style={styles.menuIcon} size={ICON_SIZE} />,
+            href: '/refer'
+        },
+        {
             label: 'Our Story',
-            icon: 'compass-outline',
+            icon: <Ionicons name='compass-outline' style={styles.menuIcon} size={ICON_SIZE} />,
             href: '/our-story'
         },
         {
             label: 'Blog',
-            icon: 'book',
+            icon: <Ionicons name='book' style={styles.menuIcon} size={ICON_SIZE} />,
             href: 'https://rasoibox.substack.com/'
-        },
-        {
-            label: 'Refer a Friend',
-            icon: 'person-add',
-            href: '/refer'
         },
     ]
 
@@ -52,14 +54,19 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
 
     if (authDetails?.authenticated) {
         let beginning: MenuItemEntry[] = [
-            // {
-            //     label: 'Profile',
-            //     icon: 'person-circle',
-            //     href: '/profile'
-            // },
+            {
+                label: 'Start Cooking',
+                icon: <MaterialCommunityIcons style={styles.menuIcon} name="silverware-clean" size={ICON_SIZE} color={rasoiBoxYellow} />,
+                href: '/startcooking'
+            },
+            {
+                label: 'Profile',
+                icon: <Ionicons name='person-circle' style={styles.menuIcon} size={ICON_SIZE} />,
+                href: '/profile'
+            },
             {
                 label: 'Order History',
-                icon: "receipt-outline",
+                icon: <Ionicons name='receipt-outline' style={styles.menuIcon} size={ICON_SIZE} />,
                 href: "/order-history"
             }
         ]
@@ -67,7 +74,7 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
         let end: MenuItemEntry[] = [
             {
                 label: 'Sign Out',
-                icon: 'exit',
+                icon: <Ionicons name='exit' style={styles.menuIcon} size={ICON_SIZE} />,
                 href: '/signout'
             }
         ];
@@ -77,7 +84,7 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
         let beginning: MenuItemEntry[] = [
             {
                 label: 'Sign In',
-                icon: 'enter',
+                icon: <Ionicons name='enter' style={styles.menuIcon} size={ICON_SIZE} />,
                 href: '/signin'
             }
         ]
@@ -88,7 +95,7 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
     return data;
 }
 
-function MenuItem(props: {name: any, iconName: any, href: any, onNav: () => void}) {
+function MenuItem(props: {name: any, icon: React.ReactNode, href: any, onNav: () => void}) {
     return (
         <Pressable onPress={() => {
             props.onNav();
@@ -99,7 +106,8 @@ function MenuItem(props: {name: any, iconName: any, href: any, onNav: () => void
             }
         }}>
             <View style={styles.menuItem}>
-                <Ionicons name={props.iconName} style={styles.menuIcon} size={25} />
+                {/* <Ionicons name={props.iconName} style={styles.menuIcon} size={25} /> */}
+                {props.icon}
                 <Text style={styles.menuText}>{props.name}</Text>
             </View>
         </Pressable>
@@ -116,7 +124,7 @@ export default function LeftMenu(props: LeftMenuProps) {
             renderItem={
                 ({item}) => <MenuItem 
                     name={item.label} 
-                    iconName={item.icon} 
+                    icon={item.icon} 
                     href={item.href} 
                     onNav={onNav} />
             }
@@ -132,9 +140,10 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     menuText: {
-        fontSize: 20,
+        fontSize: 17,
         fontFamily: 'AvenirLight',
-        padding: 20
+        padding: 20,
+        paddingLeft: 0
     },
     menuIcon: {
         padding: 20,

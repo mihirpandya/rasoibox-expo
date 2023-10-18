@@ -108,7 +108,7 @@ export default function ViewStartCooking() {
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
             <ScrollView>
-                <Header />
+                <Header hideStartCooking={true}/>
                     {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> :
                     (recipeInfos.length > 0) ? 
                         <View style={styles.card}>
