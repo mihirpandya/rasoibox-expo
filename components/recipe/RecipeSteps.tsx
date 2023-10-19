@@ -1,5 +1,5 @@
 import { Foundation } from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { borderGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { capitalizeFirst, pluralize } from '../../constants/utils';

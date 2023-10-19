@@ -30,6 +30,7 @@ function getPositionDetails(width: number, side: LightboxSide): PositionDetails 
             modalViewStyle: {
                 flex: 1,
                 borderWidth: 1,
+                borderColor: '#e0e0e0',
                 backgroundColor: 'white',
                 position: 'absolute',
                 marginLeft: '-6%',
@@ -53,6 +54,7 @@ function getPositionDetails(width: number, side: LightboxSide): PositionDetails 
             modalViewStyle: {
                 flex: 1,
                 borderWidth: 1,
+                borderColor: '#e0e0e0',
                 backgroundColor: 'white',
                 position: 'absolute',
                 marginRight: '-6%',

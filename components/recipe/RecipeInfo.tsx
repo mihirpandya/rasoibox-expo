@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getRecipeById, getRecipeMetadata, getRecipeSteps } from '../../app/api/rasoibox-backend';
+import { emitEvent, getRecipeById, getRecipeMetadata, getRecipeSteps } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import ViewRecipeMetadata from "./RecipeMetadata";
@@ -10,6 +10,7 @@ import ViewRecipeIngredients from "./RecipeIngredients";
 import { rasoiBoxPink } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 export interface Quantity {
     amount: number,
@@ -138,6 +139,12 @@ export default function RecipeInfo(props: {recipeId: number, servingSize: number
     useEffect(() => {
         fetchRecipeMetadata()
     }, [recipeName])
+
+    useEffect(() => {
+        if (authDetails?.verification_code && recipeName) {
+            emitEvent(WebsiteEvent.RECIPE, new Date(), authDetails.verification_code, recipeName)
+        }
+    }, [recipeName, authDetails])
 
     useEffect(() => {
         fetchRecipeSteps()
