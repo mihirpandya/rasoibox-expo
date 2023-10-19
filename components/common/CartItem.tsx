@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { rasoiBoxGrey } from '../../constants/Colors';
+import { ellipsify } from '../../constants/utils';
 
 export interface CartItemResponse {
     recipeName: string,
@@ -9,10 +10,6 @@ export interface CartItemResponse {
     servingSize: number,
     price: number,
     recipeId: number
-}
-
-function ellipsify(name: string): string {
-    return name.substring(0, 15) + "..."
 }
 
 export default function CartItem(props: { 
@@ -24,7 +21,7 @@ export default function CartItem(props: {
         <View style={styles.cartItem}>
             <Image style={styles.itemImage} source={{ uri: cartItem.imageUrl }}/>
             <View style={styles.recipeInfo}>
-                <Text style={styles.recipeName}>{cartItem.recipeName.length > 18 ? ellipsify(cartItem.recipeName) : cartItem.recipeName}</Text>
+                <Text style={styles.recipeName}>{cartItem.recipeName.length > 18 ? ellipsify(cartItem.recipeName, 15) : cartItem.recipeName}</Text>
                 <Text style={styles.servingSize}>{cartItem.servingSize} servings</Text>
                 <Text style={styles.price}>{cartItem.price}</Text>
             </View>

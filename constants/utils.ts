@@ -189,6 +189,14 @@ export function pluralize(name: string, amount: number) {
 	return name;
 }
 
+export function ellipsify(name: string, length: number): string {
+    if (name.length < length) {
+        return name
+    } else {
+        return name.substring(0, length) + "..."
+    }
+}
+
 export function getEstimatedDelivery(): string {
     let now = new Date()
     const daysInMillis = 60 * 60 * 24 * 1000

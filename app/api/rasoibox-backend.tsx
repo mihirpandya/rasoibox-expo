@@ -593,3 +593,19 @@ export function isVerified(verificationCode: string) {
     })
 }
 
+export function getAllRewards(verificationCode: string) {
+    return fetch(BACKEND + "rewards/get_all_rewards?verification_code=" + verificationCode, {
+        "method": "get",
+        "headers": {
+			"Content-Type": "application/json"
+		},
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    })
+}
+

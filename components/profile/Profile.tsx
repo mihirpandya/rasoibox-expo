@@ -1,11 +1,23 @@
+import { FontAwesome5 } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import { getAllRewards } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import { rasoiBoxPink } from '../../constants/Colors';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
+import ResponseText from '../common/ResponseText';
+import ViewPromoCode from './ViewPromoCode';
+
+export interface PromoCode {
+    promoCodeName: string,
+    status: string,
+    amountOff?: number,
+    percentOff?: number
+    orderId?: string
+}
 
 function ProfileInformation(props: {authDetails: AuthDetails | undefined}) {
     const { authDetails } = props
@@ -24,6 +36,89 @@ function ProfileInformation(props: {authDetails: AuthDetails | undefined}) {
     )
 }
 
+function RewardsInformation(props: {authDetails: AuthDetails | undefined}) {
+    const { authDetails } = props
+
+    const [loading, setLoading] = useState<boolean>(true)
+    const [rewards, setRewards] = useState<PromoCode[]>([])
+
+    useEffect(() => {
+        if (authDetails?.verification_code) {
+            setLoading(true)
+            getAllRewards(authDetails.verification_code).then(response => {
+                const newRewards: PromoCode[] = []
+                Object.values(response).map(item => {
+                    let promo: PromoCode = {
+                        promoCodeName: item['promo_code'],
+                        status: item['status']
+                    }
+                    if (item['amount_off']) {
+                        promo = {
+                            ...promo,
+                            amountOff: item['amount_off']
+                        }
+                    }
+                    if (item['percent_off']) {
+                        promo = {
+                            ...promo,
+                            percentOff: item['percent_off']
+                        }
+                    }
+                    if (item['order_id']) {
+                        promo = {
+                            ...promo,
+                            orderId: item['order_id']
+                        }
+                    }
+
+                    newRewards.push(promo)
+                })
+
+                setRewards(newRewards)
+            }).finally(() => {
+                setLoading(false)
+            })
+        }
+    }, [])
+
+    return (
+        <View style={styles.card}>
+            <Text style={styles.title}>Rewards</Text>
+            {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{padding: 50}}/> : 
+                <View>
+                    {
+                        rewards.length > 0 ? 
+                            <View>
+                                <View style={styles.header}>
+                                    <View style={styles.cell}>
+                                        <Text style={styles.headerValue}>Promo</Text>
+                                    </View>
+                                    <View style={styles.cell}>
+                                        <Text style={styles.headerValue}>Amount</Text>
+                                    </View>
+                                    <View style={styles.cell}>
+                                        <Text style={styles.headerValue}>Status</Text>
+                                    </View>
+                                    <View style={styles.cell}>
+                                        <Text></Text>
+                                    </View>
+                                </View>
+                                <FlatList
+                                    data={rewards}
+                                    renderItem={({item}) => <ViewPromoCode promoCode={item} />}
+                                />
+                            </View>
+                        : 
+                        <Text style={styles.fieldValue}>
+                            No rewards to show
+                        </Text>
+                    }
+                </View>
+            }
+        </View>
+    )
+}
+
 export default function Profile() {
     const [loading, setLoading] = useState<boolean>(true)
     const [authDetails, setAuthDetails] = useState<AuthDetails | undefined>()
@@ -35,17 +130,20 @@ export default function Profile() {
             }
             setLoading(false)
         })
-    })
+    }, [])
 
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
-            <Header />
-            {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> : 
-                <View style={{alignItems: 'center'}}>
-                    <ProfileInformation authDetails={authDetails}/>
-                </View>
-            }
-            <Footer />
+            <ScrollView>
+                <Header />
+                {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> : 
+                    <View style={{alignItems: 'center'}}>
+                        <ProfileInformation authDetails={authDetails}/>
+                        <RewardsInformation authDetails={authDetails}/>
+                    </View>
+                }
+                <Footer />
+            </ScrollView>
         </View>
     )
 }
@@ -87,5 +185,29 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         borderBottomWidth: 1,
         borderColor: 'rgba(249, 166, 108, 0.5)', // rasoi box yellow with opacity
-    }
+    },
+    clipboard: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingRight: 10
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        borderBottomWidth: 1,
+        marginLeft: 30,
+        marginRight: 30,
+        borderColor: 'rgba(249, 166, 108, 0.5)', // rasoi box yellow with opacity
+    },
+    cell: {
+        width: '20%',
+        flexDirection: 'row',
+    },
+    headerValue: {
+        fontFamily: 'AvenirLight',
+        paddingTop: 10,
+        paddingBottom: 10,
+        fontSize: 15
+    },
 });
