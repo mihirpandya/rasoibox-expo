@@ -23,7 +23,7 @@ interface OrderRecipeInfo {
 
 function CookItem(props: { recipe: OrderRecipeInfo }) {
     const { recipe } = props;
-    const recipeRoute = "/recipe/" + recipe.recipeId + "/" + recipe.servingSize
+    const recipeRoute = "/recipe/" + recipe.recipeId + "/" + recipe.servingSize  + "?order_id=" + recipe.orderNumber
     return (
         <Pressable onPress={() => window.open(recipeRoute, "_self")}>
             <View style={styles.recipeCard}>

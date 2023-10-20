@@ -158,7 +158,7 @@ export default function OrderInformation(props: {orderNumber: any}) {
                                 renderItem={
                                     ({item}) => <CartItem cartItem={item}>
                                                     <View style={styles.infoButton}>
-                                                        <Pressable onPress={() => window.open("/recipe/" + item.recipeId + "/" + item.servingSize, "_self")}>
+                                                        <Pressable onPress={() => window.open("/recipe/" + item.recipeId + "/" + item.servingSize + "?order_id=" + orderInfo?.orderNumber, "_self")}>
                                                             <Ionicons name="arrow-forward-circle-outline" size={24} color={rasoiBoxYellow} />
                                                         </Pressable>
                                                     </View>
