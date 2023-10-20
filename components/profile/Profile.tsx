@@ -88,7 +88,7 @@ function RewardsInformation(props: {authDetails: AuthDetails | undefined}) {
             {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{padding: 50}}/> : 
                 <View>
                     {
-                        rewards.length == 0 ? 
+                        rewards.length > 0 ? 
                             <View>
                                 <View style={styles.header}>
                                     <View style={styles.cell}>
