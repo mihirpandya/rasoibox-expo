@@ -650,3 +650,80 @@ export function finishCooking(token: string, recipeId: number, orderNumber: stri
     });
 }
 
+export function initiateResetPassword(email: string) {
+    return fetch(BACKEND + "users/initiate-reset-password?email=" + email, {
+        "method": "post",
+        "headers": {
+            "accept": "application/json"
+        },
+        "body": ""
+    }).then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+            return {
+                "status": 0
+            }
+        } else if (response.status == 404) {
+            return {
+                "status": -1,
+                "error": "unknown user"
+            }
+        }
+    }).catch(error => {
+        console.error(error);
+        throw error;
+    })
+}
+
+export function isResetPasswordAllowed(resetCode: string) {
+    return fetch(BACKEND + "users/is-reset-password-allowed?reset_code=" + resetCode, {
+        "method": "post",
+        "headers": {
+            "accept": "application/json"
+        },
+        "body": ""
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json();
+        } else {
+            console.error(response);
+            return {
+                "status": -3
+            }
+        }
+    }).catch (error => {
+        console.error(error);
+        throw error;
+    })
+}
+
+export function completeResetPassword(resetCode: string, password: string) {
+    const request_body = {
+        "reset_code": resetCode,
+        "new_password": password
+    }
+
+    return fetch(BACKEND + "users/complete-reset-password", {
+        "method": "post",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        "body": JSON.stringify(request_body)
+    }).then((response) => {
+        if (response.status == 200) {
+            return {
+                "status": 0
+            }
+        } else {
+            console.error(response);
+            return {
+                "status": -1
+            }
+        }
+    }).catch((error) => {
+        console.error(error);
+        throw error;
+    })
+}
+

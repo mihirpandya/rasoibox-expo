@@ -1,10 +1,8 @@
-import { Link, Redirect } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
-import { emitEvent } from '../../app/api/rasoibox-backend';
+import { emitEvent, initiateResetPassword } from '../../app/api/rasoibox-backend';
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { WebsiteEvent } from '../../constants/EventTypes';
-import { loginSession } from '../../constants/utils';
 import { validateEmail } from "../../validators/Validators";
 import { AuthDetails } from '../common/AuthShim';
 import FormKey from "../common/FormKey";
@@ -12,28 +10,25 @@ import FormValue from "../common/FormValue";
 import ResponseText from "../common/ResponseText";
 import * as Storage from "../common/Storage";
 
-export const errorIds = ['no_error', 'email', 'password', 'invalid_login'] as const;
+export const errorIds = ['no_error', 'email'] as const;
 type ErrorID = typeof errorIds[number];
 
 const ERRORS: Record<ErrorID, string> = {
     no_error: "There is no error. No message to show.",
     email: "Please enter a valid email address.",
-    password: "Password is a required field.",
-    invalid_login: "Unable to log in with provided credentials."
 }
 
-export default function SignInForm() {
-    document.title = "Sign In | Rasoi Box"
-    const [loggedIn, setLoggedIn] = useState<boolean>(false)
+export default function ForgotPasswordForm() {
+    document.title = "Forgot Password | Rasoi Box"
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [error, setError] = useState<ErrorID>('no_error')
+    const [successMessage, setSuccessMessage] = useState<string>()
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         Storage.getAuthDetails().then((authDetails: AuthDetails | null) => {
             if (authDetails?.verification_code) {
-                emitEvent(WebsiteEvent.SIGNIN, new Date(), authDetails?.verification_code)
+                emitEvent(WebsiteEvent.FORGOT_PASSWORD, new Date(), authDetails?.verification_code)
             }
         })
     }, [])
@@ -52,55 +47,39 @@ export default function SignInForm() {
             return;
         }
 
-        if (password.length == 0) {
-            setError('password');
-            return;
-        }
-
         setLoading(true);
-        loginSession(email, password).then(_success => {
-            setLoggedIn(true);
-        }).catch(error => {
-            setError('invalid_login')
-        }).finally(() => setLoading(false))
+        initiateResetPassword(email).finally(() => {
+            setLoading(false)
+            setSuccessMessage("We have sent you instructions to reset your password. Your reset password link will expire in 1 hour.")
+        })
     }
 
-    if (loggedIn) {
-        return <Redirect href="/menu" />
-    } else {
-        return (
-            <View style={styles.center}>
-                <View style={styles.card}>
-                    {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{paddingTop: 50}}/> : 
-                        <View style={styles.form}>
-                            <Text style={styles.title}>
-                                Welcome Back!
-                            </Text>
-                            <FormKey>Email</FormKey>
-                            <FormValue secureTextEntry={false} onChangeText={setEmail} onKeyPress={submitIfEnter} />
-                            <View style={styles.password}>
-                                <FormKey>Password</FormKey>
-                                <Link href="/forgotpassword">
-                                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                                </Link>
-                            </View>
-                            <FormValue secureTextEntry={true} onChangeText={setPassword} onKeyPress={submitIfEnter} />
-                            {error != 'no_error' && <ResponseText message={ERRORS[error]}/>}
-                            <Pressable style={styles.button} onPress={submit}>
-                                <Text style={styles.buttonText}>Sign In</Text>
-                            </Pressable>
-                            <View style={styles.signup}>
-                                <Text style={styles.signupText}>New to Rasoi Box?</Text>
-                                <Link href="/signup">
-                                    <Text style={styles.forgotPassword}>Sign Up</Text>
-                                </Link>
-                            </View>
+    return (
+        <View style={styles.center}>
+            <View style={styles.card}>
+                {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{ paddingTop: 50 }} /> :
+                    <View style={styles.form}>
+                        <Text style={styles.title}>
+                            Reset your Password
+                        </Text>
+                        <Text style={styles.subtitle}>
+                            Enter the email address associated with your account and we'll send you a link to reset your password.
+                        </Text>
+                        <FormKey>Email</FormKey>
+                        <FormValue secureTextEntry={false} onChangeText={setEmail} onKeyPress={submitIfEnter} />
+                        {error != 'no_error' && <ResponseText message={ERRORS[error]} />}
+                        {error == 'no_error' && successMessage && <ResponseText isError={false} message={successMessage} />}
+                        <Pressable style={styles.button} onPress={submit}>
+                            <Text style={styles.buttonText}>Continue</Text>
+                        </Pressable>
+                        <View style={styles.signup}>
+                            <Text style={styles.signupText}>Having trouble? Email us at hello@rasoibox.com</Text>
                         </View>
-                    }
-                </View>
+                    </View>
+                }
             </View>
-        )
-    }
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -119,8 +98,13 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'CormorantGaramondSemiBold',
         fontSize: 35,
-        paddingBottom: 50,
+        paddingBottom: 10,
         paddingTop: Dimensions.get('window').width < 700 ? 0 : 50,
+    },
+    subtitle: {
+        fontFamily: 'AvenirLight',
+        fontSize: 15,
+        paddingBottom: 30,
     },
     fieldTitle: {
         fontFamily: 'AvenirLight',
