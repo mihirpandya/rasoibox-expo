@@ -18,9 +18,9 @@ function FinishCooking(props: { token: string, orderNumber: string, recipeId: nu
 
     async function pressFinishCooking() {
         setIsConfetti(true)
+        setFinishedCooking(true)
         setTimeout(() => setIsConfetti(false), 3000)
         await finishCooking(token, recipeId, orderNumber, new Date()).then(_response => {
-            setFinishedCooking(true)
         }).catch(e => {
             console.error(e)
         })
@@ -28,11 +28,11 @@ function FinishCooking(props: { token: string, orderNumber: string, recipeId: nu
 
     return (
         <View style={styles.finishCooking}>
-            <View style={styles.finishCookingButton}>
-                <Pressable style={{flexDirection: 'row'}} onPress={pressFinishCooking}>
+            <View style={finishedCooking ? styles.finishCookingButtonDisabled : styles.finishCookingButton}>
+                <Pressable style={{flexDirection: 'row'}} onPress={pressFinishCooking} disabled={finishedCooking}>
                     <MaterialCommunityIcons name="silverware-clean" size={25} color="white" />
                     <Text style={styles.finishCookingText}>
-                        Finish Cooking
+                        {finishedCooking ? "Bon Appetit!": "Finish Cooking"}
                     </Text>
                 </Pressable>
             </View>
@@ -104,6 +104,14 @@ const styles = StyleSheet.create({
     },
     finishCookingButton: {
         backgroundColor: rasoiBoxYellow,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderRadius: 20
+    },
+    finishCookingButtonDisabled: {
+        backgroundColor: rasoiBoxPink,
         paddingTop: 5,
         paddingBottom: 5,
         paddingLeft: 15,
