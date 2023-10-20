@@ -60,7 +60,7 @@ export default function ViewPromoCode(props: {
                     promoCode.orderId ? 
                     <Pressable onPress={() => window.open("/order/" + promoCode.orderId, "_self")}>
                         <View style={styles.button}>
-                            <Text style={styles.viewDetails}>Order</Text>
+                            <Text style={styles.viewDetails}>View</Text>
                             <Entypo name="chevron-small-right" size={18} color={rasoiBoxYellow} />
                         </View>
                     </Pressable> :
