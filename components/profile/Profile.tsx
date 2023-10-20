@@ -1,4 +1,4 @@
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
@@ -87,7 +87,7 @@ function RewardsInformation(props: {authDetails: AuthDetails | undefined}) {
             {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{padding: 50}}/> : 
                 <View>
                     {
-                        rewards.length > 0 ? 
+                        rewards.length == 0 ? 
                             <View>
                                 <View style={styles.header}>
                                     <View style={styles.cell}>
@@ -109,9 +109,19 @@ function RewardsInformation(props: {authDetails: AuthDetails | undefined}) {
                                 />
                             </View>
                         : 
-                        <Text style={styles.fieldValue}>
-                            No rewards to show
-                        </Text>
+                        <View style={styles.noRewards}>
+                            <Text style={styles.noRewardsText}>
+                                No elligible promo codes to show. Get 20% off your next order by referring your friends!
+                            </Text>
+                            <Pressable onPress={() => window.open("/refer", "_self")}>
+                                <View style={styles.button}>
+                                    <Ionicons name='person-add' style={styles.menuIcon} size={15} />
+                                    <Text style={styles.referText}>
+                                        Refer a Friend
+                                    </Text>
+                                </View>
+                            </Pressable>
+                        </View>
                     }
                 </View>
             }
@@ -210,4 +220,38 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         fontSize: 15
     },
+    noRewards: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    noRewardsText: {
+        fontFamily: 'AvenirLight',
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
+        fontSize: 15,
+        textAlign: 'center',
+    },
+    button: {
+        backgroundColor: rasoiBoxYellow,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderRadius: 20,
+        marginBottom: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    referText: {
+        fontFamily: 'AvenirLight',
+        color: 'white',
+        fontSize: 15,
+        paddingLeft: 10
+    },
+    menuIcon: {
+        color: 'white'
+    }
 });
