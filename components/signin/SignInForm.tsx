@@ -80,9 +80,9 @@ export default function SignInForm() {
                             <FormValue secureTextEntry={false} onChangeText={setEmail} onKeyPress={submitIfEnter} />
                             <View style={styles.password}>
                                 <FormKey>Password</FormKey>
-                                <Link href="/forgotpassword">
+                                {/* <Link href="/forgotpassword">
                                     <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                                </Link>
+                                </Link> */}
                             </View>
                             <FormValue secureTextEntry={true} onChangeText={setPassword} onKeyPress={submitIfEnter} />
                             {error != 'no_error' && <ResponseText message={ERRORS[error]}/>}
