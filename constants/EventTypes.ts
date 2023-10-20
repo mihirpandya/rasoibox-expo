@@ -13,6 +13,7 @@ export enum WebsiteEvent {
     START_COOKING = "START_COOKING",
     ORDER_HISTORY = "ORDER_HISTORY",
     ORDER_INFO = "ORDER_INFO",
+    PROFILE = "PROFILE"
 }
 
 export enum RecipeEvent {

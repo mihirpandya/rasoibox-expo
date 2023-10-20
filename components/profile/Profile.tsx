@@ -2,7 +2,7 @@ import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { getAllRewards } from '../../app/api/rasoibox-backend';
+import { emitEvent, getAllRewards } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
@@ -11,6 +11,7 @@ import * as Storage from "../common/Storage";
 import ResponseText from '../common/ResponseText';
 import ViewPromoCode from './ViewPromoCode';
 import { capitalizeFirst } from '../../constants/utils';
+import { WebsiteEvent } from '../../constants/EventTypes';
 
 export interface PromoCode {
     promoCodeName: string,
@@ -143,6 +144,12 @@ export default function Profile() {
             setLoading(false)
         })
     }, [])
+
+    useEffect(() => {
+        if (authDetails?.verification_code) {
+            emitEvent(WebsiteEvent.PROFILE, new Date(), authDetails.verification_code)
+        }
+    }, [authDetails])
 
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
