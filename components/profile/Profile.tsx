@@ -10,6 +10,7 @@ import { AuthDetails } from '../common/AuthShim';
 import * as Storage from "../common/Storage";
 import ResponseText from '../common/ResponseText';
 import ViewPromoCode from './ViewPromoCode';
+import { capitalizeFirst } from '../../constants/utils';
 
 export interface PromoCode {
     promoCodeName: string,
@@ -130,6 +131,7 @@ function RewardsInformation(props: {authDetails: AuthDetails | undefined}) {
 }
 
 export default function Profile() {
+    document.title = "Your Profile | Rasoi Box"
     const [loading, setLoading] = useState<boolean>(true)
     const [authDetails, setAuthDetails] = useState<AuthDetails | undefined>()
 
