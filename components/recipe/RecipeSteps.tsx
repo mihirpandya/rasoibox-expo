@@ -114,8 +114,8 @@ function ViewStep(props: { verificationCode: string, step: RecipeStep }) {
     )
 }
 
-export default function ViewRecipeSteps(props: {verificationCode: string, recipeSteps: RecipeStep[]}) {
-    const { verificationCode, recipeSteps } = props;
+export default function ViewRecipeSteps(props: {verificationCode: string, recipeId: number, recipeSteps: RecipeStep[]}) {
+    const { verificationCode, recipeId, recipeSteps } = props;
 
     return (
         <View style={styles.card}>
@@ -129,7 +129,7 @@ export default function ViewRecipeSteps(props: {verificationCode: string, recipe
                 data={recipeSteps} 
                 renderItem={({item}) => <ViewStep key={item.stepNumber} verificationCode={verificationCode} step={item} />}
             />
-            <RecipeConclusion />
+            <RecipeConclusion recipeId={recipeId}/>
         </View>
     )
 }

@@ -609,3 +609,44 @@ export function getAllRewards(verificationCode: string) {
     })
 }
 
+export function canFinishCooking(token: string, recipeId: number, orderNumber: string) {
+    return fetch(BACKEND + "cooking/can_finish_cooking?recipe_id=" + recipeId + "&order_number=" + orderNumber, {
+        "method": "get",
+        "headers": {
+            "Authorization": "Bearer " + token,
+			"Content-Type": "application/json"
+		},
+    }).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.log("error: " + response);
+            throw new Error(response.statusText);
+        }
+    })
+}
+
+export function finishCooking(token: string, recipeId: number, orderNumber: string, cookDate: Date) {
+    const request_body = {
+        order_id: orderNumber,
+        recipe_id: recipeId,
+        cook_date: cookDate
+    }
+
+    return fetch(BACKEND + "cooking/finish_cooking", {
+        "method": "post",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        "body": JSON.stringify(request_body)
+    }).then((response) => {
+        if (response.status == 200) {
+            return response.json()
+        }
+
+        throw Error();
+    });
+}
+

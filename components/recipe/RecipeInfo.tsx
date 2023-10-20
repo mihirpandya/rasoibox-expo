@@ -159,7 +159,7 @@ export default function RecipeInfo(props: {recipeId: number, servingSize: number
                     <ActivityIndicator color={rasoiBoxPink} size="large" style={{margin: 30}}/>
                 }
                 {recipeMetadata && authDetails?.verification_code && <ViewRecipeIngredients servingSize={servingSize} ingredients={recipeMetadata.ingredients} inYourKitchen={recipeMetadata.inYourKitchens}/>}
-                {recipeMetadata && recipeSteps.length > 0 && authDetails?.verification_code && <ViewRecipeSteps verificationCode={authDetails.verification_code} recipeSteps={recipeSteps} />}
+                {recipeMetadata && recipeSteps.length > 0 && authDetails?.verification_code && <ViewRecipeSteps verificationCode={authDetails.verification_code} recipeId={recipeId} recipeSteps={recipeSteps} />}
                 
                 <Footer />
             </ScrollView>

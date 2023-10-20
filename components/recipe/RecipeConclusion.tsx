@@ -1,13 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import { rasoiBoxPink } from '../../constants/Colors';
-import { useSafeAreaFrame } from 'react-native-safe-area-context';
-import * as Storage from "../common/Storage";
-import { AuthDetails } from '../common/AuthShim';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getOrder } from '../../app/api/rasoibox-backend';
+import React, { useEffect, useState } from 'react';
+import ConfettiExplosion from 'react-confetti-explosion';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { canFinishCooking, finishCooking } from '../../app/api/rasoibox-backend';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
+import * as Storage from "../common/Storage";
 
-export default function RecipeConclusion() {
+
+
+function FinishCooking(props: { token: string, orderNumber: string, recipeId: number}) {
+
+    const { token, orderNumber, recipeId } = props;
+
+    const [isConfetti, setIsConfetti] = useState<boolean>(false)
+    const [finishedCooking, setFinishedCooking] = useState<boolean>(false)
+
+    async function pressFinishCooking() {
+        setIsConfetti(true)
+        setTimeout(() => setIsConfetti(false), 3000)
+        await finishCooking(token, recipeId, orderNumber, new Date()).then(_response => {
+            setFinishedCooking(true)
+        }).catch(e => {
+            console.error(e)
+        })
+    }
+
+    return (
+        <View style={styles.finishCooking}>
+            <View style={styles.finishCookingButton}>
+                <Pressable style={{flexDirection: 'row'}} onPress={pressFinishCooking}>
+                    <MaterialCommunityIcons name="silverware-clean" size={25} color="white" />
+                    <Text style={styles.finishCookingText}>
+                        Finish Cooking
+                    </Text>
+                </Pressable>
+            </View>
+            {
+                isConfetti && <ConfettiExplosion />
+            }
+        </View>
+    )
+}
+
+export default function RecipeConclusion(props: { recipeId: number }) {
+    const { recipeId } = props;
     const parsedUrl: URL = new URL(location.href)
     const orderId: string | null = parsedUrl.searchParams.get('order_id')
 
@@ -24,14 +61,20 @@ export default function RecipeConclusion() {
 
     useEffect(() => {
         if (token && orderId) {
-            getOrder(token, orderId).then(_response => {
-                setShowFinishCooking(true)
+            canFinishCooking(token, recipeId, orderId).then(response => {
+                console.log(response)
+                if (response['can_finish_cooking'] == true) {
+                    setShowFinishCooking(true)
+                }
+            }).catch(_e => {
+                setShowFinishCooking(false)
             })
         }
     }, [token])
 
     return (
         <View>
+            {showFinishCooking && token && orderId && <FinishCooking token={token} orderNumber={orderId} recipeId={recipeId}/>}
             <Text style={styles.title}>
                 How did it go?
             </Text>
@@ -52,5 +95,25 @@ const styles = StyleSheet.create({
     message: {
         fontFamily: 'AvenirLight',
         fontSize: 17
-    }
+    },
+    finishCooking: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 30,
+        paddingBottom: 30
+    },
+    finishCookingButton: {
+        backgroundColor: rasoiBoxYellow,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderRadius: 20
+    },
+    finishCookingText: {
+        color: 'white',
+        fontFamily: 'AvenirLight',
+        fontSize: 20,
+        paddingLeft: 5
+    },
 })
