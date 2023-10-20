@@ -62,7 +62,7 @@ function RenderInstructions(props: { instruction: string, ingredients: string[] 
 	// return "<div style='font-family: Avenir Light; font-size: 15px; line-height: 1.6'>" + words.join(" ").replaceAll("\n", "<br />") + "</div>"
 }
 
-function ViewStep(props: { verificationCode: string, step: RecipeStep }) {
+function ViewStep(props: { verificationCode?: string, step: RecipeStep }) {
     const { verificationCode, step } = props;
 
     return (
@@ -114,7 +114,7 @@ function ViewStep(props: { verificationCode: string, step: RecipeStep }) {
     )
 }
 
-export default function ViewRecipeSteps(props: {verificationCode: string, recipeId: number, recipeSteps: RecipeStep[]}) {
+export default function ViewRecipeSteps(props: {recipeId: number, recipeSteps: RecipeStep[], verificationCode?: string}) {
     const { verificationCode, recipeId, recipeSteps } = props;
 
     return (
