@@ -195,14 +195,12 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontSize: 15,
         paddingLeft: 30,
-        paddingRight: Dimensions.get('window').width < 700 ? 50 : 100,
+        paddingRight: Dimensions.get('window').width < 700 ? 30 : 100,
         paddingTop: 10,
         paddingBottom: 10,
     },
     fieldValue: {
         fontFamily: 'AvenirLight',
-        paddingLeft: 30,
-        paddingRight: 30,
         paddingTop: 10,
         paddingBottom: 10,
         fontSize: 15
@@ -233,7 +231,7 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(249, 166, 108, 0.5)', // rasoi box yellow with opacity
     },
     cell: {
-        width: '20%',
+        width: '25%',
         flexDirection: 'row',
     },
     headerValue: {
@@ -252,7 +250,7 @@ const styles = StyleSheet.create({
         paddingRight: 30,
         paddingTop: 20,
         paddingBottom: 10,
-        fontSize: 15,
+        fontSize: Dimensions.get('window').width < 700 ? 12 : 15,
         textAlign: 'center',
     },
     button: {

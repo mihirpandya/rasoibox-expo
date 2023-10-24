@@ -42,7 +42,7 @@ export default function ViewPromoCode(props: {
             </View>
 
             {!isExpanded() && promoCode.amountOff && <View style={styles.cell}>
-                    <Text style={styles.fieldValue}>{promoCode.amountOff} off</Text>
+                    <Text style={styles.fieldValue}>${promoCode.amountOff} off</Text>
                 </View>
             }
             
@@ -64,7 +64,7 @@ export default function ViewPromoCode(props: {
                             <Entypo name="chevron-small-right" size={18} color={rasoiBoxYellow} />
                         </View>
                     </Pressable> :
-                    promoCode.status == "Redeemable" && <View style={{flexDirection: 'row'}}>
+                    promoCode.status == "Redeemable" && <View style={{flexDirection: 'row', paddingLeft: 5}}>
                         {!showCopy && <Pressable onPress={() => copyToClipboard(promoCode.promoCodeName)} style={styles.clipboard}>
                             <FontAwesome5 name="copy" size={15} color={rasoiBoxYellow} />
                         </Pressable>}
@@ -81,8 +81,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'stretch',
-        paddingLeft: 30,
-        paddingRight: 30
     },
     cell: {
         width: '25%',
