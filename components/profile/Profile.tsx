@@ -13,6 +13,22 @@ import ViewPromoCode from './ViewPromoCode';
 import { capitalizeFirst } from '../../constants/utils';
 import { WebsiteEvent } from '../../constants/EventTypes';
 
+function getRewardsListStyle(numRewards: number) {
+    if (numRewards == 0) {
+        return {
+            marginLeft: 30,
+            marginRight: 30,
+        }
+    } else {
+        return {
+            borderBottomWidth: 1,
+            marginLeft: 30,
+            marginRight: 30,
+            borderColor: 'rgba(249, 166, 108, 0.5)', // rasoi box yellow with opacity
+        }
+    }
+}
+
 export interface PromoCode {
     promoCodeName: string,
     status: string,
@@ -88,43 +104,40 @@ function RewardsInformation(props: {authDetails: AuthDetails | undefined}) {
             <Text style={styles.title}>Rewards</Text>
             {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{padding: 50}}/> : 
                 <View>
-                    {
-                        rewards.length > 0 ? 
-                            <View>
-                                <View style={styles.header}>
-                                    <View style={styles.cell}>
-                                        <Text style={styles.headerValue}>Promo</Text>
-                                    </View>
-                                    <View style={styles.cell}>
-                                        <Text style={styles.headerValue}>Amount</Text>
-                                    </View>
-                                    <View style={styles.cell}>
-                                        <Text style={styles.headerValue}>Status</Text>
-                                    </View>
-                                    <View style={styles.cell}>
-                                        <Text></Text>
-                                    </View>
-                                </View>
-                                <FlatList
-                                    data={rewards}
-                                    renderItem={({item}) => <ViewPromoCode promoCode={item} />}
-                                />
+                    <View>
+                        <View style={styles.header}>
+                            <View style={styles.cell}>
+                                <Text style={styles.headerValue}>Promo</Text>
                             </View>
-                        : 
-                        <View style={styles.noRewards}>
-                            <Text style={styles.noRewardsText}>
-                                No elligible promo codes to show. Get 20% off your next order by referring your friends!
+                            <View style={styles.cell}>
+                                <Text style={styles.headerValue}>Amount</Text>
+                            </View>
+                            <View style={styles.cell}>
+                                <Text style={styles.headerValue}>Status</Text>
+                            </View>
+                            <View style={styles.cell}>
+                                <Text></Text>
+                            </View>
+                        </View>
+                        <FlatList
+                            data={rewards}
+                            renderItem={({item}) => <ViewPromoCode promoCode={item} />}
+                            style={getRewardsListStyle(rewards.length)}
+                        />
+                        <View style={styles.refer}>
+                            <Text style={styles.referText}>
+                                Get 20% off your next order by referring your friends!
                             </Text>
                             <Pressable onPress={() => window.open("/refer", "_self")}>
                                 <View style={styles.button}>
                                     <Ionicons name='person-add' style={styles.menuIcon} size={15} />
-                                    <Text style={styles.referText}>
+                                    <Text style={styles.buttonText}>
                                         Refer a Friend
                                     </Text>
                                 </View>
                             </Pressable>
                         </View>
-                    }
+                    </View>
                 </View>
             }
         </View>
@@ -229,15 +242,15 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         fontSize: 15
     },
-    noRewards: {
+    refer: {
         justifyContent: 'center',
         alignItems: 'center'
     },
-    noRewardsText: {
+    referText: {
         fontFamily: 'AvenirLight',
         paddingLeft: 30,
         paddingRight: 30,
-        paddingTop: 10,
+        paddingTop: 20,
         paddingBottom: 10,
         fontSize: 15,
         textAlign: 'center',
@@ -254,7 +267,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    referText: {
+    buttonText: {
         fontFamily: 'AvenirLight',
         color: 'white',
         fontSize: 15,
