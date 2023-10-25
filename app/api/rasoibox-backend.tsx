@@ -658,7 +658,6 @@ export function initiateResetPassword(email: string) {
         },
         "body": ""
     }).then((response) => {
-        console.log(response);
         if (response.status == 200) {
             return {
                 "status": 0
@@ -725,5 +724,16 @@ export function completeResetPassword(resetCode: string, password: string) {
         console.error(error);
         throw error;
     })
+}
+
+export function allSiteWidePromos(verificationCode: string, appliedPromoCodes: string[]) {
+    return fetch(BACKEND + "rewards/site_wide_promos?verification_code=" + verificationCode, {
+        "method": "post",
+        "headers": {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        "body": JSON.stringify(appliedPromoCodes)
+    }).then(response => response.json())
 }
 

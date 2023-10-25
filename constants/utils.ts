@@ -68,11 +68,19 @@ export function getTotal(orderInfo: OrderInformationResponse | undefined): numbe
 
     let total = getSubtotal(orderInfo)
     const promoCodes: PromoCode[] = orderInfo.orderBreakdown.promoCodes
-    if (total != undefined && promoCodes != undefined && promoCodes.length > 0) {
-        return totalAfterPromo(total, promoCodes[0])
-    } else {
-        return total
+    if (promoCodes != undefined && promoCodes.length > 0) {
+        promoCodes.forEach(promoCode => {
+            if (total) {
+                total = totalAfterPromo(total, promoCode)
+            }
+        })
     }
+
+    if (total && orderInfo.orderBreakdown.shippingFee) {
+        total = total + orderInfo.orderBreakdown.shippingFee
+    }
+    
+    return total;
 }
 
 export function cleanDate(date: Date, hideYear?: boolean): string {
@@ -200,7 +208,6 @@ export function ellipsify(name: string, length: number): string {
 export function getEstimatedDelivery(): string {
     let now = new Date()
     const daysInMillis = 60 * 60 * 24 * 1000
-    console.log(now)
     let daysToSunday: number;
     if (now.getDay() < 4) {
         daysToSunday = 7 - now.getDay()

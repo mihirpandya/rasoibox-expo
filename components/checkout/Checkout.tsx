@@ -1,12 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { emitEvent, getCart, isValidPopFestPromo, isValidPromoCode } from '../../app/api/rasoibox-backend';
+import { allSiteWidePromos, emitEvent, getCart, isValidPopFestPromo, isValidPromoCode } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
 import { rasoiBoxGrey, rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import { WebsiteEvent } from '../../constants/EventTypes';
+import { getEstimatedDelivery } from '../../constants/utils';
 import { AuthDetails } from '../common/AuthShim';
 import CartItem, { CartItemResponse } from '../common/CartItem';
 import PriceInformation from '../common/PriceInformation';
@@ -14,8 +16,6 @@ import RemoveFromCartButton from '../common/RemoveFromCartButton';
 import ResponseText from '../common/ResponseText';
 import * as Storage from "../common/Storage";
 import StripeCheckout from "./StripeCheckout";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { cleanDate, getEstimatedDelivery } from '../../constants/utils';
 
 export const errorIds = [
     'no_error',
@@ -65,18 +65,6 @@ function getApplyStyle(active: boolean) {
     return active ? styles.applyActive : styles.applyInactive;
 }
 
-function twoDecimals(num: number): string {
-    return num.toFixed(2)
-}
-
-function getPromoAmount(promoCode: PromoCode): string {
-    if (promoCode.amountOff > 0) {
-        return "-$" + promoCode.amountOff
-    }
-
-    return "-" + promoCode.percentOff + "%"
-}
-
 function totalAfterPromo(total: number, promoCode: PromoCode): number {
     if (promoCode.amountOff > 0) {
         return total - promoCode.amountOff;
@@ -98,6 +86,7 @@ export default function Checkout() {
     const [promoCode, setPromoCode] = useState<string>("")
     const [promoCodeError, setPromoCodeError] = useState<PromoCodeErrorId>('no_error');
     const [appliedPromoCode, setAppliedPromoCode] = useState<PromoCode | undefined>(undefined)
+    const [sitewidePromos, setSitewidePromos] = useState<PromoCode[]>([])
     const [subtotal, setSubtotal] = useState<number>(0)
     const [shipping, setShipping] = useState<number>(5)
     const [total, setTotal] = useState<number>(0)
@@ -135,12 +124,15 @@ export default function Checkout() {
         let total = 0;
         cart.forEach(cartItem => total += cartItem.price);
         setSubtotal(total);
-        total = total + shipping
         if (appliedPromoCode != undefined) {
             total = totalAfterPromo(total, appliedPromoCode)
         }
+        sitewidePromos.forEach(promo => {
+            total = totalAfterPromo(total, promo)
+        })
+        total = total + shipping
         setTotal(total);
-    }, [cart, appliedPromoCode])
+    }, [cart, sitewidePromos, appliedPromoCode])
 
 
     useEffect(() => {
@@ -153,6 +145,24 @@ export default function Checkout() {
             emitEvent(WebsiteEvent.CHECKOUT, new Date(), authDetails.verification_code)
         }
     }, [authDetails])
+
+    useEffect(() => {
+        if (authDetails?.verification_code) {
+            const promoCodes: string[] = appliedPromoCode ? [appliedPromoCode.name] : []
+            allSiteWidePromos(authDetails.verification_code, promoCodes).then(response => {
+                console.log(response);
+                const promos: PromoCode[] = Object.values(response).map(item => {
+                    return {
+                        name: item['name'],
+                        amountOff: item['amount_off'],
+                        percentOff: item['percent_off']
+                    }
+                })
+
+                setSitewidePromos(promos)
+            })
+        }
+    }, [authDetails, cart, appliedPromoCode])
 
     function submitIfEnter(event: any) {
         if (event.key === "Enter") {
@@ -251,6 +261,13 @@ export default function Checkout() {
         }
     }
 
+    // const appliedPromoCodes: PromoCode[] = sitewidePromos
+    // if (appliedPromoCode) {
+    //     console.log(sitewidePromos)
+    //     console.log(appliedPromoCode)
+    //     appliedPromoCodes.push(appliedPromoCode)
+    // }
+
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
             <ScrollView>
@@ -287,6 +304,7 @@ export default function Checkout() {
                         {promoCodeError != 'no_error' && <ResponseText message={PROMO_CODE_ERRORS[promoCodeError]}/>}
                         <PriceInformation
                             appliedPromoCode={appliedPromoCode}
+                            sitewidePromos={sitewidePromos}
                             subtotal={subtotal}
                             shipping={shipping}
                             total={total}

@@ -164,8 +164,8 @@ export default function OrderInformation(props: {orderNumber: any}) {
                                                     </View>
                                                 </CartItem>
                                 }/>
-                            <PriceInformation 
-                                appliedPromoCode={orderInfo?.orderBreakdown.promoCodes[0]}
+                            <PriceInformation
+                                sitewidePromos={orderInfo ? orderInfo.orderBreakdown.promoCodes : []}
                                 shipping={shippingFee()}
                                 subtotal={getSubtotal(orderInfo)}
                                 total={getTotal(orderInfo)}

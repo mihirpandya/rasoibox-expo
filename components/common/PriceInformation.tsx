@@ -7,6 +7,7 @@ import { PromoCode } from "../checkout/Checkout";
 
 interface PriceInformationProps {
     appliedPromoCode: PromoCode | undefined,
+    sitewidePromos: PromoCode[],
     subtotal: number,
     shipping: number,
     total: number,
@@ -16,7 +17,8 @@ interface PriceInformationProps {
 }
 
 export default function PriceInformation(props: PriceInformationProps) {
-    const { appliedPromoCode, subtotal, shipping, total, showDelete, deleteAppliedPromoCode, showTaxes } = props;
+    const { appliedPromoCode, sitewidePromos, subtotal, shipping, total, showDelete, deleteAppliedPromoCode, showTaxes } = props;
+
     return (
         <View>
             <View style={styles.subtotal}>
@@ -24,21 +26,28 @@ export default function PriceInformation(props: PriceInformationProps) {
                     <Text style={styles.key}>Subtotal</Text>
                     <Text style={styles.value}>${twoDecimals(subtotal)}</Text>
                 </View>
-                <View style={styles.section}>
-                    <Text style={styles.key}>Shipping</Text>
-                    <Text style={styles.value}>{shipping == 0 ? "FREE" : "$" + shipping}</Text>
-                </View>
                 {
-                    appliedPromoCode != undefined &&
-                    <View style={styles.section}>
+                    appliedPromoCode && <View style={styles.section}>
                         <Text style={styles.key}>{appliedPromoCode.name}</Text>
-                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={styles.value}>{getPromoAmount(appliedPromoCode)}</Text>
-                            {showDelete && <Pressable style={{paddingLeft: 5}} onPress={deleteAppliedPromoCode}>
+                            {showDelete && <Pressable style={{ paddingLeft: 5 }} onPress={deleteAppliedPromoCode}>
                                 <Ionicons name="trash-outline" size={15} color={rasoiBoxGrey} />
                             </Pressable>}
                         </View>
                     </View>
+                }
+                {
+                    sitewidePromos.map(sitewidePromo => {
+                        return (
+                            <View style={styles.section} key={sitewidePromo.name}>
+                                <Text style={styles.key}>{sitewidePromo.name}</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text style={styles.value}>{getPromoAmount(sitewidePromo)}</Text>
+                                </View>
+                            </View>
+                        )
+                    })
                 }
                 {
                     showTaxes && <View style={styles.section}>
@@ -46,6 +55,10 @@ export default function PriceInformation(props: PriceInformationProps) {
                         <Text style={styles.value}>Calculated at next step</Text>
                     </View>
                 }
+                <View style={styles.section}>
+                    <Text style={styles.key}>Shipping</Text>
+                    <Text style={styles.value}>{shipping == 0 ? "FREE" : "$" + shipping}</Text>
+                </View>
             </View>
             <View style={styles.total}>
                 <View style={styles.section}>
