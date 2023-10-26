@@ -49,7 +49,8 @@ export default function Index() {
         }, [])
 
       return (
-        <AuthShim authChild={<Redirect href="/menu" />} unauthChild={<WelcomePage />}/>
+        // <AuthShim authChild={<Redirect href="/menu" />} unauthChild={<WelcomePage />}/>
+        <WelcomePage />
       );
 }
 

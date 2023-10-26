@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         width: Dimensions.get('window').width < 700 ? '95%' : 380,
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : 0,
-        marginTop: Dimensions.get('window').width < 700 ? 20 : 0,
+        marginTop: 20,
         borderRadius: 10,
     },
     title: {

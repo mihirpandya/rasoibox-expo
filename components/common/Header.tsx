@@ -50,38 +50,40 @@ function HeaderContent(props: {
         toggleCartPressed
     } = props
     return (
-        <View style={styles.header}>
-            <View style={styles.left}>
-                <Pressable onPress={toggleMenuPressed} style={styles.menu}>
-                    <Ionicons name="menu-sharp" size={25} color={rasoiBoxGrey}/>
-                </Pressable>
-                <Lightbox isVisible={menuPressed} width={300} side={LightboxSide.left} closeLightbox={toggleMenuPressed}>
-                    <LeftMenu authDetails={authDetails} onNav={toggleMenuPressed}/>
-                </Lightbox>
-                <LogoTitle />
-            </View>
-            <View style={styles.right}>
-                {!hideStartCooking && 
-                <View style={styles.startCooking}>
-                    <Pressable style={{flexDirection: 'row'}} onPress={() => window.open("/startcooking", "_self")}>
-                        <MaterialCommunityIcons name="silverware-clean" size={20} color="white" />
-                        <Text style={styles.startCookingText}>
-                            Start Cooking
-                        </Text>
+        <View>
+            <View style={styles.header}>
+                <View style={styles.left}>
+                    <Pressable onPress={toggleMenuPressed} style={styles.menu}>
+                        <Ionicons name="menu-sharp" size={25} color={rasoiBoxGrey}/>
                     </Pressable>
-                </View>}
-                <Pressable style={styles.cart} onPress={toggleCartPressed}>
-                    <Ionicons name="cart-outline" size={25} color={rasoiBoxPink}/>
-                    {cartSize > 0 && 
-                        <View style={styles.cartSize}>
-                            <Text style={styles.cartSizeText}> {cartSize} </Text>
-                        </View>
-                    }
-                </Pressable>
+                    <Lightbox isVisible={menuPressed} width={300} side={LightboxSide.left} closeLightbox={toggleMenuPressed}>
+                        <LeftMenu authDetails={authDetails} onNav={toggleMenuPressed}/>
+                    </Lightbox>
+                    <LogoTitle />
+                </View>
+                <View style={styles.right}>
+                    {!hideStartCooking && 
+                    <View style={styles.startCooking}>
+                        <Pressable style={{flexDirection: 'row'}} onPress={() => window.open("/startcooking", "_self")}>
+                            <MaterialCommunityIcons name="silverware-clean" size={20} color="white" />
+                            <Text style={styles.startCookingText}>
+                                Start Cooking
+                            </Text>
+                        </Pressable>
+                    </View>}
+                    <Pressable style={styles.cart} onPress={toggleCartPressed}>
+                        <Ionicons name="cart-outline" size={25} color={rasoiBoxPink}/>
+                        {cartSize > 0 && 
+                            <View style={styles.cartSize}>
+                                <Text style={styles.cartSizeText}> {cartSize} </Text>
+                            </View>
+                        }
+                    </Pressable>
+                </View>
+                <Lightbox isVisible={cartPressed} width={350} side={LightboxSide.right} closeLightbox={toggleCartPressed}>
+                    <RightCart loading={cartLoading} cart={cart} closeLightbox={toggleCartPressed} fetchCart={fetchCart}/>
+                </Lightbox>
             </View>
-            <Lightbox isVisible={cartPressed} width={350} side={LightboxSide.right} closeLightbox={toggleCartPressed}>
-                <RightCart loading={cartLoading} cart={cart} closeLightbox={toggleCartPressed} fetchCart={fetchCart}/>
-            </Lightbox>
         </View>
     )
 }
@@ -175,6 +177,11 @@ export default function Header(props: {
                 },
                 title: "Rasoi Box"
             }} />
+            <View style={styles.ribbon}>
+                <Text style={styles.ribbonText}>
+                    Diwali promo text here
+                </Text>
+            </View>
         </View>
     );
 }
@@ -218,6 +225,17 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontSize: 15,
         paddingLeft: 5
+    },
+    ribbon: {
+        backgroundColor: rasoiBoxPink,
+        padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    ribbonText: {
+        color: 'white',
+        fontFamily: 'AvenirLight',
+        fontSize: 15
     },
     // icons
     menu: {

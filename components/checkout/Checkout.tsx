@@ -334,8 +334,8 @@ const styles = StyleSheet.create({
     summary: {
         paddingTop: 30,
         width: Dimensions.get('window').width < 700 ? '95%' : 380,
+        marginTop: 20,
         marginLeft: Dimensions.get('window').width < 700 ? '2.5%' : 0,
-        marginTop: Dimensions.get('window').width < 700 ? 20 : 0,
         borderRadius: 10,
         borderWidth: 1
     },
