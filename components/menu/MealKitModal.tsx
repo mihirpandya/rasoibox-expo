@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     createdBy: {
         marginTop: 20,
         flexDirection: 'row',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
     },
     createdByText: {
         fontSize: 15,
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight'
     },
     createdByImage: {
-        width: Dimensions.get('window').width < 700 ? 120 : 150,
+        width: Dimensions.get('window').width < 700 ? 140 : 190,
         height: 30
     },
     timings: {
