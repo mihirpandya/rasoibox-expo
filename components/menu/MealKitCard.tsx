@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
 import { Card } from 'react-native-paper';
-import { rasoiBoxYellow } from '../../constants/Colors';
+import { rasoiBoxPink, rasoiBoxYellow } from '../../constants/Colors';
 import Tags from "./Tags";
 
 type MealKitCardProps = {
@@ -14,6 +14,7 @@ type MealKitCardProps = {
     cookTime: number,
     prepTime: number,
     tags: string[],
+    createdBy: string,
     onPress: () => void;
 }
 
@@ -28,19 +29,32 @@ export default function MealKitCard(props: MealKitCardProps) {
         cookTime,
         prepTime,
         tags,
+        createdBy,
         onPress
     } = props;
+
+    function getContainerStyle() {
+        if (createdBy == "Rasoi Box") {
+            return styles.containerStyle
+        } else {
+            return styles.containerStyleWithCreator
+        }
+    }
 
     return (
         <Pressable onPress={onPress}>
             <Card style={styles.card}>
                 <Card.Cover style={styles.cover} source={{uri: imageUrl}} />
-                <Card.Title titleStyle={styles.title} title={name}/>
+                {
+                createdBy == "Rasoi Box" ?
+                    <Card.Title titleStyle={styles.title} title={name}/> :
+                    <Card.Title titleStyle={styles.title} title={name} subtitle={"by " + createdBy} subtitleStyle={styles.subtitle}/>
+                }
                 <Card.Content>
                     <Text style={styles.description}>
                         {description}
                     </Text>
-                    <Tags tags={tags} time={prepTime + cookTime} containerStyle={styles.containerStyle}/>
+                    <Tags tags={tags} time={prepTime + cookTime} containerStyle={getContainerStyle()}/>
                 </Card.Content>
             </Card>
         </Pressable>
@@ -65,6 +79,12 @@ const styles = StyleSheet.create({
         fontFamily: 'AvenirLight',
         fontSize: Dimensions.get('window').width < 700 ? 16 : 20,
     },
+    subtitle: {
+        color: rasoiBoxPink,
+        fontFamily: 'AvenirLight',
+        fontSize: Dimensions.get('window').width < 700 ? 10 : 12,
+        marginTop: -10
+    },
     description: {
         fontFamily: 'AvenirLight',
         fontSize: Dimensions.get('window').width < 700 ? 14 : 15,
@@ -74,6 +94,11 @@ const styles = StyleSheet.create({
     containerStyle: {
         position: 'absolute',
         marginTop: 95,
+        width: Dimensions.get('window').width < 700 ? 140 : 220
+    },
+    containerStyleWithCreator: {
+        position: 'absolute',
+        marginTop: 75,
         width: Dimensions.get('window').width < 700 ? 140 : 220
     }
 })

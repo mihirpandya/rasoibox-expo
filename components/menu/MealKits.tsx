@@ -21,7 +21,8 @@ interface MealKit {
     prices: number[],
     cookTime: number,
     prepTime: number,
-    tags: string[]
+    tags: string[],
+    createdBy: string
 }
 
 export default function MealKits() {
@@ -80,9 +81,11 @@ export default function MealKits() {
                     prices: values[i]['prices'],
                     cookTime: values[i]['cook_time'],
                     prepTime: values[i]['prep_time'],
-                    tags: values[i]['tags']
+                    tags: values[i]['tags'],
+                    createdBy: values[i]['created_by']
                 })
             }
+            items.reverse()
             setAvailableItems(items)
             setLoading(false);
         })
@@ -141,6 +144,7 @@ export default function MealKits() {
                             cookTime={item.cookTime}
                             prepTime={item.prepTime}
                             tags={item.tags}
+                            createdBy={item.createdBy}
                             onPress={() => selectItem(item)}
                         />)}
                         {selectedItem != undefined && <MealKitModal 
@@ -156,6 +160,7 @@ export default function MealKits() {
                             prepTime={selectedItem.prepTime}
                             tags={selectedItem.tags}
                             verificationCode={authDetails?.verification_code}
+                            createdBy={selectedItem.createdBy}
                         />}
                     </View>
                 }

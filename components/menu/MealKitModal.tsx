@@ -21,7 +21,8 @@ interface MealKitModalProps {
     cookTime: number,
     prepTime: number,
     tags: string[],
-    verificationCode: string | undefined
+    verificationCode: string | undefined,
+    createdBy: string
 }
 
 function twoDecimals(num: number): string {
@@ -53,7 +54,8 @@ export default function MealKitModal(props: MealKitModalProps) {
         cookTime,
         prepTime,
         tags,
-        verificationCode
+        verificationCode,
+        createdBy
     } = props;
 
     servingSizes.sort()
@@ -96,13 +98,20 @@ export default function MealKitModal(props: MealKitModalProps) {
                             <Tags tags={tags} time={prepTime + cookTime} tagStyle={{marginTop: 10, height: 20}} />
                         </View>
                         <Image style={styles.image} source={{uri: imageUrl}} />
-                        <View style={{marginTop: 20, flexDirection: 'row'}}>
-                            <Text style={styles.price}>
-                                ${price}
-                            </Text>
-                            <Text style={styles.pricePerServing}>
-                                ({twoDecimals(price / servingSize)}/serving)
-                            </Text>
+                        <View style={styles.priceLine}>
+                            <View style={{marginTop: 20, flexDirection: 'row'}}>
+                                <Text style={styles.price}>
+                                    ${price}
+                                </Text>
+                                <Text style={styles.pricePerServing}>
+                                    ({twoDecimals(price / servingSize)}/serving)
+                                </Text>
+                            </View>
+                            {createdBy == "Signature Concoctions" &&
+                                <View style={styles.createdBy}>
+                                    <Image style={styles.createdByImage} source={require('../../assets/images/sc_horz.png')}/>
+                                </View>
+                            }
                         </View>
                         <View style={styles.servings}>
                             <Text style={styles.subheading}>Serving Size: {servingSize} people</Text>
@@ -241,6 +250,25 @@ const styles = StyleSheet.create({
         paddingTop: 8,
         paddingLeft: 8,
         color: 'grey'
+    },
+    priceLine: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    createdBy: {
+        marginTop: 20,
+        flexDirection: 'row',
+        alignItems: 'flex-end'
+    },
+    createdByText: {
+        fontSize: 15,
+        color: rasoiBoxPink,
+        fontFamily: 'AvenirLight'
+    },
+    createdByImage: {
+        width: Dimensions.get('window').width < 700 ? 120 : 150,
+        height: 30
     },
     timings: {
         paddingTop: 5,
