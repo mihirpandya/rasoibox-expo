@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { allSiteWidePromos, emitEvent, getCart, isValidPopFestPromo, isValidPromoCode } from '../../app/api/rasoibox-backend';
 import Footer from '../../components/common/Footer';
@@ -83,6 +83,7 @@ export default function Checkout() {
     const [error, setError] = useState<ErrorID>('no_error')
     const [cart, setCart] = useState<CartItemResponse[]>([])
     const [loading, setLoading] = useState<boolean>(true);
+    const [priceLoading, setPriceLoading] = useState<boolean>(false);
     const [promoCode, setPromoCode] = useState<string>("")
     const [promoCodeError, setPromoCodeError] = useState<PromoCodeErrorId>('no_error');
     const [appliedPromoCode, setAppliedPromoCode] = useState<PromoCode | undefined>(undefined)
@@ -149,8 +150,8 @@ export default function Checkout() {
     useEffect(() => {
         if (authDetails?.verification_code) {
             const promoCodes: string[] = appliedPromoCode ? [appliedPromoCode.name] : []
+            setPriceLoading(true)
             allSiteWidePromos(authDetails.verification_code, promoCodes).then(response => {
-                console.log(response);
                 const promos: PromoCode[] = Object.values(response).map(item => {
                     return {
                         name: item['name'],
@@ -160,7 +161,7 @@ export default function Checkout() {
                 })
 
                 setSitewidePromos(promos)
-            })
+            }).finally(() => setPriceLoading(false))
         }
     }, [authDetails, cart, appliedPromoCode])
 
@@ -204,6 +205,7 @@ export default function Checkout() {
 
     function submitPromoCode() {
         setPromoCodeError('no_error')
+        setPriceLoading(true);
         if (appliedPromoCode != undefined) {
             setPromoCodeError('more_than_one')
             return;
@@ -234,7 +236,7 @@ export default function Checkout() {
             }
         }).catch(_error => {
             applyPopFestPromoIfValid()
-        })
+        }).finally(() => setPriceLoading(false))
     }
 
     function submit() {
@@ -271,47 +273,50 @@ export default function Checkout() {
     return (
         <View style={{backgroundColor: 'white', flex: 1}}>
             <ScrollView>
-                <Header />
+                <Header updateCart={true}/>
                 <View style={styles.card}>
                     <StripeCheckout cartEmpty={cart.length == 0} firstName={authDetails?.first_name} lastName={authDetails?.last_name} email={authDetails?.email} promoCode={appliedPromoCode?.name}/>
                     <View style={styles.summary}>
                         <View style={{marginLeft: 20}}>
                             <Text style={styles.title}>Order Summary</Text>
                         </View>
-                        <FlatList 
-                            data={cart}
-                            renderItem={
-                                ({item}) => <CartItem cartItem={item}>
-                                                <RemoveFromCartButton 
-                                                    verificationCode={authDetails?.verification_code}
-                                                    recipeName={item.recipeName}
-                                                    updateCartCallback={() => fetchCart()}
-                                                />
-                                            </CartItem>
-                            }/>
-                        <Text style={styles.subtitle}>Estimated delivery: {getEstimatedDelivery()}</Text>
-                        <View style={styles.promocode}>
-                            <Ionicons style={{marginRight: -30}} name="pricetags" size={20} color={rasoiBoxPink} />
-                            <TextInput style={styles.promocodeText} placeholder='Promo code' onChangeText={setPromoCode} onKeyPress={submitPromoCodeIfEnter}/>
-                            <View style={getApplyStyle(promoCode.length > 0)}>
-                                <Pressable onPress={submitPromoCode}>
-                                    <Text style={styles.applyText}>
-                                        Apply
-                                    </Text>
-                                </Pressable>
+                        {loading ? <ActivityIndicator size={"large"} color={rasoiBoxPink} style={{padding: 30}}/> :
+                        <View style={{}}>
+                            <FlatList 
+                                data={cart}
+                                renderItem={
+                                    ({item}) => <CartItem cartItem={item}>
+                                                    <RemoveFromCartButton 
+                                                        verificationCode={authDetails?.verification_code}
+                                                        recipeName={item.recipeName}
+                                                        updateCartCallback={() => fetchCart()}
+                                                    />
+                                                </CartItem>
+                                }/>
+                            <Text style={styles.subtitle}>Estimated delivery: {getEstimatedDelivery()}</Text>
+                            <View style={styles.promocode}>
+                                <Ionicons style={{marginRight: -30}} name="pricetags" size={20} color={rasoiBoxPink} />
+                                <TextInput style={styles.promocodeText} placeholder='Promo code' onChangeText={setPromoCode} onKeyPress={submitPromoCodeIfEnter}/>
+                                <View style={getApplyStyle(promoCode.length > 0)}>
+                                    <Pressable onPress={submitPromoCode}>
+                                        <Text style={styles.applyText}>
+                                            Apply
+                                        </Text>
+                                    </Pressable>
+                                </View>
                             </View>
-                        </View>
-                        {promoCodeError != 'no_error' && <ResponseText message={PROMO_CODE_ERRORS[promoCodeError]}/>}
-                        <PriceInformation
-                            appliedPromoCode={appliedPromoCode}
-                            sitewidePromos={sitewidePromos}
-                            subtotal={subtotal}
-                            shipping={shipping}
-                            total={total}
-                            showDelete={true}
-                            showTaxes={false}
-                            deleteAppliedPromoCode={deleteAppliedPromoCode}
-                        />
+                            {promoCodeError != 'no_error' && <ResponseText message={PROMO_CODE_ERRORS[promoCodeError]}/>}
+                            <PriceInformation
+                                appliedPromoCode={appliedPromoCode}
+                                sitewidePromos={sitewidePromos}
+                                subtotal={subtotal}
+                                shipping={shipping}
+                                total={total}
+                                showDelete={true}
+                                showTaxes={false}
+                                deleteAppliedPromoCode={deleteAppliedPromoCode}
+                            />
+                        </View>}
                     </View>
                 </View>
                 <Footer />
