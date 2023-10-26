@@ -9,7 +9,7 @@ import * as Storage from "../common/Storage";
 
 
 
-function FinishCooking(props: { token: string, orderNumber: string, recipeId: number}) {
+function FinishCooking(props: { token?: string, orderNumber?: string | null, recipeId?: number}) {
 
     const { token, orderNumber, recipeId } = props;
 
@@ -20,10 +20,12 @@ function FinishCooking(props: { token: string, orderNumber: string, recipeId: nu
         setIsConfetti(true)
         setFinishedCooking(true)
         setTimeout(() => setIsConfetti(false), 3000)
-        await finishCooking(token, recipeId, orderNumber, new Date()).then(_response => {
-        }).catch(e => {
-            console.error(e)
-        })
+        if (token && orderNumber && recipeId && orderNumber != null) {
+            await finishCooking(token, recipeId, orderNumber, new Date()).then(_response => {
+            }).catch(e => {
+                console.error(e)
+            })
+        }
     }
 
     return (
@@ -74,7 +76,7 @@ export default function RecipeConclusion(props: { recipeId: number }) {
 
     return (
         <View>
-            {showFinishCooking && token && orderId && <FinishCooking token={token} orderNumber={orderId} recipeId={recipeId}/>}
+            <FinishCooking token={token} orderNumber={orderId} recipeId={recipeId}/>
             <Text style={styles.title}>
                 How did it go?
             </Text>
