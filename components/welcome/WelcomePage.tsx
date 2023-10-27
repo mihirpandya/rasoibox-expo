@@ -12,6 +12,7 @@ import HowItWorks from "./HowItWorks";
 import InnerChef from "./InnerChef";
 import UnlockTheFlavors from "./UnlockTheFlavors";
 import WhatIsInARasoiBox from "./WhatIsInARasoiBox";
+import Diwali from './Diwali';
 
 
 export default function WelcomePage() {
@@ -60,7 +61,8 @@ export default function WelcomePage() {
             <ScrollView ref={ref}>
                 <Header />
 
-                <CookWithConfidence scrollView={ref} coordinate={unlockCoordinate}/>
+                {/* <CookWithConfidence scrollView={ref} coordinate={unlockCoordinate}/> */}
+                <Diwali />
 
                 <InnerChef />
 

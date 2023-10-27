@@ -24,6 +24,7 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     CormorantGaramondSemiBold: require('../assets/fonts/CormorantGaramond-SemiBold.ttf'),
     AvenirLight: require('../assets/fonts/Avenir-Light.ttf'),
+    Amita: require('../assets/fonts/Amita-Regular.ttf'),
     ...FontAwesome.font,
   });
 
