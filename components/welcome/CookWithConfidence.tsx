@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import React, { RefObject } from 'react';
 import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { rasoiBoxGrey, rasoiBoxYellow, titleColor } from '../../constants/Colors';

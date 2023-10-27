@@ -10,6 +10,7 @@ import { AuthDetails } from './AuthShim';
 import { CartItemResponse } from './CartItem';
 import Lightbox, { LightboxSide } from "./Lightbox";
 import * as Storage from "./Storage";
+import { Octicons } from '@expo/vector-icons';
 
 
 function LogoTitle() {
@@ -178,9 +179,10 @@ export default function Header(props: {
                 title: "Rasoi Box"
             }} />
             <View style={styles.ribbon}>
-                <Text style={styles.ribbonText}>
-                    Diwali promo text here
+                <Text style={styles.ribbonTextLarge}>
+                    $5 on orders $40+ | $10 on orders $60+ | $20 on orders $80+
                 </Text>
+                <Text style={styles.ribbonTextSmall}>limited time only. promo auto-applied at check-out.</Text>
             </View>
         </View>
     );
@@ -227,15 +229,24 @@ const styles = StyleSheet.create({
         paddingLeft: 5
     },
     ribbon: {
-        backgroundColor: rasoiBoxPink,
+        backgroundColor: '#fde4d2',
         padding: 5,
         justifyContent: 'center',
         alignItems: 'center',
     },
+    ribbonTextSmall: {
+        paddingTop: 3,
+        fontSize: Dimensions.get('window').width < 700 ? 10 : 12,
+        fontFamily: 'CormorantGaramondSemiBold',
+    },
+    ribbonTextLarge: {
+        fontSize: Dimensions.get('window').width < 700 ? 15 : 20,
+        fontFamily: 'CormorantGaramondSemiBold',
+    },
     ribbonText: {
         color: 'white',
         fontFamily: 'AvenirLight',
-        fontSize: 15
+        fontSize: Dimensions.get('window').width < 700 ? 12 : 15
     },
     // icons
     menu: {
