@@ -15,7 +15,7 @@ export default function OurStory() {
 
                 <View style={styles.contents}>
                     <View style={styles.first}>
-                        <Image style={styles.image} source={require('../../assets/images/mihshim.png')} />
+                        <Image style={styles.image} source={require('../../assets/images/mihshim-2.jpg')} />
                         <View style={styles.ourstory}>
                             <Text style={styles.title}>Our Story</Text>
                             <Text style={styles.story}>
