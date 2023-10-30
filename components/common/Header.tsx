@@ -15,7 +15,7 @@ import { Octicons } from '@expo/vector-icons';
 
 function LogoTitle() {
     const imageUrl = Dimensions.get('window').width < 700 ? require('../../assets/images/icon.png') : 
-        require('../../assets/images/header_logo.svg')
+        require('../../assets/images/header_logo_bold.svg')
     return (
         <Link href="/">
           <Image
