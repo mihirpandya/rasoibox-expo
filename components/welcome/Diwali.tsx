@@ -40,7 +40,7 @@ export default function Diwali() {
                             </View>
                         </Pressable>
                         <View style={styles.logos}>
-                            <Image style={styles.rb} source={require('../../assets/images/header_logo.svg')} />
+                            <Image style={styles.rb} source={require('../../assets/images/header_logo_bold.svg')} />
                             <Ionicons style={styles.rbxsc} name="close" size={24} color={rasoiBoxYellow} />
                             <Image style={styles.sc} source={require('../../assets/images/sc_horz.png')} />
                         </View>
