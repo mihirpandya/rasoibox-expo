@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width < 700 ? '100%' : '50%',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: 50,
+        paddingTop: Dimensions.get('window').width < 700 ? 0 : 50,
         paddingBottom: 50,
         paddingLeft: Dimensions.get('window').width < 700 ? '0%' : '10%',
     },
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     logos: {
         flexDirection: Dimensions.get('window').width < 700 ? 'column' : 'row',
         marginTop: 30,
-        marginBottom: 30,
+        marginBottom: 50,
         justifyContent: 'center',
         alignItems: 'center',
     },

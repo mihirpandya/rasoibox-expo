@@ -13,6 +13,7 @@ import InnerChef from "./InnerChef";
 import UnlockTheFlavors from "./UnlockTheFlavors";
 import WhatIsInARasoiBox from "./WhatIsInARasoiBox";
 import Diwali from './Diwali';
+import ReferAFriend from '../refer/ReferAFriend';
 
 
 export default function WelcomePage() {

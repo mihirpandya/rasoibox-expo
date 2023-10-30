@@ -167,7 +167,6 @@ export default function ReferAFriend() {
 
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: 'white', // rasoi box pink with opacity,
         flex: 1,
     },
     card: {
