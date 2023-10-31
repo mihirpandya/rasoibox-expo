@@ -189,7 +189,8 @@ const styles = StyleSheet.create({
     },
     card: {
         flexDirection: Dimensions.get('window').width < 700 ? 'column': 'row',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        paddingTop: 30,
     },
     orderNumber: {
         fontFamily: 'CormorantGaramondSemiBold',
