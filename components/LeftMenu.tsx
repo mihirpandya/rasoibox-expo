@@ -54,11 +54,6 @@ function getMenuItemEntries(authDetails: AuthDetails | undefined): MenuItemEntry
     if (authDetails?.authenticated) {
         let beginning: MenuItemEntry[] = [
             {
-                label: 'Start Cooking',
-                icon: <MaterialCommunityIcons style={styles.menuIcon} name="silverware-clean" size={ICON_SIZE} color={rasoiBoxYellow} />,
-                href: '/startcooking'
-            },
-            {
                 label: 'Profile',
                 icon: <Ionicons name='person-circle' style={styles.menuIcon} size={ICON_SIZE} />,
                 href: '/profile'
