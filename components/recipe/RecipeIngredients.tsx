@@ -13,6 +13,8 @@ function showNumber(fraction: number) {
 		return "1/4"
 	} else if (fraction == 1.5) {
 		return "1 1/2"
+    } else if (fraction == 0.125) {
+        return "1/8"
 	} else {
 		return fraction
 	}
