@@ -62,8 +62,8 @@ export default function WelcomePage() {
             <ScrollView ref={ref}>
                 <Header />
 
-                {/* <CookWithConfidence scrollView={ref} coordinate={unlockCoordinate}/> */}
-                <Diwali />
+                <CookWithConfidence scrollView={ref} coordinate={unlockCoordinate}/>
+                {/* <Diwali /> */}
 
                 <InnerChef />
 

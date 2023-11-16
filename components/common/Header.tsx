@@ -178,12 +178,12 @@ export default function Header(props: {
                 },
                 title: "Rasoi Box"
             }} />
-            <View style={styles.ribbon}>
+            {/* <View style={styles.ribbon}>
                 <Text style={styles.ribbonTextLarge}>
                     $5 on orders $40+ | $10 on orders $60+ | $20 on orders $80+
                 </Text>
                 <Text style={styles.ribbonTextSmall}>limited time only. promo auto-applied at check-out.</Text>
-            </View>
+            </View> */}
         </View>
     );
 }

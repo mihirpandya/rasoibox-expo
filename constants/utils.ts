@@ -214,5 +214,7 @@ export function getEstimatedDelivery(): string {
     } else {
         daysToSunday = 7 + 7 - now.getDay()
     }
+
+    daysToSunday = daysToSunday + 7
     return cleanDate(new Date(now.getTime() + daysToSunday * daysInMillis), true)
 }
